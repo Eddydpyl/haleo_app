@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1016504287323",
+    "firebase_url": "https://haleo-ec52d.firebaseio.com",
+    "project_id": "haleo-ec52d",
+    "storage_bucket": "haleo-ec52d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1016504287323:android:4644dcc7a79b94b6403f7e",
+        "android_client_info": {
+          "package_name": "io.darter.haleo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1016504287323-17oshg5dm1ujc7j8n20afptdnjo414pq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNvuPHuMvnVze8e1YJ2oH_HRLLZHmTM5k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1016504287323-17oshg5dm1ujc7j8n20afptdnjo414pq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

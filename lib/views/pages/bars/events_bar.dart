@@ -6,7 +6,7 @@ import '../../../models/user.dart';
 
 class EventsBar extends StatelessWidget implements PreferredSizeWidget {
 
-  final AppUser user = AppUser(name: "Barto");
+  final User user = User(name: "Barto");
 
   @override
   Widget build(BuildContext context) {

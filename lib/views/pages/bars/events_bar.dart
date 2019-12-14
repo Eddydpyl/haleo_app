@@ -3,6 +3,8 @@ import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
 
 import '../../../models/user.dart';
+import '../../custom_icons.dart';
+import '../../common_widgets.dart';
 
 class EventsBar extends StatelessWidget implements PreferredSizeWidget {
 
@@ -11,12 +13,12 @@ class EventsBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       elevation: 0.0,
-      leading: Icon(
-        Icons.chat_bubble,
-        color: Colors.red,
-      ),
+      leading: PaintGradient(
+          child: Icon(CustomIcons.chat),
+          colorA: Color(0xfffa6b40),
+          colorB: Color(0xfffd1d1d)),
       centerTitle: true,
       title: RichText(
         text: TextSpan(
@@ -56,23 +58,24 @@ class EventsBar extends StatelessWidget implements PreferredSizeWidget {
               shape: BoxShape.circle,
             ),
             child: (user.image?.isNotEmpty ?? false)
-              ? CircleAvatar(
-                radius: 22.0,
-                backgroundColor: Colors.white,
-                child: TransitionToImage(
-                  fit: BoxFit.cover,
-                  image: AdvancedNetworkImage(
-                    user.image,
-                    useDiskCache: true,
-                    timeoutDuration: Duration(seconds: 5),
+                ? CircleAvatar(
+                    radius: 22.0,
+                    backgroundColor: Colors.white,
+                    child: TransitionToImage(
+                      fit: BoxFit.cover,
+                      image: AdvancedNetworkImage(
+                        user.image,
+                        useDiskCache: true,
+                        timeoutDuration: Duration(seconds: 5),
+                      ),
+                      placeholder: InitialsText(user.name),
+                    ),
+                  )
+                : CircleAvatar(
+                    radius: 22.0,
+                    backgroundColor: Colors.white,
+                    child: InitialsText(user.name),
                   ),
-                  placeholder: InitialsText(user.name),
-                ),
-              ) : CircleAvatar(
-                radius: 22.0,
-                backgroundColor: Colors.white,
-                child: InitialsText(user.name),
-              ),
           ),
         ),
       ],

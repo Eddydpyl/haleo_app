@@ -1,10 +1,40 @@
 import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:angles/angles.dart';
 import 'package:share/share.dart';
 
 import '../models/event.dart';
+
+class PaintGradient extends StatelessWidget {
+  final Widget child;
+  final Color colorA;
+  final Color colorB;
+
+  PaintGradient({
+    @required this.child,
+    @required this.colorA,
+    @required this.colorB,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ShaderMask(
+        blendMode: BlendMode.srcIn,
+        shaderCallback: (Rect bounds) {
+          return ui.Gradient.linear(
+            Offset(4.0, 24.0),
+            Offset(24.0, 4.0),
+            [
+              colorA,
+              colorB,
+            ],
+          );
+        },
+        child: child);
+  }
+}
 
 class EventCard extends StatelessWidget {
   final Event event;
@@ -75,10 +105,10 @@ class EventCard extends StatelessWidget {
                 alignment: Alignment.bottomRight,
                 child: FlatButton(
                   shape: CircleBorder(),
-                  child: Icon(
-                    Icons.share,
-                    color: Colors.blue,
-                  ),
+                  child: PaintGradient(
+                      child: Icon(Icons.share),
+                      colorA: Color(0xff7474bf),
+                      colorB: Color(0xff348ac7)),
                   onPressed: () {
                     Share.share("Que Haleo más grande.");
                   },
@@ -151,23 +181,27 @@ class TearBorder extends ShapeBorder {
   }
 
   @override
-  Path getInnerPath(Rect rect, { TextDirection textDirection }) {
+  Path getInnerPath(Rect rect, {TextDirection textDirection}) {
     return getOuterPath(rect, textDirection: textDirection);
   }
 
   @override
-  Path getOuterPath(Rect rect, { TextDirection textDirection }) {
+  Path getOuterPath(Rect rect, {TextDirection textDirection}) {
     return Path()
       ..moveTo(rect.left + rect.width / 2.0, rect.top)
-      ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top, rect.right * tailMultiplier, rect.top + rect.height / 2.0)
-      ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top + rect.height, rect.left + rect.width  / 2.0, rect.bottom)
-      ..arcToPoint(Offset(rect.left, rect.top + rect.height / 2.0), radius: Radius.circular(25.0))
-      ..arcToPoint(Offset(rect.left + rect.width / 2.0, rect.top), radius: Radius.circular(25.0))
+      ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top,
+          rect.right * tailMultiplier, rect.top + rect.height / 2.0)
+      ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top + rect.height,
+          rect.left + rect.width / 2.0, rect.bottom)
+      ..arcToPoint(Offset(rect.left, rect.top + rect.height / 2.0),
+          radius: Radius.circular(25.0))
+      ..arcToPoint(Offset(rect.left + rect.width / 2.0, rect.top),
+          radius: Radius.circular(25.0))
       ..close();
   }
 
   @override
-  void paint(Canvas canvas, Rect rect, { TextDirection textDirection }) {}
+  void paint(Canvas canvas, Rect rect, {TextDirection textDirection}) {}
 
   @override
   ShapeBorder scale(double t) {

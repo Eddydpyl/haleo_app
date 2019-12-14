@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../custom_icons.dart';
 import '../../../models/event.dart';
 import '../../common_widgets.dart';
 
@@ -9,46 +10,68 @@ class EventsBody extends StatefulWidget {
 }
 
 class _EventsBodyState extends State<EventsBody> {
-
-  final Event event = Event(name: "Padel", description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce condimentum augue vel vestibulum sodales. Donec consectetur, nisi a fringilla lobortis, arcu leo ultrices nunc, tincidunt interdum ex libero id diam.", image: "https://www.hotelbalnearivichycatalan.cat/uploads/galleries/que-fer/sense-sortir-del-balneari/padel/pista-padel-8.jpg");
+  final Event event = Event(
+      name: "Padel",
+      description:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce condimentum augue vel vestibulum sodales. Donec consectetur, nisi a fringilla lobortis, arcu leo ultrices nunc, tincidunt interdum ex libero id diam.",
+      image:
+          "https://www.hotelbalnearivichycatalan.cat/uploads/galleries/que-fer/sense-sortir-del-balneari/padel/pista-padel-8.jpg");
 
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Align(
-          alignment: Alignment.topCenter,
-          child: Stack(
-            children: <Widget>[
-              BackgroundCard(
-                color: Colors.red,
-                height: height - 150, // The floating action buttons always take up the same space.
-                width: width - 50, // We have to leave at least some space for the rotated cards.
-                rotation: height > 400 ? 3.0 : 2.0, // Rotation is much more apparent in wider screens.
+    final offsetWidth = 32;
+    final offsetHeight = 0.28 * height;
+
+    return Padding(
+        padding: new EdgeInsets.only(top: 16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Align(
+              alignment: Alignment.topCenter,
+              child: Stack(
+                children: <Widget>[
+                  BackgroundCard(
+                    color: Colors.red,
+                    height: height -
+                        offsetHeight, // The floating action buttons always take up the same space.
+                    width: width -
+                        offsetWidth, // We have to leave at least some space for the rotated cards.
+                    rotation: height > 400
+                        ? 3.0
+                        : 2.0, // Rotation is much more apparent in wider screens.
+                  ),
+                  BackgroundCard(
+                    color: Colors.blue,
+                    height: height -
+                        offsetHeight, // The floating action buttons always take up the same space.
+                    width: width -
+                        offsetWidth, // We have to leave at least some space for the rotated cards.
+                    rotation: height > 400
+                        ? -2.0
+                        : -1.0, // Rotation is much more apparent in wider screens.
+                  ),
+                  EventCard(
+                    event: event,
+                    height: height -
+                        offsetHeight, // The floating action buttons always take up the same space.
+                    width: width -
+                        offsetWidth, // We have to leave at least some space for the rotated cards.
+                  ),
+                ],
               ),
-              BackgroundCard(
-                color: Colors.blue,
-                height: height - 150, // The floating action buttons always take up the same space.
-                width: width - 50, // We have to leave at least some space for the rotated cards.
-                rotation: height > 400 ? -5.0 : -3.0, // Rotation is much more apparent in wider screens.
-              ),
-              EventCard(
-                event: event,
-                height: height - 150, // The floating action buttons always take up the same space.
-                width: width - 50, // We have to leave at least some space for the rotated cards.
-              ),
-            ],
-          ),
-        ),
-        Container(height: 10.0),
-        EventActions(),
-      ],
-    );
+            ),
+            Container(height: 16.0), // Acts as padding here
+            new Expanded(
+              child: EventActions(),
+            ),
+            Container(height: 16.0), // Acts as padding here
+          ],
+        ));
   }
 }
 
@@ -67,10 +90,10 @@ class EventActions extends StatelessWidget {
             backgroundColor: Colors.white,
             child: Padding(
               padding: const EdgeInsets.only(right: 8.0),
-              child: Icon(
-                Icons.close,
-                color: Colors.red,
-              ),
+              child: PaintGradient(
+                  child: Icon(CustomIcons.cancel_1),
+                  colorA: Color(0xfffa6b40),
+                  colorB: Color(0xfffd1d1d)),
             ),
             onPressed: () {
               // TODO
@@ -81,10 +104,10 @@ class EventActions extends StatelessWidget {
           height: 50.0,
           child: FloatingActionButton(
             backgroundColor: Colors.white,
-            child: Icon(
-              Icons.add,
-              color: Colors.blue,
-            ),
+            child: PaintGradient(
+                child: Icon(CustomIcons.plus_1),
+                colorA: Color(0xff7474bf),
+                colorB: Color(0xff348ac7)),
             onPressed: () {
               // TODO
             },
@@ -98,10 +121,10 @@ class EventActions extends StatelessWidget {
               backgroundColor: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: Icon(
-                  Icons.favorite,
-                  color: Colors.green,
-                ),
+                child: PaintGradient(
+                    child: Icon(CustomIcons.heart_filled),
+                    colorA: Color(0xff7dd624),
+                    colorB: Color(0xff45b649)),
               ),
               onPressed: () {
                 // TODO
@@ -113,4 +136,3 @@ class EventActions extends StatelessWidget {
     );
   }
 }
-

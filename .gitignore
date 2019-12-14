@@ -20,6 +20,14 @@
 # is commented out by default.
 #.vscode/
 
+# vscode related 
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
 # Flutter/Dart/Pub related
 **/doc/api/
 .dart_tool/
@@ -73,3 +81,4 @@
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
 /android/key.properties
+/pubspec.lock

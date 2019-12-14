@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
+
+import 'package:flutter/material.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:angles/angles.dart';
@@ -21,18 +22,16 @@ class PaintGradient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShaderMask(
-        blendMode: BlendMode.srcIn,
-        shaderCallback: (Rect bounds) {
-          return ui.Gradient.linear(
-            Offset(4.0, 24.0),
-            Offset(24.0, 4.0),
-            [
-              colorA,
-              colorB,
-            ],
-          );
-        },
-        child: child);
+      child: child,
+      blendMode: BlendMode.srcIn,
+      shaderCallback: (Rect bounds) {
+        return ui.Gradient.linear(
+          Offset(4.0, 24.0),
+          Offset(24.0, 4.0),
+          [colorA, colorB],
+        );
+      },
+    );
   }
 }
 
@@ -106,9 +105,10 @@ class EventCard extends StatelessWidget {
                 child: FlatButton(
                   shape: CircleBorder(),
                   child: PaintGradient(
-                      child: Icon(Icons.share),
-                      colorA: Color(0xff7474bf),
-                      colorB: Color(0xff348ac7)),
+                    child: Icon(Icons.share),
+                    colorA: Color(0xff7474bf),
+                    colorB: Color(0xff348ac7),
+                  ),
                   onPressed: () {
                     Share.share("Que Haleo más grande.");
                   },

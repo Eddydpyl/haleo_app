@@ -11,11 +11,14 @@ class EventsBody extends StatefulWidget {
 
 class _EventsBodyState extends State<EventsBody> {
   final Event event = Event(
-      name: "Padel",
-      description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce condimentum augue vel vestibulum sodales. Donec consectetur, nisi a fringilla lobortis, arcu leo ultrices nunc, tincidunt interdum ex libero id diam.",
-      image:
-          "https://www.hotelbalnearivichycatalan.cat/uploads/galleries/que-fer/sense-sortir-del-balneari/padel/pista-padel-8.jpg");
+    name: "Padel",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+        "Fusce condimentum augue vel vestibulum sodales. Donec consectetur, "
+        "nisi a fringilla lobortis, arcu leo ultrices nunc, tincidunt "
+        "interdum ex libero id diam.",
+    image: "https://www.hotelbalnearivichycatalan.cat/uploads/galleries/que"
+        "-fer/sense-sortir-del-balneari/padel/pista-padel-8.jpg",
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -37,38 +40,34 @@ class _EventsBodyState extends State<EventsBody> {
                 children: <Widget>[
                   BackgroundCard(
                     color: Colors.red,
-                    height: height -
-                        offsetHeight, // The floating action buttons always take up the same space.
-                    width: width -
-                        offsetWidth, // We have to leave at least some space for the rotated cards.
-                    rotation: height > 400
-                        ? 3.0
-                        : 2.0, // Rotation is much more apparent in wider screens.
+                    // The floating action buttons always take up the same space.
+                    height: height - offsetHeight,
+                    // We have to leave at least some space for the rotated cards.
+                    width: width - offsetWidth,
+                    // Rotation is much more apparent in wider screens.
+                    rotation: height > 400 ? 3.0 : 2.0,
                   ),
                   BackgroundCard(
                     color: Colors.blue,
-                    height: height -
-                        offsetHeight, // The floating action buttons always take up the same space.
-                    width: width -
-                        offsetWidth, // We have to leave at least some space for the rotated cards.
-                    rotation: height > 400
-                        ? -2.0
-                        : -1.0, // Rotation is much more apparent in wider screens.
+                    // The floating action buttons always take up the same space.
+                    height: height - offsetHeight,
+                    // We have to leave at least some space for the rotated cards.
+                    width: width - offsetWidth,
+                    // Rotation is much more apparent in wider screens.
+                    rotation: height > 400 ? -2.0 : -1.0,
                   ),
                   EventCard(
                     event: event,
-                    height: height -
-                        offsetHeight, // The floating action buttons always take up the same space.
-                    width: width -
-                        offsetWidth, // We have to leave at least some space for the rotated cards.
+                    // The floating action buttons always take up the same space.
+                    height: height - offsetHeight,
+                    // We have to leave at least some space for the rotated cards.
+                    width: width - offsetWidth,
                   ),
                 ],
               ),
             ),
             Container(height: 16.0), // Acts as padding here
-            new Expanded(
-              child: EventActions(),
-            ),
+            Expanded(child: EventActions()),
             Container(height: 16.0), // Acts as padding here
           ],
         ));
@@ -91,9 +90,10 @@ class EventActions extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: PaintGradient(
-                  child: Icon(CustomIcons.cancel_1),
-                  colorA: Color(0xfffa6b40),
-                  colorB: Color(0xfffd1d1d)),
+                child: Icon(CustomIcons.cancel_1),
+                colorA: Color(0xfffa6b40),
+                colorB: Color(0xfffd1d1d),
+              ),
             ),
             onPressed: () {
               // TODO
@@ -105,9 +105,10 @@ class EventActions extends StatelessWidget {
           child: FloatingActionButton(
             backgroundColor: Colors.white,
             child: PaintGradient(
-                child: Icon(CustomIcons.plus_1),
-                colorA: Color(0xff7474bf),
-                colorB: Color(0xff348ac7)),
+              child: Icon(CustomIcons.plus_1),
+              colorA: Color(0xff7474bf),
+              colorB: Color(0xff348ac7),
+            ),
             onPressed: () {
               // TODO
             },
@@ -122,9 +123,10 @@ class EventActions extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: PaintGradient(
-                    child: Icon(CustomIcons.heart_filled),
-                    colorA: Color(0xff7dd624),
-                    colorB: Color(0xff45b649)),
+                  child: Icon(CustomIcons.heart_filled),
+                  colorA: Color(0xff7dd624),
+                  colorB: Color(0xff45b649),
+                ),
               ),
               onPressed: () {
                 // TODO

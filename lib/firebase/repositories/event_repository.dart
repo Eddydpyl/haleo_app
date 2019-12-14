@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../models/event.dart';
 
@@ -10,12 +12,13 @@ import '../../models/event.dart';
 
 class EventRepository {
   final Firestore _database;
+  final Geoflutterfire _geo;
 
-  EventRepository(this._database);
+  EventRepository(this._database, this._geo);
 
   Future<String> create(String uid, Event event) async {
     DocumentReference reference = _database.collection("events").document(uid);
-    reference.setData((event..id = reference.documentID).toJson());
+    reference.setData(event.toJson());
     return reference.documentID;
   }
 
@@ -25,10 +28,20 @@ class EventRepository {
     return snapshot?.data != null ? Event.fromRaw(snapshot.data) : null;
   }
 
-  Future<Map<String, Event>> readAll() async {
+  Future<Map<String, Event>> readAll({String uid,
+    bool open, GeoFirePoint center, double radius}) async {
     Query reference = _database.collection("events");
-    QuerySnapshot snapshot = await reference.getDocuments();
-    List<DocumentSnapshot> documents = snapshot.documents ?? [];
+    if (uid != null) reference.where("attendees", arrayContains: uid);
+    if (open != null) reference.where("open", isEqualTo: open);
+    List<DocumentSnapshot> documents;
+    if (center != null && radius != null) {
+      documents = await Observable(_geo.collection(collectionRef: reference)
+          .within(center: center, radius: radius, field: "point")).first;
+    } else {
+      QuerySnapshot snapshot = await reference.getDocuments();
+      documents = snapshot.documents ?? [];
+    }
+
     List<MapEntry<String, Event>> entries = documents.map((document) =>
         MapEntry<String, Event>(document.documentID, Event.fromRaw(document.data))).toList();
     return Map.fromEntries(entries);
@@ -50,13 +63,25 @@ class EventRepository {
         ? MapEntry(snapshot.documentID, Event.fromRaw(snapshot.data)) : null);
   }
 
-  Stream<Map<String, Event>> collectionStream() {
+  Stream<Map<String, Event>> collectionStream({String uid,
+    bool open, GeoFirePoint center, double radius}) {
     Query reference = _database.collection("events");
-    return reference.snapshots().map((snapshot) {
-      List<DocumentSnapshot> documents = snapshot.documents ?? [];
-      List<MapEntry<String, Event>> entries = documents.map((document) =>
-          MapEntry<String, Event>(document.documentID, Event.fromRaw(document.data))).toList();
-      return Map.fromEntries(entries);
-    });
+    if (uid != null) reference.where("attendees", arrayContains: uid);
+    if (open != null) reference.where("open", isEqualTo: open);
+    if (center != null && radius != null) {
+      return _geo.collection(collectionRef: reference).within(center: center,
+          radius: radius, field: "point").map((List<DocumentSnapshot> documents) {
+        List<MapEntry<String, Event>> entries = documents.map((document) =>
+            MapEntry<String, Event>(document.documentID, Event.fromRaw(document.data))).toList();
+        return Map.fromEntries(entries);
+      });
+    } else {
+      return reference.snapshots().map((snapshot) {
+        List<DocumentSnapshot> documents = snapshot.documents ?? [];
+        List<MapEntry<String, Event>> entries = documents.map((document) =>
+            MapEntry<String, Event>(document.documentID, Event.fromRaw(document.data))).toList();
+        return Map.fromEntries(entries);
+      });
+    }
   }
 }

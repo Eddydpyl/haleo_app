@@ -1,5 +1,4 @@
 class Event {
-  String id;
   String user;
   String name;
   String description;
@@ -12,7 +11,6 @@ class Event {
   List<String> attendees; // Users that are interested in the event.
 
   Event({
-    this.id,
     this.user,
     this.name,
     this.description,
@@ -26,8 +24,7 @@ class Event {
   });
 
   Event.fromRaw(Map map)
-      : this.id = map["id"],
-        this.user = map["user"],
+      : this.user = map["user"],
         this.name = map["name"],
         this.description = map["description"],
         this.image = map["image"],
@@ -41,7 +38,6 @@ class Event {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {};
-    if (id != null) json["id"] = id;
     if (name != null) json["name"] = name;
     if (description != null) json["description"] = description;
     if (image != null) json["image"] = image;
@@ -59,7 +55,6 @@ class Event {
       identical(this, other) ||
           other is Event &&
               runtimeType == other.runtimeType &&
-              id == other.id &&
               user == other.user &&
               name == other.name &&
               description == other.description &&
@@ -73,7 +68,6 @@ class Event {
 
   @override
   int get hashCode =>
-      id.hashCode ^
       user.hashCode ^
       name.hashCode ^
       description.hashCode ^
@@ -87,7 +81,7 @@ class Event {
 
   @override
   String toString() {
-    return 'Event{id: $id, user: $user, name: $name, description: $description,'
+    return 'Event{user: $user, name: $name, description: $description,'
         ' image: $image, point: $point, topic: $topic, open: $open,'
         ' slots: $slots, count: $count, attendees: $attendees}';
   }

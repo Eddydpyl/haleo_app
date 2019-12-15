@@ -21,7 +21,7 @@ class EventsBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       title: RichText(
         text: TextSpan(
-          text: "hal",
+          text: "¡hal",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black87,
@@ -36,12 +36,17 @@ class EventsBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             TextSpan(
-              text: "o",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
-              ),
-            ),
+                text: "o",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                )),
+            TextSpan(
+                text: "!",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ))
           ],
         ),
       ),

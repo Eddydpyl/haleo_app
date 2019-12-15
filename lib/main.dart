@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Haleo',
       theme: CustomTheme.haleo,
-      home: LoginPage(),
+      home: EventsPage(),
     );
   }
 }

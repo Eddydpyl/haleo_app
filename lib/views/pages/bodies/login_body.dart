@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginBody extends StatefulWidget {
   @override
@@ -69,12 +70,25 @@ class _LoginBodyState extends State<LoginBody> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                           Padding(
+                              padding: EdgeInsets.only(bottom: 16.0),
+                              child: RichText(
+                                maxLines: 1,
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                    text: "¡Padentro!",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black54,
+                                      fontSize: 32.0,
+                                    )),
+                              )),
+                          Padding(
                               padding: EdgeInsets.symmetric(vertical: 8.0),
                               child: LoginButton(
                                 text: 'Google',
                                 padding: EdgeInsets.symmetric(vertical: 12.0),
                                 backgroundColor: Colors.red,
-                                icon: Icons.email,
+                                icon: FontAwesomeIcons.google,
                                 onPressed: () => {},
                               )),
                           Padding(
@@ -83,7 +97,7 @@ class _LoginBodyState extends State<LoginBody> {
                                 text: 'Facebook',
                                 padding: EdgeInsets.symmetric(vertical: 12.0),
                                 backgroundColor: Colors.blue[700],
-                                icon: Icons.email,
+                                icon: FontAwesomeIcons.facebookF,
                                 onPressed: () => {},
                               )),
                           Padding(
@@ -92,7 +106,7 @@ class _LoginBodyState extends State<LoginBody> {
                                 text: 'Email',
                                 padding: EdgeInsets.symmetric(vertical: 12.0),
                                 backgroundColor: Colors.grey,
-                                icon: Icons.email,
+                                icon: FontAwesomeIcons.envelope,
                                 onPressed: () => {},
                               )),
                         ])))),

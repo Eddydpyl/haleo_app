@@ -81,7 +81,7 @@ class EventCard extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0,
-                    color: Colors.black,
+                    color: Colors.black87,
                   ),
                 ),
               ),
@@ -94,7 +94,7 @@ class EventCard extends StatelessWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
                         fontSize: 15.0,
-                        color: Colors.grey,
+                        color: Colors.black54,
                       ),
                     ),
                   ),

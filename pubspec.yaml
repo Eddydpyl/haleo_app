@@ -33,6 +33,8 @@ dependencies:
   rxdart: 0.22.6
   intl: 0.15.8
   angles: 1.2.1
+  flutter_signin_button: ^1.0.0
+
 
 dev_dependencies:
   flutter_test:

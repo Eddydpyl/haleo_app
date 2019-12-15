@@ -24,7 +24,7 @@ class EventsBar extends StatelessWidget implements PreferredSizeWidget {
           text: "hal",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: Colors.black87,
             fontSize: 35.0,
           ),
           children: <TextSpan>[

@@ -44,8 +44,7 @@ class _LoginBodyState extends State<LoginBody> {
                   maxLines: 4,
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                      text:
-                          "Encuentra meetups casuales cerca de ti. ¡Estás a un click!",
+                      text: "Encuentra eventos cerca de ti. \n ¡Estás a un click!",
                       style: TextStyle(
                         fontWeight: FontWeight.normal,
                         color: Colors.white,
@@ -60,7 +59,7 @@ class _LoginBodyState extends State<LoginBody> {
           child: Stack(children: <Widget>[
             BgLoginCard(height: 320, radius: 16.0),
             BgLoginCard(height: 340, radius: 16.0),
-            BgLoginCard(height: 300, radius: 16.0),
+            BgLoginCard(height: 300, radius: 16.0, color: Colors.white),
             Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
@@ -75,11 +74,11 @@ class _LoginBodyState extends State<LoginBody> {
                                 maxLines: 1,
                                 textAlign: TextAlign.center,
                                 text: TextSpan(
-                                    text: "¡Padentro!",
+                                    text: "¡padentro!",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black54,
-                                      fontSize: 32.0,
+                                      fontSize: 30.0,
                                     )),
                               )),
                           Padding(
@@ -212,10 +211,12 @@ class LoginButton extends StatelessWidget {
 class BgLoginCard extends StatelessWidget {
   final double height;
   final double radius;
+  final Color color;
 
   BgLoginCard({
     @required this.height,
     @required this.radius,
+    this.color = Colors.white54,
   });
 
   @override
@@ -225,7 +226,7 @@ class BgLoginCard extends StatelessWidget {
         child: Container(
           height: height,
           decoration: BoxDecoration(
-              color: Colors.white54,
+              color: color,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(radius),
                   topRight: Radius.circular(radius))),

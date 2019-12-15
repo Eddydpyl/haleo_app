@@ -16,46 +16,42 @@ class _LoginBodyState extends State<LoginBody> {
     return Stack(children: <Widget>[
       Container(
         decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xfffa6b40), Color(0xfffd1d1d)]),
-            image: DecorationImage(
-                colorFilter: new ColorFilter.mode(
-                    Colors.black.withOpacity(0.2), BlendMode.dstATop),
-                image: NetworkImage(
-                    'https://images.unsplash.com/photo-1471421298428-1513ab720a8e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=632&q=80'),
-                fit: BoxFit.cover)),
+          gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xfffa6b40), Color(0xfffd1d1d)]),
+        ),
       ),
       Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 128.0),
+          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 180.0),
           child: Align(
             alignment: Alignment.topCenter,
             child: RichText(
+              maxLines: 1,
+              textAlign: TextAlign.center,
               text: TextSpan(
-                text: "hal",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                  fontSize: 50.0,
-                ),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: "e",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red,
-                    ),
-                  ),
-                  TextSpan(
-                    text: "o",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ],
-              ),
+                  text: "¿haleo?",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 50.0,
+                  )),
+            ),
+          )),
+      Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 280.0),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: RichText(
+              maxLines: 4,
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                  text: "Encuentra meetups casuales cerca de ti. \n ¡Estás a un solo click!",
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    color: Colors.white,
+                    fontSize: 20.0,
+                  )),
             ),
           )),
       Padding(
@@ -79,17 +75,17 @@ class _LoginBodyState extends State<LoginBody> {
                     height: 300,
                     child: Center(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                      SignInButton(
-                        Buttons.Google,
-                        onPressed: () {}, //TODO: google login
-                      ),
-                      SignInButton(
-                        Buttons.Facebook,
-                        onPressed: () {}, //TODO: facebook login
-                      ),
-                    ])))),
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                          SignInButton(
+                            Buttons.Google,
+                            onPressed: () {}, //TODO: google login
+                          ),
+                          SignInButton(
+                            Buttons.Facebook,
+                            onPressed: () {}, //TODO: facebook login
+                          ),
+                        ])))),
           ])),
     ]);
   }

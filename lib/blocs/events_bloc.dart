@@ -23,7 +23,7 @@ class EventsBloc extends BaseBloc {
   EventsBloc(DatabaseManager databaseManager, PreferenceManager preferenceManager)
       : _databaseManager = databaseManager, _preferenceManager = preferenceManager;
 
-  /// Returns a [Stream] of [Event] given the filters.
+  /// Returns a [Stream] of events given the filters.
   Observable<Map<String, Event>> get eventsStream => _events.stream;
 
   /// Indicates if the user is interested in an event.
@@ -46,7 +46,8 @@ class EventsBloc extends BaseBloc {
     _attend.stream.listen((MapEntry<String, bool> attend) {
       if (attend != null) {
         if (attend.value) _databaseManager.eventRepository()
-            .update(attend.key, Event(attendees: [attend.key]));
+            .update(attend.key, Event(attendees: [attend.key]))
+            .catchError((e) => forwardException(e));
         _preferenceManager.view(attend.key);
       }
     });

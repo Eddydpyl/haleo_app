@@ -20,6 +20,14 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "placeholderText" : MessageLookupByLibrary.simpleMessage("PLACEHOLDER")
+    "accountNotFoundText" : MessageLookupByLibrary.simpleMessage("An account with the provided email does not exist."),
+    "disabledUserText" : MessageLookupByLibrary.simpleMessage("Your user has been disabled by an administrator."),
+    "errorSignInText" : MessageLookupByLibrary.simpleMessage("There was an issue and you could not sign in."),
+    "errorSignUpText" : MessageLookupByLibrary.simpleMessage("There was an issue and you could not sign up."),
+    "invalidEmailText" : MessageLookupByLibrary.simpleMessage("The email address is not valid."),
+    "invalidPasswordText" : MessageLookupByLibrary.simpleMessage("The password must be at least 6 characters long."),
+    "invalidSignInText" : MessageLookupByLibrary.simpleMessage("Either the email or password are incorrect."),
+    "passwordSentText" : MessageLookupByLibrary.simpleMessage("A password reset link has been sent to your email."),
+    "usedEmailText" : MessageLookupByLibrary.simpleMessage("The email address is already in use.")
   };
 }

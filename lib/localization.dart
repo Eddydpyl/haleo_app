@@ -33,10 +33,66 @@ class Localization {
 
   Localization._internal();
 
-  String placeholderText() =>
+  String invalidEmailText() =>
       Intl.message(
-        "PLACEHOLDER",
-        name: "placeholderText",
+        "The email address is not valid.",
+        name: "invalidEmailText",
+        args: [],
+      );
+
+  String invalidPasswordText() =>
+      Intl.message(
+        "The password must be at least 6 characters long.",
+        name: "invalidPasswordText",
+        args: [],
+      );
+
+  String usedEmailText() =>
+      Intl.message(
+        "The email address is already in use.",
+        name: "usedEmailText",
+        args: [],
+      );
+
+  String invalidSignInText() =>
+      Intl.message(
+        "Either the email or password are incorrect.",
+        name: "invalidSignInText",
+        args: [],
+      );
+
+  String disabledUserText() =>
+      Intl.message(
+        "Your user has been disabled by an administrator.",
+        name: "disabledUserText",
+        args: [],
+      );
+
+  String errorSignInText() =>
+      Intl.message(
+        "There was an issue and you could not sign in.",
+        name: "errorSignInText",
+        args: [],
+      );
+
+  String errorSignUpText() =>
+      Intl.message(
+        "There was an issue and you could not sign up.",
+        name: "errorSignUpText",
+        args: [],
+      );
+
+  String passwordSentText() =>
+      Intl.message(
+        "A password reset link has been sent to your email.",
+        name: "passwordSentText",
+        args: [],
+      );
+
+  String accountNotFoundText() =>
+      Intl.message(
+        "An account with the provided email does not exist.",
+        name: "accountNotFoundText",
         args: [],
       );
 }

@@ -1,7 +1,47 @@
 {
-  "@@last_modified": "2019-12-15T11:30:16.411900",
-  "placeholderText": "PLACEHOLDER",
-  "@placeholderText": {
+  "@@last_modified": "2019-12-15T20:07:27.838221",
+  "invalidEmailText": "The email address is not valid.",
+  "@invalidEmailText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "invalidPasswordText": "The password must be at least 6 characters long.",
+  "@invalidPasswordText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "usedEmailText": "The email address is already in use.",
+  "@usedEmailText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "invalidSignInText": "Either the email or password are incorrect.",
+  "@invalidSignInText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "disabledUserText": "Your user has been disabled by an administrator.",
+  "@disabledUserText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorSignInText": "There was an issue and you could not sign in.",
+  "@errorSignInText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorSignUpText": "There was an issue and you could not sign up.",
+  "@errorSignUpText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "passwordSentText": "A password reset link has been sent to your email.",
+  "@passwordSentText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "accountNotFoundText": "An account with the provided email does not exist.",
+  "@accountNotFoundText": {
     "type": "text",
     "placeholders": {}
   }

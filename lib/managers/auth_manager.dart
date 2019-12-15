@@ -23,6 +23,7 @@ class AuthManager {
         idToken: googleAuth.idToken,
     );
 
+    if (credential == null) return null;
     final AuthResult authResult = await _auth.signInWithCredential(credential);
     return authResult?.user;
   }
@@ -37,4 +38,7 @@ class AuthManager {
   Future<bool> isSignedIn() async => (await currentUser()) == null ? false : true;
 
   Stream<FirebaseUser> onAuthStateChanged() => _auth.onAuthStateChanged;
+
+  Future<dynamic> sendPasswordResetEmail(String email) =>
+      _auth.sendPasswordResetEmail(email: email);
 }

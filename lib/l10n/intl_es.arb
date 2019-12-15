@@ -1,7 +1,47 @@
 {
-  "@@last_modified": "2019-12-15T11:30:16.411900",
-  "placeholderText": "PLACEHOLDER",
-  "@placeholderText": {
+  "@@last_modified": "2019-12-15T20:04:49.383030",
+  "invalidEmailText": "La dirección de correo electrónico no es válida.",
+  "@invalidEmailText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "invalidPasswordText": "La contraseña debe de tener por lo menos 6 caracteres.",
+  "@invalidPasswordText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "usedEmailText": "La dirección de correo electrónico ya está en uso.",
+  "@usedEmailText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "invalidSignInText": "La dirección de correo electrónico o la contraseña son incorrectas.",
+  "@invalidSignInText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "disabledUserText": "Tu usuario ha sido deshabilitado por un administrador.",
+  "@disabledUserText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorSignInText": "Hubo un problema y no se pudo iniciar sesión.",
+  "@errorSignInText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorSignUpText": "Hubo un problema y no se pudo registrar.",
+  "@errorSignUpText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "passwordSentText": "Se ha enviado un enlace para restablecer tu contraseña a tu correo.",
+  "@passwordSentText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "accountNotFoundText": "No existe una cuenta con el correo electrónico proporcionado.",
+  "@accountNotFoundText": {
     "type": "text",
     "placeholders": {}
   }

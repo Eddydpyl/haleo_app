@@ -53,7 +53,13 @@ class EventsBar extends StatelessWidget implements PreferredSizeWidget {
             height: 32.0,
             padding: const EdgeInsets.all(2.0),
             decoration: new BoxDecoration(
-              color: Colors.red,
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xfffa6b40),
+                    Color(0xfffd1d1d),
+                  ]),
               shape: BoxShape.circle,
             ),
             child: (user.image?.isNotEmpty ?? false)

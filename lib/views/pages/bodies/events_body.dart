@@ -39,7 +39,8 @@ class _EventsBodyState extends State<EventsBody> {
               child: Stack(
                 children: <Widget>[
                   BackgroundCard(
-                    color: Colors.red,
+                    colorA: 0xfffa6b40,
+                    colorB: 0xfffd1d1d,
                     // The floating action buttons always take up the same space.
                     height: height - offsetHeight,
                     // We have to leave at least some space for the rotated cards.
@@ -48,7 +49,8 @@ class _EventsBodyState extends State<EventsBody> {
                     rotation: height > 400 ? 3.0 : 2.0,
                   ),
                   BackgroundCard(
-                    color: Colors.blue,
+                    colorA: 0xff7474bf,
+                    colorB: 0xff348ac7,
                     // The floating action buttons always take up the same space.
                     height: height - offsetHeight,
                     // We have to leave at least some space for the rotated cards.

@@ -123,13 +123,15 @@ class EventCard extends StatelessWidget {
 }
 
 class BackgroundCard extends StatelessWidget {
-  final Color color;
+  final int colorA;
+  final int colorB;
   final double height;
   final double width;
   final double rotation;
 
   BackgroundCard({
-    @required this.color,
+    @required this.colorA,
+    @required this.colorB,
     @required this.height,
     @required this.width,
     this.rotation = 0.0,
@@ -144,8 +146,17 @@ class BackgroundCard extends StatelessWidget {
         width: width,
         child: Card(
           shape: ContinuousRectangleBorder(),
-          color: color,
-          child: Container(),
+          child: Container(
+             decoration: new BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(colorA),
+                    Color(colorB),
+                  ])
+            ),
+          ),
         ),
       ),
     );

@@ -20,6 +20,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_advanced_networkimage: 0.5.0
+  shared_preferences: 0.5.4+8
   intl_translation: 0.17.3
   cupertino_icons: 0.1.2
   firebase_core: 0.4.2+1
@@ -57,11 +58,12 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  fonts:
-  - family:  CustomIcons
-    fonts:
-    - asset: assets/fonts/CustomIcons.ttf
 
   assets:
     - assets/fonts/
     - assets/images/
+
+  fonts:
+    - family: CustomIcons
+      fonts:
+        - asset: assets/fonts/CustomIcons.ttf

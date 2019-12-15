@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Event {
   String user;
   String name;
@@ -36,7 +38,7 @@ class Event {
         this.count = map["count"],
         this.attendees = map["attendees"];
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson([bool update = false]) {
     Map<String, dynamic> json = {};
     if (name != null) json["name"] = name;
     if (description != null) json["description"] = description;
@@ -46,7 +48,8 @@ class Event {
     if (open != null) json["open"] = open;
     if (slots != null) json["slots"] = slots;
     if (count != null) json["count"] = count;
-    if (attendees != null) json["attendees"] = attendees;
+    if (attendees != null) json["attendees"] = update
+        ? FieldValue.arrayUnion([attendees]) : attendees;
     return json;
   }
 

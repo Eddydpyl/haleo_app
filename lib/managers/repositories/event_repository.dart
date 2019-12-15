@@ -49,7 +49,7 @@ class EventRepository {
 
   Future<dynamic> update(String key, Event event) {
     DocumentReference reference = _database.collection("events").document(key);
-    return reference.updateData(event.toJson());
+    return reference.updateData(event.toJson(true));
   }
 
   Future<dynamic> delete(String key) async {

@@ -22,8 +22,8 @@ class ApplicationProvider extends InheritedWidget {
   ApplicationProvider({
     Key key,
     @required Widget child,
-    @required Firestore database,
     @required FirebaseAuth auth,
+    @required Firestore database,
     @required GoogleSignIn google,
     @required Geoflutterfire geo,
     @required FirebaseMessaging messaging,

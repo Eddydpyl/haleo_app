@@ -95,4 +95,11 @@ class Localization {
         name: "accountNotFoundText",
         args: [],
       );
+
+  String eventFullText() =>
+      Intl.message(
+        "The event is already full!",
+        name: "eventFullText",
+        args: [],
+      );
 }

@@ -19,7 +19,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   flutter_advanced_networkimage: 0.5.0
+  flutter_ringtone_player: 1.0.3
   shared_preferences: 0.5.4+8
   intl_translation: 0.17.3
   cupertino_icons: 0.1.2

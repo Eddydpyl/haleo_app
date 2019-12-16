@@ -8,10 +8,12 @@ import '../managers/database_manager.dart';
 import '../managers/preference_manager.dart';
 import '../models/perimeter.dart';
 import '../models/event.dart';
+import '../localization.dart';
 
 class EventsBloc extends BaseBloc {
   final DatabaseManager _databaseManager;
   final PreferenceManager _preferenceManager;
+  final Localization _localization;
 
   LenientSubject<Map<String, Event>> _events;
   LenientSubject<MapEntry<String, bool>> _attend;
@@ -20,8 +22,8 @@ class EventsBloc extends BaseBloc {
 
   StreamSubscription _subscription;
 
-  EventsBloc(DatabaseManager databaseManager, PreferenceManager preferenceManager)
-      : _databaseManager = databaseManager, _preferenceManager = preferenceManager;
+  EventsBloc(DatabaseManager databaseManager, PreferenceManager preferenceManager, Localization localization)
+      : _databaseManager = databaseManager, _preferenceManager = preferenceManager, _localization = localization;
 
   /// Returns a [Stream] of events given the filters.
   Observable<Map<String, Event>> get eventsStream => _events.stream;
@@ -43,12 +45,14 @@ class EventsBloc extends BaseBloc {
     _perimeter = LenientSubject(ignoreRepeated: true);
     _userKey = LenientSubject(ignoreRepeated: true);
 
-    _attend.stream.listen((MapEntry<String, bool> attend) {
+    _attend.stream.listen((MapEntry<String, bool> attend) async {
       if (attend != null) {
-        if (attend.value) _databaseManager.eventRepository()
-            .update(attend.key, Event(attendees: [attend.key]))
-            .catchError((e) => forwardException(e));
-        _preferenceManager.view(attend.key);
+        if (attend.value) {
+          Event event = await _databaseManager.eventRepository().read(attend.key);
+          if (!event.open) return forwardException(FailedException(_localization.eventFullText()));
+          _databaseManager.eventRepository().update(attend.key, Event(attendees: [attend.key]))
+              .catchError((e) => forwardException(e));
+        } _preferenceManager.view(attend.key);
       }
     });
     _perimeter.stream.listen((Perimeter perimeter) {

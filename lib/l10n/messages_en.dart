@@ -24,6 +24,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "disabledUserText" : MessageLookupByLibrary.simpleMessage("Your user has been disabled by an administrator."),
     "errorSignInText" : MessageLookupByLibrary.simpleMessage("There was an issue and you could not sign in."),
     "errorSignUpText" : MessageLookupByLibrary.simpleMessage("There was an issue and you could not sign up."),
+    "eventFullText" : MessageLookupByLibrary.simpleMessage("The event is already full!"),
     "invalidEmailText" : MessageLookupByLibrary.simpleMessage("The email address is not valid."),
     "invalidPasswordText" : MessageLookupByLibrary.simpleMessage("The password must be at least 6 characters long."),
     "invalidSignInText" : MessageLookupByLibrary.simpleMessage("Either the email or password are incorrect."),

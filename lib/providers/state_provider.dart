@@ -14,10 +14,10 @@ class StateProvider extends StatelessWidget {
   final MessageManager messaging;
 
   StateProvider({
-    this.child,
-    this.auth,
-    this.database,
-    this.messaging,
+    @required this.child,
+    @required this.auth,
+    @required this.database,
+    @required this.messaging,
   });
 
   @override

@@ -44,5 +44,10 @@
   "@accountNotFoundText": {
     "type": "text",
     "placeholders": {}
+  },
+  "eventFullText": "¡El evento está lleno!",
+  "@eventFullText": {
+    "type": "text",
+    "placeholders": {}
   }
 }

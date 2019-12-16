@@ -152,7 +152,7 @@ class _InitializerState extends State<Initializer> {
         if (snapshot.data != null) {
           return EventsPage();
         } else
-          return EventsPage();
+          return EventsCreatePage();
       },
     );
   }

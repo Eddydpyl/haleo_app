@@ -68,9 +68,7 @@ class _EventsBodyState extends State<EventsBody> {
                 ],
               ),
             ),
-            Container(height: 16.0), // Acts as padding here
             Expanded(child: EventActions()),
-            Container(height: 16.0), // Acts as padding here
           ],
         ));
   }

@@ -25,7 +25,7 @@ class EventsCreateBar extends StatelessWidget implements PreferredSizeWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black87,
-            fontSize: 35.0,
+            fontSize: 24.0,
           ),
         ),
       ),

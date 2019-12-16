@@ -12,16 +12,6 @@ class EventsCreateBody extends StatefulWidget {
 }
 
 class _EventsCreateBodyState extends State<EventsCreateBody> {
-  final Event event = Event(
-    name: "Padel",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-        "Fusce condimentum augue vel vestibulum sodales. Donec consectetur, "
-        "nisi a fringilla lobortis, arcu leo ultrices nunc, tincidunt "
-        "interdum ex libero id diam.",
-    image: "https://www.hotelbalnearivichycatalan.cat/uploads/galleries/que"
-        "-fer/sense-sortir-del-balneari/padel/pista-padel-8.jpg",
-  );
-
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -47,9 +37,7 @@ class _EventsCreateBodyState extends State<EventsCreateBody> {
                 ],
               ),
             ),
-            Container(height: 8.0), // Acts as padding here
             Expanded(child: EventActions()),
-            Container(height: 8.0), // Acts as padding here
           ],
         ));
   }
@@ -63,6 +51,54 @@ class EventEditCard extends StatelessWidget {
     @required this.height,
   });
 
+  Widget _buildTitleTF() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
+      child: TextField(
+        keyboardType: TextInputType.text,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20.0,
+          color: Colors.black87,
+        ),
+        decoration: InputDecoration(
+          hintText: 'Beber cerveza, explorar la zona, visitar la catedral ... ',
+          hintStyle: TextStyle(fontSize: 12.0),
+          hintMaxLines: 1,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDescriptionTF() {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 8.0),
+        child: TextField(
+          maxLines: 5,
+          keyboardType: TextInputType.text,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 15.0,
+            color: Colors.black54,
+          ),
+          decoration: InputDecoration(
+              hintText: 'Placeholder',
+              hintStyle: TextStyle(
+                fontSize: 12.0,
+              ),
+              hintMaxLines: 5,
+              labelStyle: TextStyle(color: Colors.red),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(2.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red))),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -71,49 +107,27 @@ class EventEditCard extends StatelessWidget {
       child: Card(
         shape: ContinuousRectangleBorder(),
         color: Colors.white,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            TransitionToImage(
-              height: height > 400 ? height / 2 : height / 4,
-              width: double.maxFinite,
-              fit: BoxFit.cover,
-              image: AdvancedNetworkImage(
-                'https://www.arbelecos.es/wp-content/uploads/2016/02/placeholder-9.jpg',
-                useDiskCache: true,
-                timeoutDuration: Duration(seconds: 5),
-              ),
-              placeholder: Container(),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
-              child: Text(
-                'Prueba',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.0,
-                  color: Colors.black87,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              TransitionToImage(
+                height: height > 400 ? height / 2 : height / 4,
+                width: double.maxFinite,
+                fit: BoxFit.cover,
+                image: AdvancedNetworkImage(
+                  'https://www.arbelecos.es/wp-content/uploads/2016/02/placeholder-9.jpg',
+                  useDiskCache: true,
+                  timeoutDuration: Duration(seconds: 5),
                 ),
+                placeholder: Container(),
               ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 8.0),
-                  child: Text(
-                    'Cambiar por inputs',
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 15.0,
-                      color: Colors.black54,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+              _buildTitleTF(),
+              _buildDescriptionTF(),
+            ],
+          ),
         ),
       ),
     );

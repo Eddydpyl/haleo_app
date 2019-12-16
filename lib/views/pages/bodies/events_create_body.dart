@@ -62,6 +62,10 @@ class EventEditCard extends StatelessWidget {
           color: Colors.black87,
         ),
         decoration: InputDecoration(
+          border: _underlineInputBorder(),
+          enabledBorder: _underlineInputBorder(),
+          focusedBorder: _underlineInputBorder(color: Colors.red),
+          fillColor: Colors.black54,
           hintText: 'Beber cerveza, explorar la zona, visitar la catedral ... ',
           hintStyle: TextStyle(fontSize: 12.0),
           hintMaxLines: 1,
@@ -83,19 +87,37 @@ class EventEditCard extends StatelessWidget {
             color: Colors.black54,
           ),
           decoration: InputDecoration(
-              hintText: 'Placeholder',
-              hintStyle: TextStyle(
-                fontSize: 12.0,
-              ),
-              hintMaxLines: 5,
-              labelStyle: TextStyle(color: Colors.red),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(2.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red))),
+            hintText: 'Placeholder',
+            hintStyle: TextStyle(
+              fontSize: 12.0,
+            ),
+            hintMaxLines: 5,
+            labelStyle: TextStyle(color: Colors.red),
+            border: _outlineInputBorder(),
+            enabledBorder: _outlineInputBorder(),
+            focusedBorder: _outlineInputBorder(color: Colors.red),
+          ),
         ),
       ),
+    );
+  }
+
+  UnderlineInputBorder _underlineInputBorder({Color color = Colors.black54}) {
+    return UnderlineInputBorder(
+      borderSide: BorderSide(
+        color: color,
+        width: 2.0,
+      ),
+    );
+  }
+
+  OutlineInputBorder _outlineInputBorder({Color color = Colors.black54}) {
+    return OutlineInputBorder(
+      borderSide: BorderSide(
+        color: color,
+        width: 2.0,
+      ),
+      borderRadius: BorderRadius.circular(2.0),
     );
   }
 
@@ -143,7 +165,7 @@ class EventActions extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Container(
-          height: 64.0,
+          height: 50.0, // TODO: increase button size to 64 when we can do so in main screen too
           child: FloatingActionButton(
             backgroundColor: Colors.white,
             child: PaintGradient(
@@ -152,12 +174,12 @@ class EventActions extends StatelessWidget {
               colorB: Color(0xfffd1d1d),
             ),
             onPressed: () {
-              // TODO
+              // TODO: cancel event creation
             },
           ),
         ),
         Container(
-          height: 64.0,
+          height: 50.0,
           child: FloatingActionButton(
             backgroundColor: Colors.white,
             child: PaintGradient(
@@ -166,7 +188,7 @@ class EventActions extends StatelessWidget {
               colorB: Color(0xff45b649),
             ),
             onPressed: () {
-              // TODO
+              // TODO: create event
             },
           ),
         ),

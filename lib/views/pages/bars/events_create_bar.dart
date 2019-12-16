@@ -21,7 +21,7 @@ class EventsCreateBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       title: RichText(
         text: TextSpan(
-          text: "¡Nuevo evento!",
+          text: "¡crear haleo!",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black87,

@@ -150,12 +150,23 @@ class _InitializerState extends State<Initializer> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
+      initialData: "",
       stream: StateProvider.stateBloc(context).userKeyStream,
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.data != null) {
-          return EventsPage();
+          if (snapshot.data.isNotEmpty)
+            return EventsPage();
+          else return SplashScreen();
         } else return SessionPage();
       },
     );
   }
 }
+
+class SplashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(); // TODO
+  }
+}
+

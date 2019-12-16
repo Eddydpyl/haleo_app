@@ -5,60 +5,56 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../managers/database_manager.dart';
-import '../managers/preference_manager.dart';
-import '../blocs/state_bloc.dart';
-import '../blocs/events_bloc.dart';
+import '../blocs/user_admin_bloc.dart';
 import '../blocs/user_bloc.dart';
-import '../localization.dart';
 
-class EventsProvider extends StatelessWidget {
+class UserProvider extends StatelessWidget {
   final Widget child;
-  final StateBloc stateBloc;
   final DatabaseManager database;
-  final PreferenceManager preferences;
-  final Localization localization;
+  final String uid;
 
-  EventsProvider({
+  UserProvider({
     @required this.child,
-    @required this.stateBloc,
     @required this.database,
-    @required this.preferences,
-    @required this.localization,
+    @required this.uid,
   });
 
   @override
   Widget build(BuildContext context) {
     return MultiBaseProvider.create(
-      key: Key("Events"),
-      inherited: EventsInherited(
+      key: Key("User"),
+      inherited: UserInherited(
         child: child,
         blocs: {
-          "eventsBloc": EventsBloc(database, preferences, localization),
           "userBloc": UserBloc(database),
+          "userAdminBloc": UserAdminBloc(database),
         },
       ),
       initialize: (Map<String, BaseBloc> blocs, Set<StreamSubscription> subscriptions) {
         UserBloc userBloc = blocs["userBloc"];
-        subscriptions.add(stateBloc.userKeyStream
-            .listen((key) => userBloc.userKeySink.add(key)));
+        userBloc.userKeySink.add(uid);
+      },
+      update: (Map<String, BaseBloc> blocs, Set<StreamSubscription> subscriptions) {
+        UserBloc userBloc = blocs["userBloc"];
+        userBloc.userKeySink.add(uid);
       },
     );
   }
 
-  static EventsBloc eventsBloc(BuildContext context) =>
-      MultiBaseProvider.bloc<EventsInherited>(context, "eventsBloc");
-
   static UserBloc userBloc(BuildContext context) =>
-      MultiBaseProvider.bloc<EventsInherited>(context, "userBloc");
+      MultiBaseProvider.bloc<UserInherited>(context, "userBloc");
+
+  static UserAdminBloc userAdminBloc(BuildContext context) =>
+      MultiBaseProvider.bloc<UserInherited>(context, "userAdminBloc");
 
   static PublishSubject<BaseException> exception(BuildContext context) =>
-      MultiBaseProvider.exception<EventsInherited>(context);
+      MultiBaseProvider.exception<UserInherited>(context);
 }
 
 // ignore: must_be_immutable
-class EventsInherited extends MultiBaseInherited {
+class UserInherited extends MultiBaseInherited {
 
-  EventsInherited({
+  UserInherited({
     @required Widget child,
     @required Map<String, BaseBloc> blocs,
   }) : super(child: child, blocs: blocs);

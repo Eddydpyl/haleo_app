@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'bars/events_bar.dart';
 import 'bodies/events_body.dart';
 import '../../providers/application_provider.dart';
+import '../../providers/state_provider.dart';
 import '../../providers/events_provider.dart';
 
 class EventsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EventsProvider(
+      stateBloc: StateProvider.stateBloc(context),
       database: ApplicationProvider.database(context),
       preferences: ApplicationProvider.preferences(context),
       localization: ApplicationProvider.localization(context),

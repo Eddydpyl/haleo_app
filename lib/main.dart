@@ -19,6 +19,7 @@ import 'localization.dart';
 import 'providers/application_provider.dart';
 import 'providers/state_provider.dart';
 import 'views/pages/events_page.dart';
+import 'views/pages/events_create_page.dart';
 import 'views/pages/login_page.dart';
 import 'views/themes.dart';
 import 'models/base.dart';
@@ -151,7 +152,7 @@ class _InitializerState extends State<Initializer> {
         if (snapshot.data != null) {
           return EventsPage();
         } else
-          return LoginPage();
+          return EventsPage();
       },
     );
   }

@@ -19,7 +19,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   flutter_advanced_networkimage: 0.5.0
+  flutter_ringtone_player: 1.0.3
+  shared_preferences: 0.5.4+8
   intl_translation: 0.17.3
   cupertino_icons: 0.1.2
   font_awesome_flutter: 8.5.0
@@ -28,6 +32,7 @@ dependencies:
   cloud_firestore: 0.12.11
   firebase_messaging: 5.1.8
   geoflutterfire: 2.0.3+5
+  google_sign_in: 4.0.14
   darter_base: ^0.0.2
   vibration: 1.2.2
   share: 0.6.3+4
@@ -57,11 +62,12 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  fonts:
-  - family:  CustomIcons
-    fonts:
-    - asset: assets/fonts/CustomIcons.ttf
 
   assets:
     - assets/fonts/
     - assets/images/
+
+  fonts:
+    - family: CustomIcons
+      fonts:
+        - asset: assets/fonts/CustomIcons.ttf

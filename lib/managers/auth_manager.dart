@@ -17,7 +17,9 @@ class AuthManager {
 
   Future<FirebaseUser> signInWithGoogle() async {
     final GoogleSignInAccount googleSignIn = await _google.signIn();
-    final GoogleSignInAuthentication googleAuth = await googleSignIn.authentication;
+    final GoogleSignInAuthentication googleAuth = await googleSignIn?.authentication;
+    if (googleAuth == null) return null;
+
     final AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,

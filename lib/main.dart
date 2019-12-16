@@ -19,7 +19,7 @@ import 'localization.dart';
 import 'providers/application_provider.dart';
 import 'providers/state_provider.dart';
 import 'views/pages/events_page.dart';
-import 'views/pages/login_page.dart';
+import 'views/pages/session_page.dart';
 import 'views/themes.dart';
 import 'models/base.dart';
 
@@ -119,7 +119,8 @@ class _InitializerState extends State<Initializer> {
           final int action = int.parse(data["action"]);
           final String key = data["key"];
           if (type == Archetype.EVENT) {
-            if (action == Action.COMPLETE || action == Action.SEND_MESSAGE) {
+            if (action == Action.OPEN
+                || action == Action.SEND_MESSAGE) {
               // TODO: Navigate to the event's page.
             }
           }
@@ -134,7 +135,8 @@ class _InitializerState extends State<Initializer> {
           final int action = int.parse(data["action"]);
           final String key = data["key"];
           if (type == Archetype.EVENT) {
-            if (action == Action.COMPLETE || action == Action.SEND_MESSAGE) {
+            if (action == Action.OPEN
+                || action == Action.SEND_MESSAGE) {
               // TODO: Navigate to the event's page.
             }
           }
@@ -150,8 +152,7 @@ class _InitializerState extends State<Initializer> {
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.data != null) {
           return EventsPage();
-        } else
-          return LoginPage();
+        } else return SessionPage();
       },
     );
   }

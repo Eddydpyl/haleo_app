@@ -80,9 +80,12 @@ class SessionBloc extends BaseBloc {
     });
     _google.stream.listen((bool google) async {
       if (google ?? false) {
-        FirebaseUser aux = await _authManager.signInWithGoogle()
-            .catchError((Exception exception) => forwardException(
-            FailedException(_localization.errorSignInText())));
+        FirebaseUser aux = await _authManager
+          .signInWithGoogle().catchError((exception) {
+            forwardException(FailedException(_localization.errorSignInText()));
+            return null;
+          });
+
         if (aux == null) return;
         User user = User(email: aux.email,
             name: aux.displayName, image: aux.photoUrl);

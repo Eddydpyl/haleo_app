@@ -41,5 +41,38 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+    <!-- Google Sign-in Section -->
+    <key>CFBundleURLTypes</key>
+    <array>
+    	<dict>
+    		<key>CFBundleTypeRole</key>
+    		<string>Editor</string>
+    		<key>CFBundleURLSchemes</key>
+    		<array>
+    			<string>com.googleusercontent.apps.1016504287323-mb7mjdtf9dmotpsrnq0cjsf718lag9ms</string>
+    		</array>
+    	</dict>
+    </array>
+     <!-- Facebook Sign-in Section -->
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>fb767239737083125</string>
+             </array>
+        </dict>
+    </array>
+    <key>FacebookAppID</key>
+    <string>767239737083125</string>
+    <key>FacebookDisplayName</key>
+    <string>Haleo</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>fbapi</string>
+        <string>fb-messenger-share-api</string>
+        <string>fbauth2</string>
+        <string>fbshareextension</string>
+    </array>
 </dict>
 </plist>

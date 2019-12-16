@@ -12,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:vibration/vibration.dart';
 import 'package:intl/intl.dart';
 
@@ -50,6 +51,7 @@ class App extends StatelessWidget {
       messaging: messaging,
       geo: Geoflutterfire(),
       google: GoogleSignIn(),
+      facebook: FacebookLogin(),
       preferences: preferences,
       child: Builder(
         builder: (BuildContext context) {

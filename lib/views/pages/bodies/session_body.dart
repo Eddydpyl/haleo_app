@@ -162,9 +162,7 @@ class _SessionBodyState extends State<SessionBody> {
       padding: EdgeInsets.symmetric(vertical: 12.0),
       backgroundColor: Colors.blue[700],
       icon: FontAwesomeIcons.facebookF,
-      onPressed: () {
-        // TODO
-      },
+      onPressed: () => sessionBloc.facebookSink.add(true),
     );
   }
 

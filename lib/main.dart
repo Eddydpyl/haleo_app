@@ -100,8 +100,8 @@ class _InitializerState extends State<Initializer> {
     // https://pub.dev/packages/firebase_messaging#ios-integration
     widget.messaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        final Map<String, dynamic> data = Map
-            .from(Platform.isIOS ? message : message["data"]);
+        final Map<String, dynamic> data =
+            Map.from(Platform.isIOS ? message : message["data"]);
         if (data != null && data["type"] != null) {
           // Play the appropriate sound.
           FlutterRingtonePlayer.playNotification();
@@ -111,32 +111,30 @@ class _InitializerState extends State<Initializer> {
         }
       },
       onLaunch: (Map<String, dynamic> message) async {
-        final Map<String, dynamic> data = Map
-            .from(Platform.isIOS ? message : message["data"]);
+        final Map<String, dynamic> data =
+            Map.from(Platform.isIOS ? message : message["data"]);
         if (data != null && data["type"] != null) {
           // Identify the notification type.
           final int type = int.parse(data["type"]);
           final int action = int.parse(data["action"]);
           final String key = data["key"];
           if (type == Archetype.EVENT) {
-            if (action == Action.COMPLETE
-                || action == Action.SEND_MESSAGE) {
+            if (action == Action.COMPLETE || action == Action.SEND_MESSAGE) {
               // TODO: Navigate to the event's page.
             }
           }
         }
       },
       onResume: (Map<String, dynamic> message) async {
-        final Map<String, dynamic> data = Map
-            .from(Platform.isIOS ? message : message["data"]);
+        final Map<String, dynamic> data =
+            Map.from(Platform.isIOS ? message : message["data"]);
         if (data != null && data["type"] != null) {
           // Identify the notification type.
           final int type = int.parse(data["type"]);
           final int action = int.parse(data["action"]);
           final String key = data["key"];
           if (type == Archetype.EVENT) {
-            if (action == Action.COMPLETE
-                || action == Action.SEND_MESSAGE) {
+            if (action == Action.COMPLETE || action == Action.SEND_MESSAGE) {
               // TODO: Navigate to the event's page.
             }
           }
@@ -152,7 +150,8 @@ class _InitializerState extends State<Initializer> {
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.data != null) {
           return EventsPage();
-        } else return Container();
+        } else
+          return LoginPage();
       },
     );
   }

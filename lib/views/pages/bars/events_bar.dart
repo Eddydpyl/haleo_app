@@ -22,10 +22,10 @@ class EventsBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       title: RichText(
         text: TextSpan(
-          text: "hal",
+          text: "¡hal",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: Colors.black87,
             fontSize: 35.0,
           ),
           children: <TextSpan>[
@@ -37,12 +37,17 @@ class EventsBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             TextSpan(
-              text: "o",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.blue,
-              ),
-            ),
+                text: "o",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                )),
+            TextSpan(
+                text: "!",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ))
           ],
         ),
       ),
@@ -54,7 +59,13 @@ class EventsBar extends StatelessWidget implements PreferredSizeWidget {
             height: 32.0,
             padding: const EdgeInsets.all(2.0),
             decoration: new BoxDecoration(
-              color: Colors.red,
+              gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xfffa6b40),
+                    Color(0xfffd1d1d),
+                  ]),
               shape: BoxShape.circle,
             ),
             child: (user.image?.isNotEmpty ?? false)

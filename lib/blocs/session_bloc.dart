@@ -24,6 +24,7 @@ class SessionBloc extends BaseBloc {
   LenientSubject<String> _email;
   LenientSubject<String> _password;
   LenientSubject<bool> _google;
+  LenientSubject<bool> _facebook;
 
   SessionBloc(AuthManager authManager, DatabaseManager databaseManager, Localization localization)
       : _authManager = authManager, _databaseManager = databaseManager, _localization = localization;
@@ -46,6 +47,9 @@ class SessionBloc extends BaseBloc {
   /// Consumes a placeholder to trigger a Google sign in.
   LenientSink<bool> get googleSink => _google.sink;
 
+  /// Consumes a placeholder to trigger a Facebook sign in.
+  LenientSink<bool> get facebookSink => _facebook.sink;
+
   @override
   void initialize() {
     super.initialize();
@@ -54,6 +58,7 @@ class SessionBloc extends BaseBloc {
     _email = LenientSubject(ignoreRepeated: false);
     _password = LenientSubject(ignoreRepeated: false);
     _google = LenientSubject(ignoreRepeated: false);
+    _facebook = LenientSubject(ignoreRepeated: false);
 
     _mode.add(SessionMode.SIGN_IN);
     _mode.stream.listen((int mode) => _emptyFields());
@@ -80,9 +85,26 @@ class SessionBloc extends BaseBloc {
     });
     _google.stream.listen((bool google) async {
       if (google ?? false) {
-        FirebaseUser aux = await _authManager.signInWithGoogle()
-            .catchError((Exception exception) => forwardException(
-            FailedException(_localization.errorSignInText())));
+        FirebaseUser aux = await _authManager
+          .signInWithGoogle().catchError((exception) {
+            forwardException(FailedException(_localization.errorSignInText()));
+            return null;
+          });
+
+        if (aux == null) return;
+        User user = User(email: aux.email,
+            name: aux.displayName, image: aux.photoUrl);
+        _databaseManager.userRepository().create(aux.uid, user);
+      }
+    });
+    _facebook.stream.listen((bool facebook) async {
+      if (facebook ?? false) {
+        FirebaseUser aux = await _authManager
+          .signInWithFacebook().catchError((exception) {
+            forwardException(FailedException(_localization.errorSignInText()));
+            return null;
+          });
+
         if (aux == null) return;
         User user = User(email: aux.email,
             name: aux.displayName, image: aux.photoUrl);
@@ -153,6 +175,7 @@ class SessionBloc extends BaseBloc {
     futures.add(_email.close());
     futures.add(_password.close());
     futures.add(_google.close());
+    futures.add(_facebook.close());
     futures.add(super.dispose());
     return Future.wait(futures);
   }

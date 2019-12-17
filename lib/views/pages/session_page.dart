@@ -2,30 +2,26 @@ import 'package:darter_base/darter_base.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import 'bars/events_bar.dart';
-import 'bodies/events_body.dart';
+import 'bodies/session_body.dart';
 import '../../providers/application_provider.dart';
-import '../../providers/state_provider.dart';
-import '../../providers/events_provider.dart';
+import '../../providers/session_provider.dart';
 
-class EventsPage extends StatelessWidget {
+class SessionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return EventsProvider(
-      stateBloc: StateProvider.stateBloc(context),
+    return SessionProvider(
+      auth: ApplicationProvider.auth(context),
       database: ApplicationProvider.database(context),
-      preferences: ApplicationProvider.preferences(context),
       localization: ApplicationProvider.localization(context),
-      child: EventsScaffold(
-        appBar: EventsBar(),
-        body: EventsBody(),
+      child: SessionScaffold(
+        body: SessionBody(),
       ),
     );
   }
 }
 
-class EventsScaffold extends BaseScaffold<EventsInherited> {
-  EventsScaffold({
+class SessionScaffold extends BaseScaffold<SessionInherited> {
+  SessionScaffold({
     Key key,
     PreferredSizeWidget appBar,
     Widget body,

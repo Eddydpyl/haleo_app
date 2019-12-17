@@ -12,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:vibration/vibration.dart';
 import 'package:intl/intl.dart';
 
@@ -19,8 +20,7 @@ import 'localization.dart';
 import 'providers/application_provider.dart';
 import 'providers/state_provider.dart';
 import 'views/pages/events_page.dart';
-import 'views/pages/events_create_page.dart';
-import 'views/pages/login_page.dart';
+import 'views/pages/session_page.dart';
 import 'views/themes.dart';
 import 'models/base.dart';
 
@@ -51,6 +51,7 @@ class App extends StatelessWidget {
       messaging: messaging,
       geo: Geoflutterfire(),
       google: GoogleSignIn(),
+      facebook: FacebookLogin(),
       preferences: preferences,
       child: Builder(
         builder: (BuildContext context) {
@@ -120,7 +121,8 @@ class _InitializerState extends State<Initializer> {
           final int action = int.parse(data["action"]);
           final String key = data["key"];
           if (type == Archetype.EVENT) {
-            if (action == Action.COMPLETE || action == Action.SEND_MESSAGE) {
+            if (action == Action.OPEN
+                || action == Action.SEND_MESSAGE) {
               // TODO: Navigate to the event's page.
             }
           }
@@ -135,7 +137,8 @@ class _InitializerState extends State<Initializer> {
           final int action = int.parse(data["action"]);
           final String key = data["key"];
           if (type == Archetype.EVENT) {
-            if (action == Action.COMPLETE || action == Action.SEND_MESSAGE) {
+            if (action == Action.OPEN
+                || action == Action.SEND_MESSAGE) {
               // TODO: Navigate to the event's page.
             }
           }
@@ -147,13 +150,23 @@ class _InitializerState extends State<Initializer> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
+      initialData: "",
       stream: StateProvider.stateBloc(context).userKeyStream,
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.data != null) {
-          return EventsPage();
-        } else
-          return EventsCreatePage();
+          if (snapshot.data.isNotEmpty)
+            return EventsPage();
+          else return SplashScreen();
+        } else return SessionPage();
       },
     );
   }
 }
+
+class SplashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(); // TODO
+  }
+}
+

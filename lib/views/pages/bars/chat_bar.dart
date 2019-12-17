@@ -6,9 +6,8 @@ import '../../../providers/events_provider.dart';
 import '../../../models/user.dart';
 import '../../custom_icons.dart';
 import '../../common_widgets.dart';
-import '../chat_page.dart';
 
-class EventsBar extends StatelessWidget implements PreferredSizeWidget {
+class ChatBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -21,16 +20,7 @@ class EventsBar extends StatelessWidget implements PreferredSizeWidget {
             backgroundColor: Colors.transparent,
             elevation: 0.0,
             leading: PaintGradient(
-                child: IconButton(
-                  icon: Icon(CustomIcons.chat),
-                  tooltip: 'Ir al chat',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ChatPage()),
-                    ); //TODO: fix providing data stream
-                  },
-                ),
+                child: Icon(CustomIcons.chat),
                 colorA: Color(0xfffa6b40),
                 colorB: Color(0xfffd1d1d)),
             centerTitle: true,

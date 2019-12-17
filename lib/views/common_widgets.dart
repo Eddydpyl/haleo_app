@@ -1,12 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_networkimage/provider.dart';
-import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:angles/angles.dart';
-import 'package:share/share.dart';
-
-import '../models/event.dart';
 
 class PaintGradient extends StatelessWidget {
   final Widget child;
@@ -31,109 +26,6 @@ class PaintGradient extends StatelessWidget {
           [colorA, colorB],
         );
       },
-    );
-  }
-}
-
-class EventCard extends StatelessWidget {
-  final Event event;
-  final double height;
-  final double width;
-  final double rotation;
-
-  EventCard({
-    @required this.event,
-    this.height = double.maxFinite,
-    this.width = double.maxFinite,
-    this.rotation = 0.0,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          final double height = constraints.maxHeight;
-          final double width = constraints.maxWidth;
-          return Transform.rotate(
-            angle: Angle.fromDegrees(rotation).radians,
-            child: Container(
-              height: height,
-              width: width,
-              child: Card(
-                shape: ContinuousRectangleBorder(),
-                color: Colors.white,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    TransitionToImage(
-                      height: height > 300 ? height / 2 : height / 4,
-                      width: double.maxFinite,
-                      fit: BoxFit.cover,
-                      image: AdvancedNetworkImage(
-                        event.image,
-                        useDiskCache: true,
-                        timeoutDuration: Duration(seconds: 5),
-                      ),
-                      placeholder: Image.asset("assets/images/placeholder.jpg"),
-                      loadingWidget: Image.asset("assets/images/placeholder.jpg"),
-                    ),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                event.name.toUpperCase(),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20.0,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              Container(height: 12.0),
-                              Text(
-                                event.description,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 15.0,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: FlatButton(
-                        shape: CircleBorder(),
-                        child: PaintGradient(
-                          child: Icon(Icons.share),
-                          colorA: Color(0xff7474bf),
-                          colorB: Color(0xff348ac7),
-                        ),
-                        onPressed: () {
-                          Share.share("Que Haleo más grande.");
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
     );
   }
 }
@@ -233,4 +125,15 @@ class TearBorder extends ShapeBorder {
   ShapeBorder scale(double t) {
     return null; // This border doesn't support scaling.
   }
+}
+
+class FadeRoute extends PageRouteBuilder {
+  final Widget page;
+  FadeRoute(this.page) : super(
+    pageBuilder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation) => page,
+    transitionsBuilder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation, Widget child) =>
+        FadeTransition(opacity: animation, child: child),
+  );
 }

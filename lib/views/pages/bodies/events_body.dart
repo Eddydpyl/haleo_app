@@ -1,11 +1,15 @@
+import 'package:angles/angles.dart';
 import 'package:flutter/material.dart';
-import 'package:haleo_app/models/perimeter.dart';
+import 'package:flutter_advanced_networkimage/provider.dart';
+import 'package:flutter_advanced_networkimage/transition.dart';
+import 'package:share/share.dart';
 
 import '../../../providers/events_provider.dart';
-import '../event_admin_page.dart';
-import '../../custom_icons.dart';
 import '../../../models/event.dart';
+import '../../../models/perimeter.dart';
 import '../../common_widgets.dart';
+import '../../custom_icons.dart';
+import '../event_admin_page.dart';
 
 class EventsBody extends StatefulWidget {
   @override
@@ -82,15 +86,7 @@ class EventStack extends StatelessWidget {
           ),
           events.isNotEmpty
           ? EventCard(event: events[eventKey])
-          : BackgroundCard(
-            colorA: 0xffffff,
-            colorB: 0xffffff,
-            child: Center(
-              child: Text(
-                "No hay eventos...",
-              ),
-            ),
-          ),
+          : EmptyCard(),
         ],
       ),
     );
@@ -134,8 +130,8 @@ class EventActions extends StatelessWidget {
             ),
           ),
           Container(
-            height: 50.0,
-            width: 50.0,
+            height: 64.0,
+            width: 64.0,
             child: FloatingActionButton(
               heroTag: null, // Fixes issue.
               backgroundColor: Colors.white,
@@ -147,9 +143,7 @@ class EventActions extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => EventAdminPage(),
-                  ),
+                  FadeRoute(EventAdminPage()),
                 );
               },
             ),
@@ -178,6 +172,124 @@ class EventActions extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class EventCard extends StatelessWidget {
+  final Event event;
+  final double height;
+  final double width;
+  final double rotation;
+
+  EventCard({
+    @required this.event,
+    this.height = double.maxFinite,
+    this.width = double.maxFinite,
+    this.rotation = 0.0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      width: width,
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final double height = constraints.maxHeight;
+          final double width = constraints.maxWidth;
+          return Transform.rotate(
+            angle: Angle.fromDegrees(rotation).radians,
+            child: Container(
+              height: height,
+              width: width,
+              child: Card(
+                shape: ContinuousRectangleBorder(),
+                color: Colors.white,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    TransitionToImage(
+                      height: height > 300 ? height / 2 : height / 4,
+                      width: double.maxFinite,
+                      fit: BoxFit.cover,
+                      image: AdvancedNetworkImage(
+                        event.image,
+                        useDiskCache: true,
+                        timeoutDuration: Duration(seconds: 5),
+                      ),
+                      placeholder: Image.asset("assets/images/placeholder.jpg"),
+                      loadingWidget: Image.asset("assets/images/placeholder.jpg"),
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                event.name.toUpperCase(),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.0,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              Container(height: 12.0),
+                              Text(
+                                event.description,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 15.0,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: FlatButton(
+                        shape: CircleBorder(),
+                        child: PaintGradient(
+                          child: Icon(Icons.share),
+                          colorA: Color(0xff7474bf),
+                          colorB: Color(0xff348ac7),
+                        ),
+                        onPressed: () {
+                          Share.share("Que Haleo más grande.");
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class EmptyCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BackgroundCard(
+      colorA: 0xffffff,
+      colorB: 0xffffff,
+      child: Center(
+        child: Text(
+          "No hay eventos...",
+        ),
       ),
     );
   }

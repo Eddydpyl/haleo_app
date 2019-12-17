@@ -1,4 +1,7 @@
+import 'package:angles/angles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_networkimage/provider.dart';
+import 'package:flutter_advanced_networkimage/transition.dart';
 
 import '../../custom_icons.dart';
 import '../../../models/event.dart';
@@ -15,13 +18,11 @@ class EventAdminBody extends StatefulWidget {
 }
 
 class _EventAdminBodyState extends State<EventAdminBody> {
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
-    final offsetWidth = 32;
-    final offsetHeight = 0.28 * height;
-
     return Padding(
       padding: EdgeInsets.only(top: 16.0),
       child: Column(
@@ -29,30 +30,143 @@ class _EventAdminBodyState extends State<EventAdminBody> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Align(
-            alignment: Alignment.topCenter,
-            child: Stack(
-              children: <Widget>[
-                EventEditCard(
-                  height: height - offsetHeight,
-                  width: width - offsetWidth,
-                ),
-              ],
+          Expanded(
+            child: EventStack(
+              titleController: titleController,
+              descriptionController: descriptionController,
             ),
           ),
-          Expanded(child: EventActions()),
+          EventActions(
+            titleController: titleController,
+            descriptionController: descriptionController,
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    titleController.dispose();
+    descriptionController.dispose();
+  }
+}
+
+class EventStack extends StatelessWidget {
+  final TextEditingController titleController;
+  final TextEditingController descriptionController;
+  final String eventKey;
+  final String image;
+
+  EventStack({
+    @required this.titleController,
+    @required this.descriptionController,
+    this.eventKey,
+    this.image,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final double height = MediaQuery.of(context).size.height;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Stack(
+        children: <Widget>[
+          BackgroundCard(
+            colorA: 0xfffa6b40,
+            colorB: 0xfffd1d1d,
+            rotation: height > 400 ? 3.0 : 2.0,
+          ),
+          BackgroundCard(
+            colorA: 0xff7474bf,
+            colorB: 0xff348ac7,
+            rotation: height > 400 ? -2.0 : -1.0,
+          ),
+          EventAdminCard(
+            titleController: titleController,
+            descriptionController: descriptionController,
+            image: image,
+          ),
         ],
       ),
     );
   }
 }
 
-class EventEditCard extends StatelessWidget {
-  final double width, height;
+class EventActions extends StatelessWidget {
+  final TextEditingController titleController;
+  final TextEditingController descriptionController;
+  final String eventKey;
+  final String image;
 
-  EventEditCard({
-    @required this.width,
-    @required this.height,
+  EventActions({
+    @required this.titleController,
+    @required this.descriptionController,
+    this.eventKey,
+    this.image,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            height: 64.0,
+            width: 64.0,
+            child: FloatingActionButton(
+              heroTag: null, // Fixes issue.
+              backgroundColor: Colors.white,
+              child: PaintGradient(
+                child: Icon(CustomIcons.cancel_1),
+                colorA: Color(0xfffa6b40),
+                colorB: Color(0xfffd1d1d),
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+          Container(
+            height: 64.0,
+            width: 64.0,
+            child: FloatingActionButton(
+              heroTag: null, // Fixes issue.
+              backgroundColor: Colors.white,
+              child: PaintGradient(
+                child: Icon(CustomIcons.ok_1),
+                colorA: Color(0xff7dd624),
+                colorB: Color(0xff45b649),
+              ),
+              onPressed: () {
+                // TODO: Create or update event.
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EventAdminCard extends StatelessWidget {
+  final TextEditingController titleController;
+  final TextEditingController descriptionController;
+  final double height;
+  final double width;
+  final double rotation;
+  final String image;
+
+  EventAdminCard({
+    @required this.titleController,
+    @required this.descriptionController,
+    this.height = double.maxFinite,
+    this.width = double.maxFinite,
+    this.rotation = 0.0,
+    this.image,
   });
 
   @override
@@ -60,28 +174,52 @@ class EventEditCard extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      child: Card(
-        shape: ContinuousRectangleBorder(),
-        color: Colors.white,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Image.asset("assets/images/placeholder.jpg"),
-              _buildTitleTF(),
-              _buildDescriptionTF(),
-            ],
-          ),
-        ),
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final double height = constraints.maxHeight;
+          final double width = constraints.maxWidth;
+          return Transform.rotate(
+            angle: Angle.fromDegrees(rotation).radians,
+            child: Container(
+              height: height,
+              width: width,
+              child: Card(
+                shape: ContinuousRectangleBorder(),
+                color: Colors.white,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TransitionToImage(
+                        height: height > 300 ? height / 2 : height / 4,
+                        width: double.maxFinite,
+                        fit: BoxFit.cover,
+                        image: AdvancedNetworkImage(
+                          image ?? "",
+                          useDiskCache: true,
+                          timeoutDuration: Duration(seconds: 5),
+                        ),
+                        placeholder: Image.asset("assets/images/placeholder.jpg"),
+                        loadingWidget: Image.asset("assets/images/placeholder.jpg"),
+                      ),
+                      titleWidget(titleController),
+                      descriptionWidget(descriptionController),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildTitleTF() {
+  Widget titleWidget(TextEditingController controller) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
+      padding: const EdgeInsets.all(8.0),
       child: TextField(
         keyboardType: TextInputType.text,
         style: TextStyle(
@@ -90,11 +228,11 @@ class EventEditCard extends StatelessWidget {
           color: Colors.black87,
         ),
         decoration: InputDecoration(
-          border: _underlineInputBorder(),
-          enabledBorder: _underlineInputBorder(),
-          focusedBorder: _underlineInputBorder(color: Colors.red),
+          border: underlineInputBorder(),
+          enabledBorder: underlineInputBorder(),
+          focusedBorder: underlineInputBorder(Colors.red),
           fillColor: Colors.black54,
-          hintText: 'Beber cerveza, explorar la zona, visitar la catedral ... ',
+          hintText: "Beber cerveza, explorar la zona, visitar la catedral ... ",
           hintStyle: TextStyle(fontSize: 15.0),
           hintMaxLines: 1,
         ),
@@ -102,35 +240,35 @@ class EventEditCard extends StatelessWidget {
     );
   }
 
-  Widget _buildDescriptionTF() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 8.0),
-        child: TextField(
-          maxLines: 5,
-          keyboardType: TextInputType.text,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
+  Widget descriptionWidget(TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        maxLines: 5,
+        keyboardType: TextInputType.text,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 15.0,
+          color: Colors.black54,
+        ),
+        decoration: InputDecoration(
+          hintText: "¿Qué propones hacer? ¿Qué idioma hablas?, ¿Qué hora te viene mejor?, ...",
+          hintStyle: TextStyle(
             fontSize: 15.0,
-            color: Colors.black54,
           ),
-          decoration: InputDecoration(
-            hintText: 'Placeholder',
-            hintStyle: TextStyle(
-              fontSize: 15.0,
-            ),
-            hintMaxLines: 5,
-            labelStyle: TextStyle(color: Colors.red),
-            border: _outlineInputBorder(),
-            enabledBorder: _outlineInputBorder(),
-            focusedBorder: _outlineInputBorder(color: Colors.red),
+          hintMaxLines: 5,
+          labelStyle: TextStyle(
+            color: Colors.red,
           ),
+          border: outlineInputBorder(),
+          enabledBorder: outlineInputBorder(),
+          focusedBorder: outlineInputBorder(Colors.red),
         ),
       ),
     );
   }
 
-  UnderlineInputBorder _underlineInputBorder({Color color = Colors.black54}) {
+  UnderlineInputBorder underlineInputBorder([Color color = Colors.black54]) {
     return UnderlineInputBorder(
       borderSide: BorderSide(
         color: color,
@@ -139,55 +277,13 @@ class EventEditCard extends StatelessWidget {
     );
   }
 
-  OutlineInputBorder _outlineInputBorder({Color color = Colors.black54}) {
+  OutlineInputBorder outlineInputBorder([Color color = Colors.black54]) {
     return OutlineInputBorder(
       borderSide: BorderSide(
         color: color,
         width: 2.0,
       ),
       borderRadius: BorderRadius.circular(2.0),
-    );
-  }
-}
-
-class EventActions extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          height: 50.0,
-          // TODO: increase button size to 64 when we can do so in main screen too
-          child: FloatingActionButton(
-            heroTag: null, // Fixes issue.
-            backgroundColor: Colors.white,
-            child: PaintGradient(
-              child: Icon(CustomIcons.cancel_1),
-              colorA: Color(0xfffa6b40),
-              colorB: Color(0xfffd1d1d),
-            ),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ),
-        Container(
-          height: 50.0,
-          child: FloatingActionButton(
-            heroTag: null, // Fixes issue.
-            backgroundColor: Colors.white,
-            child: PaintGradient(
-              child: Icon(CustomIcons.ok_1),
-              colorA: Color(0xff7dd624),
-              colorB: Color(0xff45b649),
-            ),
-            onPressed: () {
-              // TODO: Create event.
-            },
-          ),
-        ),
-      ],
     );
   }
 }

@@ -87,7 +87,7 @@ class EventEditCard extends StatelessWidget {
             color: Colors.black54,
           ),
           decoration: InputDecoration(
-            hintText: '¿Qué propones hacer? ¿Qué idioma',
+            hintText: '¿Qué propones hacer? ¿Qué idioma hablas?, ¿Qué hora te viene mejor?, ...',
             hintStyle: TextStyle(
               fontSize: 15.0,
             ),
@@ -158,7 +158,7 @@ class EventActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0), // TODO see how to make it occupy all non scrollable available width
+      padding: EdgeInsets.symmetric(vertical: 16.0), // TODO check this out to make it fill full height: https://api.flutter.dev/flutter/widgets/SingleChildScrollView-class.html
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

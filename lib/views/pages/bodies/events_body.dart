@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../custom_icons.dart';
 import '../../../models/event.dart';
 import '../../common_widgets.dart';
+import '../events_create_page.dart';
 
 class EventsBody extends StatefulWidget {
   @override
@@ -85,6 +86,7 @@ class EventActions extends StatelessWidget {
         Container(
           height: 50.0,
           child: FloatingActionButton(
+            heroTag: 'btnDislike',
             shape: TearBorder(),
             backgroundColor: Colors.white,
             child: Padding(
@@ -103,6 +105,7 @@ class EventActions extends StatelessWidget {
         Container(
           height: 50.0,
           child: FloatingActionButton(
+            heroTag: 'btnCreate',
             backgroundColor: Colors.white,
             child: PaintGradient(
               child: Icon(CustomIcons.plus_1),
@@ -110,7 +113,10 @@ class EventActions extends StatelessWidget {
               colorB: Color(0xff348ac7),
             ),
             onPressed: () {
-              // TODO
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EventsCreatePage()), //TODO: fix providing userstream data, etc
+              );
             },
           ),
         ),
@@ -118,6 +124,7 @@ class EventActions extends StatelessWidget {
           height: 50.0,
           child: MirrorWidget(
             child: FloatingActionButton(
+              heroTag: 'btnLike',
               shape: TearBorder(),
               backgroundColor: Colors.white,
               child: Padding(
@@ -138,3 +145,6 @@ class EventActions extends StatelessWidget {
     );
   }
 }
+
+
+

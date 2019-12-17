@@ -126,8 +126,8 @@ class _SessionBodyState extends State<SessionBody> {
                   padding: EdgeInsets.symmetric(vertical: 8.0),
                   child: facebookButton(sessionBloc),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                SizedBox(
+                  height: 16.0,
                 )
               ],
             ),

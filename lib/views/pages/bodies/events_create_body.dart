@@ -19,7 +19,7 @@ class _EventsCreateBodyState extends State<EventsCreateBody> {
     final offsetWidth = 32;
     final offsetHeight = 0.28 * height;
 
-    return Padding(
+    return SingleChildScrollView(
         padding: new EdgeInsets.only(top: 16.0),
         child: Column(
           mainAxisSize: MainAxisSize.max,
@@ -37,7 +37,7 @@ class _EventsCreateBodyState extends State<EventsCreateBody> {
                 ],
               ),
             ),
-            Expanded(child: EventActions()),
+            EventActions(),
           ],
         ));
   }
@@ -87,7 +87,7 @@ class EventEditCard extends StatelessWidget {
             color: Colors.black54,
           ),
           decoration: InputDecoration(
-            hintText: 'Placeholder',
+            hintText: '¿Qué propones hacer? ¿Qué idioma',
             hintStyle: TextStyle(
               fontSize: 15.0,
             ),
@@ -129,27 +129,25 @@ class EventEditCard extends StatelessWidget {
       child: Card(
         shape: ContinuousRectangleBorder(),
         color: Colors.white,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TransitionToImage(
-                height: height > 400 ? height / 2 : height / 4,
-                width: double.maxFinite,
-                fit: BoxFit.cover,
-                image: AdvancedNetworkImage(
-                  'https://www.arbelecos.es/wp-content/uploads/2016/02/placeholder-9.jpg',
-                  useDiskCache: true,
-                  timeoutDuration: Duration(seconds: 5),
-                ),
-                placeholder: Container(),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TransitionToImage(
+              height: height > 400 ? height / 2 : height / 4,
+              width: double.maxFinite,
+              fit: BoxFit.cover,
+              image: AdvancedNetworkImage(
+                'https://www.arbelecos.es/wp-content/uploads/2016/02/placeholder-9.jpg',
+                useDiskCache: true,
+                timeoutDuration: Duration(seconds: 5),
               ),
-              _buildTitleTF(),
-              _buildDescriptionTF(),
-            ],
-          ),
+              placeholder: Container(),
+            ),
+            _buildTitleTF(),
+            _buildDescriptionTF(),
+          ],
         ),
       ),
     );
@@ -159,40 +157,46 @@ class EventEditCard extends StatelessWidget {
 class EventActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          height: 50.0, // TODO: increase button size to 64 when we can do so in main screen too
-          child: FloatingActionButton(
-            backgroundColor: Colors.white,
-            child: PaintGradient(
-              child: Icon(CustomIcons.cancel_1),
-              colorA: Color(0xfffa6b40),
-              colorB: Color(0xfffd1d1d),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0), // TODO see how to make it occupy all non scrollable available width
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            height:
+                50.0, // TODO: increase button size to 64 when we can do so in main screen too
+            child: FloatingActionButton(
+              heroTag: 'btnCancel',
+              backgroundColor: Colors.white,
+              child: PaintGradient(
+                child: Icon(CustomIcons.cancel_1),
+                colorA: Color(0xfffa6b40),
+                colorB: Color(0xfffd1d1d),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
-            onPressed: () {
-              // TODO: cancel event creation
-            },
           ),
-        ),
-        Container(
-          height: 50.0,
-          child: FloatingActionButton(
-            backgroundColor: Colors.white,
-            child: PaintGradient(
-              child: Icon(CustomIcons.ok_1),
-              colorA: Color(0xff7dd624),
-              colorB: Color(0xff45b649),
+          Container(
+            height: 50.0,
+            child: FloatingActionButton(
+              heroTag: 'btnOk',
+              backgroundColor: Colors.white,
+              child: PaintGradient(
+                child: Icon(CustomIcons.ok_1),
+                colorA: Color(0xff7dd624),
+                colorB: Color(0xff45b649),
+              ),
+              onPressed: () {
+                // TODO: create event
+              },
             ),
-            onPressed: () {
-              // TODO: create event
-            },
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

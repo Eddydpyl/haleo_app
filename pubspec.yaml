@@ -30,6 +30,7 @@ dependencies:
   firebase_core: 0.4.2+1
   firebase_auth: 0.15.1
   cloud_firestore: 0.12.11
+  firebase_storage: 3.0.8
   firebase_messaging: 5.1.8
   flutter_facebook_login: 3.0.0
   geoflutterfire: 2.0.3+5

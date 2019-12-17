@@ -1,12 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_networkimage/provider.dart';
-import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:angles/angles.dart';
-import 'package:share/share.dart';
-
-import '../models/event.dart';
 
 class PaintGradient extends StatelessWidget {
   final Widget child;
@@ -35,106 +30,21 @@ class PaintGradient extends StatelessWidget {
   }
 }
 
-class EventCard extends StatelessWidget {
-  final Event event;
-  final double height;
-  final double width;
-  final double rotation;
-
-  EventCard({
-    @required this.event,
-    @required this.height,
-    @required this.width,
-    this.rotation = 0.0,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Transform.rotate(
-      angle: Angle.fromDegrees(rotation).radians,
-      child: Container(
-        height: height,
-        width: width,
-        child: Card(
-          shape: ContinuousRectangleBorder(),
-          color: Colors.white,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TransitionToImage(
-                height: height > 400 ? height / 2 : height / 4,
-                width: double.maxFinite,
-                fit: BoxFit.cover,
-                image: AdvancedNetworkImage(
-                  event.image,
-                  useDiskCache: true,
-                  timeoutDuration: Duration(seconds: 5),
-                ),
-                placeholder: Container(),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
-                child: Text(
-                  event.name.toUpperCase(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                    color: Colors.black87,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 8.0),
-                    child: Text(
-                      event.description,
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontSize: 15.0,
-                        color: Colors.black54,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: FlatButton(
-                  shape: CircleBorder(),
-                  child: PaintGradient(
-                    child: Icon(Icons.share),
-                    colorA: Color(0xff7474bf),
-                    colorB: Color(0xff348ac7),
-                  ),
-                  onPressed: () {
-                    Share.share("Que Haleo más grande.");
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class BackgroundCard extends StatelessWidget {
   final int colorA;
   final int colorB;
   final double height;
   final double width;
   final double rotation;
+  final Widget child;
 
   BackgroundCard({
     @required this.colorA,
     @required this.colorB,
-    @required this.height,
-    @required this.width,
+    this.height = double.maxFinite,
+    this.width = double.maxFinite,
     this.rotation = 0.0,
+    this.child,
   });
 
   @override
@@ -147,14 +57,13 @@ class BackgroundCard extends StatelessWidget {
         child: Card(
           shape: ContinuousRectangleBorder(),
           child: Container(
-             decoration: new BoxDecoration(
+            child: child ?? Container(),
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(colorA),
-                    Color(colorB),
-                  ])
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Color(colorA), Color(colorB)],
+              ),
             ),
           ),
         ),
@@ -182,8 +91,6 @@ class MirrorWidget extends StatelessWidget {
 }
 
 class TearBorder extends ShapeBorder {
-  final double tailMultiplier = 1.10;
-
   const TearBorder();
 
   @override
@@ -201,13 +108,13 @@ class TearBorder extends ShapeBorder {
     return Path()
       ..moveTo(rect.left + rect.width / 2.0, rect.top)
       ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top,
-          rect.right * tailMultiplier, rect.top + rect.height / 2.0)
+          rect.width, rect.top + rect.height / 2.0)
       ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top + rect.height,
           rect.left + rect.width / 2.0, rect.bottom)
       ..arcToPoint(Offset(rect.left, rect.top + rect.height / 2.0),
-          radius: Radius.circular(25.0))
+          radius: Radius.circular(rect.height / 2))
       ..arcToPoint(Offset(rect.left + rect.width / 2.0, rect.top),
-          radius: Radius.circular(25.0))
+          radius: Radius.circular(rect.height / 2))
       ..close();
   }
 
@@ -218,4 +125,15 @@ class TearBorder extends ShapeBorder {
   ShapeBorder scale(double t) {
     return null; // This border doesn't support scaling.
   }
+}
+
+class FadeRoute extends PageRouteBuilder {
+  final Widget page;
+  FadeRoute(this.page) : super(
+    pageBuilder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation) => page,
+    transitionsBuilder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation, Widget child) =>
+        FadeTransition(opacity: animation, child: child),
+  );
 }

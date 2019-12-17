@@ -2,28 +2,38 @@ import 'package:darter_base/darter_base.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import 'bars/events_create_bar.dart';
-import 'bodies/events_create_body.dart';
+import 'bars/event_admin_bar.dart';
+import 'bodies/event_admin_body.dart';
 import '../../providers/application_provider.dart';
-import '../../providers/events_provider.dart';
+import '../../providers/state_provider.dart';
+import '../../providers/event_admin_provider.dart';
+import '../../models/event.dart';
 
-class EventsCreatePage extends StatelessWidget {
+class EventAdminPage extends StatelessWidget {
+  final String eventKey;
+  final Event event;
+
+  EventAdminPage({this.eventKey, this.event})
+      : assert((eventKey != null && event != null)
+      || (eventKey == null && event == null));
+
   @override
   Widget build(BuildContext context) {
-    return EventsProvider(
+    return EventAdminProvider(
+      stateBloc: StateProvider.stateBloc(context),
       database: ApplicationProvider.database(context),
-      preferences: ApplicationProvider.preferences(context),
+      storage: ApplicationProvider.storage(context),
       localization: ApplicationProvider.localization(context),
-      child: EventsScaffold(
-        appBar: EventsCreateBar(),
-        body: EventsCreateBody(),
+      child: EventAdminScaffold(
+        appBar: EventAdminBar(),
+        body: EventAdminBody(eventKey, event),
       ),
     );
   }
 }
 
-class EventsScaffold extends BaseScaffold<EventsInherited> {
-  EventsScaffold({
+class EventAdminScaffold extends BaseScaffold<EventAdminInherited> {
+  EventAdminScaffold({
     Key key,
     PreferredSizeWidget appBar,
     Widget body,

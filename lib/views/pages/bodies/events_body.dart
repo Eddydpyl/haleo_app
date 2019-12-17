@@ -221,8 +221,18 @@ class EventCard extends StatelessWidget {
                         useDiskCache: true,
                         timeoutDuration: Duration(seconds: 5),
                       ),
-                      placeholder: Image.asset("assets/images/placeholder.jpg"),
-                      loadingWidget: Image.asset("assets/images/placeholder.jpg"),
+                      placeholder: Image.asset(
+                        "assets/images/placeholder.jpg",
+                        height: height > 300 ? height / 2 : height / 4,
+                        width: double.maxFinite,
+                        fit: BoxFit.cover,
+                      ),
+                      loadingWidget: Image.asset(
+                        "assets/images/placeholder.jpg",
+                        height: height > 300 ? height / 2 : height / 4,
+                        width: double.maxFinite,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     Expanded(
                       child: SingleChildScrollView(

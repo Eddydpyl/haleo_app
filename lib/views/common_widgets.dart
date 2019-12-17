@@ -43,80 +43,96 @@ class EventCard extends StatelessWidget {
 
   EventCard({
     @required this.event,
-    @required this.height,
-    @required this.width,
+    this.height = double.maxFinite,
+    this.width = double.maxFinite,
     this.rotation = 0.0,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Transform.rotate(
-      angle: Angle.fromDegrees(rotation).radians,
-      child: Container(
-        height: height,
-        width: width,
-        child: Card(
-          shape: ContinuousRectangleBorder(),
-          color: Colors.white,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TransitionToImage(
-                height: height > 400 ? height / 2 : height / 4,
-                width: double.maxFinite,
-                fit: BoxFit.cover,
-                image: AdvancedNetworkImage(
-                  event.image,
-                  useDiskCache: true,
-                  timeoutDuration: Duration(seconds: 5),
-                ),
-                placeholder: Container(),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
-                child: Text(
-                  event.name.toUpperCase(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                    color: Colors.black87,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 8.0),
-                    child: Text(
-                      event.description,
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontSize: 15.0,
-                        color: Colors.black54,
+    return Container(
+      height: height,
+      width: width,
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final double height = constraints.maxHeight;
+          final double width = constraints.maxWidth;
+          return Transform.rotate(
+            angle: Angle.fromDegrees(rotation).radians,
+            child: Container(
+              height: height,
+              width: width,
+              child: Card(
+                shape: ContinuousRectangleBorder(),
+                color: Colors.white,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    TransitionToImage(
+                      height: height > 300 ? height / 2 : height / 4,
+                      width: double.maxFinite,
+                      fit: BoxFit.cover,
+                      image: AdvancedNetworkImage(
+                        event.image,
+                        useDiskCache: true,
+                        timeoutDuration: Duration(seconds: 5),
+                      ),
+                      placeholder: Image.asset("assets/images/placeholder.jpg"),
+                      loadingWidget: Image.asset("assets/images/placeholder.jpg"),
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                event.name.toUpperCase(),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.0,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              Container(height: 12.0),
+                              Text(
+                                event.description,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 15.0,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: FlatButton(
+                        shape: CircleBorder(),
+                        child: PaintGradient(
+                          child: Icon(Icons.share),
+                          colorA: Color(0xff7474bf),
+                          colorB: Color(0xff348ac7),
+                        ),
+                        onPressed: () {
+                          Share.share("Que Haleo más grande.");
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: FlatButton(
-                  shape: CircleBorder(),
-                  child: PaintGradient(
-                    child: Icon(Icons.share),
-                    colorA: Color(0xff7474bf),
-                    colorB: Color(0xff348ac7),
-                  ),
-                  onPressed: () {
-                    Share.share("Que Haleo más grande.");
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -128,13 +144,15 @@ class BackgroundCard extends StatelessWidget {
   final double height;
   final double width;
   final double rotation;
+  final Widget child;
 
   BackgroundCard({
     @required this.colorA,
     @required this.colorB,
-    @required this.height,
-    @required this.width,
+    this.height = double.maxFinite,
+    this.width = double.maxFinite,
     this.rotation = 0.0,
+    this.child,
   });
 
   @override
@@ -147,14 +165,13 @@ class BackgroundCard extends StatelessWidget {
         child: Card(
           shape: ContinuousRectangleBorder(),
           child: Container(
-             decoration: new BoxDecoration(
+            child: child ?? Container(),
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(colorA),
-                    Color(colorB),
-                  ])
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Color(colorA), Color(colorB)],
+              ),
             ),
           ),
         ),
@@ -182,8 +199,6 @@ class MirrorWidget extends StatelessWidget {
 }
 
 class TearBorder extends ShapeBorder {
-  final double tailMultiplier = 1.10;
-
   const TearBorder();
 
   @override
@@ -201,13 +216,13 @@ class TearBorder extends ShapeBorder {
     return Path()
       ..moveTo(rect.left + rect.width / 2.0, rect.top)
       ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top,
-          rect.right * tailMultiplier, rect.top + rect.height / 2.0)
+          rect.width, rect.top + rect.height / 2.0)
       ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top + rect.height,
           rect.left + rect.width / 2.0, rect.bottom)
       ..arcToPoint(Offset(rect.left, rect.top + rect.height / 2.0),
-          radius: Radius.circular(25.0))
+          radius: Radius.circular(rect.height / 2))
       ..arcToPoint(Offset(rect.left + rect.width / 2.0, rect.top),
-          radius: Radius.circular(25.0))
+          radius: Radius.circular(rect.height / 2))
       ..close();
   }
 

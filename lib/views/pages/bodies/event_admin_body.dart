@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_networkimage/provider.dart';
-import 'package:flutter_advanced_networkimage/transition.dart';
 
 import '../../custom_icons.dart';
 import '../../../models/event.dart';
 import '../../common_widgets.dart';
 
-class EventsCreateBody extends StatefulWidget {
+class EventAdminBody extends StatefulWidget {
+  final String eventKey;
+  final Event event;
+
+  EventAdminBody([this.eventKey, this.event]);
+
   @override
-  _EventsCreateBodyState createState() => _EventsCreateBodyState();
+  _EventAdminBodyState createState() => _EventAdminBodyState();
 }
 
-class _EventsCreateBodyState extends State<EventsCreateBody> {
+class _EventAdminBodyState extends State<EventAdminBody> {
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -20,26 +23,27 @@ class _EventsCreateBodyState extends State<EventsCreateBody> {
     final offsetHeight = 0.28 * height;
 
     return Padding(
-        padding: new EdgeInsets.only(top: 16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Align(
-              alignment: Alignment.topCenter,
-              child: Stack(
-                children: <Widget>[
-                  EventEditCard(
-                    height: height - offsetHeight,
-                    width: width - offsetWidth,
-                  ),
-                ],
-              ),
+      padding: EdgeInsets.only(top: 16.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Align(
+            alignment: Alignment.topCenter,
+            child: Stack(
+              children: <Widget>[
+                EventEditCard(
+                  height: height - offsetHeight,
+                  width: width - offsetWidth,
+                ),
+              ],
             ),
-            Expanded(child: EventActions()),
-          ],
-        ));
+          ),
+          Expanded(child: EventActions()),
+        ],
+      ),
+    );
   }
 }
 
@@ -50,6 +54,30 @@ class EventEditCard extends StatelessWidget {
     @required this.width,
     @required this.height,
   });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      width: width,
+      child: Card(
+        shape: ContinuousRectangleBorder(),
+        color: Colors.white,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Image.asset("assets/images/placeholder.jpg"),
+              _buildTitleTF(),
+              _buildDescriptionTF(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _buildTitleTF() {
     return Padding(
@@ -120,40 +148,6 @@ class EventEditCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(2.0),
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      child: Card(
-        shape: ContinuousRectangleBorder(),
-        color: Colors.white,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TransitionToImage(
-                height: height > 400 ? height / 2 : height / 4,
-                width: double.maxFinite,
-                fit: BoxFit.cover,
-                image: AdvancedNetworkImage(
-                  'https://www.arbelecos.es/wp-content/uploads/2016/02/placeholder-9.jpg',
-                  useDiskCache: true,
-                  timeoutDuration: Duration(seconds: 5),
-                ),
-                placeholder: Container(),
-              ),
-              _buildTitleTF(),
-              _buildDescriptionTF(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class EventActions extends StatelessWidget {
@@ -165,22 +159,23 @@ class EventActions extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Container(
-          height: 50.0, // TODO: increase button size to 64 when we can do so in main screen too
+          height: 50.0,
+          // TODO: increase button size to 64 when we can do so in main screen too
           child: FloatingActionButton(
+            heroTag: null, // Fixes issue.
             backgroundColor: Colors.white,
             child: PaintGradient(
               child: Icon(CustomIcons.cancel_1),
               colorA: Color(0xfffa6b40),
               colorB: Color(0xfffd1d1d),
             ),
-            onPressed: () {
-              // TODO: cancel event creation
-            },
+            onPressed: () => Navigator.of(context).pop(),
           ),
         ),
         Container(
           height: 50.0,
           child: FloatingActionButton(
+            heroTag: null, // Fixes issue.
             backgroundColor: Colors.white,
             child: PaintGradient(
               child: Icon(CustomIcons.ok_1),
@@ -188,7 +183,7 @@ class EventActions extends StatelessWidget {
               colorB: Color(0xff45b649),
             ),
             onPressed: () {
-              // TODO: create event
+              // TODO: Create event.
             },
           ),
         ),

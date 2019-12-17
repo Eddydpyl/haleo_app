@@ -16,7 +16,7 @@ class StorageManager {
     final String name = "$currentDate-$random";
     final StorageReference reference = _storage
         .ref().child("images").child(name);
-    await reference.putFile(file).onComplete;
+    await reference.putData(file).onComplete;
     return reference.getDownloadURL()
         .then((uri) => uri.toString());
   }

@@ -109,4 +109,18 @@ class Localization {
         name: "uploadErrorText",
         args: [],
       );
+
+  String locationPermissionText() =>
+      Intl.message(
+        "We need your location to crear an event.",
+        name: "locationPermissionText",
+        args: [],
+      );
+
+  String locationErrorText() =>
+      Intl.message(
+        "There was an error retrieving your location.",
+        name: "locationErrorText",
+        args: [],
+      );
 }

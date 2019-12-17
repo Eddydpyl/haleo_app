@@ -21,12 +21,37 @@ class EventAdminBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget titleWidget() {
-    return Text(
-      "¡Crear haleo!",
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        color: Colors.black87,
-        fontSize: 24.0,
+    return RichText(
+      text: TextSpan(
+        text: "¡Armar hal",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+          fontSize: 24.0,
+        ),
+        children: <TextSpan>[
+          TextSpan(
+            text: "e",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+          TextSpan(
+            text: "o",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.blue,
+            ),
+          ),
+          TextSpan(
+            text: "!",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          )
+        ],
       ),
     );
   }

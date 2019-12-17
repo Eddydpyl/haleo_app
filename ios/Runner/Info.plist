@@ -74,5 +74,12 @@
         <string>fbauth2</string>
         <string>fbshareextension</string>
     </array>
+    <!-- Permissions -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>TEXTO EXPLICANDO LA NECESIDAD DEL GPS.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>TEXTO EXPLICANDO LA NECESIDAD DEL GPS.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>TEXTO EXPLICANDO LA NECESIDAD DE LA GALERIA.</string>
 </dict>
 </plist>

@@ -23,7 +23,7 @@ class EventsBar extends StatelessWidget implements PreferredSizeWidget {
  Widget titleWidget() {
    return RichText(
      text: TextSpan(
-       text: "¡hal",
+       text: "¡Hal",
        style: TextStyle(
          fontWeight: FontWeight.bold,
          color: Colors.black87,

@@ -47,7 +47,7 @@ class EventAdminProvider extends StatelessWidget {
     );
   }
 
-  static EventAdminBloc eventsBloc(BuildContext context) =>
+  static EventAdminBloc eventAdminBloc(BuildContext context) =>
       MultiBaseProvider.bloc<EventAdminInherited>(context, "eventAdminBloc");
 
   static UploaderBloc uploaderBloc(BuildContext context) =>

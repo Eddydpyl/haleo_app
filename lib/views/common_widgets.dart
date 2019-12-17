@@ -2,6 +2,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:angles/angles.dart';
+import 'package:flutter_advanced_networkimage/provider.dart';
+import 'package:flutter_advanced_networkimage/transition.dart';
 
 class PaintGradient extends StatelessWidget {
   final Widget child;
@@ -126,6 +128,46 @@ class TearBorder extends ShapeBorder {
     return null; // This border doesn't support scaling.
   }
 }
+
+class CardImage extends StatelessWidget {
+  final String image;
+  final double height;
+
+  CardImage({this.image, this.height});
+
+  @override
+  Widget build(BuildContext context) {
+    return (image?.isNotEmpty ?? false)
+      ? TransitionToImage(
+        height: height,
+        width: double.maxFinite,
+        fit: BoxFit.cover,
+        image: AdvancedNetworkImage(
+          image,
+          useDiskCache: true,
+          timeoutDuration: Duration(seconds: 5),
+        ),
+        placeholder: Image.asset(
+          "assets/images/placeholder.jpg",
+          height: height,
+          width: double.maxFinite,
+          fit: BoxFit.cover,
+        ),
+        loadingWidget: Image.asset(
+          "assets/images/placeholder.jpg",
+          height: height,
+          width: double.maxFinite,
+          fit: BoxFit.cover,
+        ),
+      ) : Image.asset(
+        "assets/images/placeholder.jpg",
+        height: height,
+        width: double.maxFinite,
+        fit: BoxFit.cover,
+      );
+  }
+}
+
 
 class FadeRoute extends PageRouteBuilder {
   final Widget page;

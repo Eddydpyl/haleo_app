@@ -18,7 +18,7 @@ class EventRepository {
 
   Future<String> create(Event event) async {
     DocumentReference reference = _database.collection("events").document();
-    reference.setData(event.toJson());
+    reference.setData((event..topic = reference.documentID).toJson());
     return reference.documentID;
   }
 

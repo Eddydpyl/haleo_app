@@ -1,12 +1,16 @@
 import 'package:angles/angles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_networkimage/provider.dart';
-import 'package:flutter_advanced_networkimage/transition.dart';
+import 'package:flutter/services.dart';
+import 'package:haleo_app/blocs/events_bloc.dart';
+import 'package:haleo_app/localization.dart';
+import 'package:location/location.dart';
 import 'package:share/share.dart';
 
+import '../../../providers/application_provider.dart';
 import '../../../providers/events_provider.dart';
 import '../../../models/event.dart';
 import '../../../models/perimeter.dart';
+import '../../../utility.dart';
 import '../../common_widgets.dart';
 import '../../custom_icons.dart';
 import '../event_admin_page.dart';
@@ -21,8 +25,32 @@ class _EventsBodyState extends State<EventsBody> {
   String eventKey;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final Localization localization = ApplicationProvider.localization(context);
+    final EventsBloc eventsBloc = EventsProvider.eventsBloc(context);
+    Location().getLocation().then((LocationData location) {
+      eventsBloc.perimeterSink.add(Perimeter(
+        lat: location.latitude,
+        lng: location.longitude,
+        // TODO: Use a more reasonable radius.
+        radius: double.maxFinite,
+      ));
+    }).catchError((e) {
+      if (e is PlatformException
+          && e.code == 'PERMISSION_DENIED') {
+        Location().requestPermission();
+        SnackBarUtility.show(context,
+            localization.locationPermissionText());
+      } else {
+        SnackBarUtility.show(context,
+            localization.locationErrorText());
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    EventsProvider.eventsBloc(context).perimeterSink.add(Perimeter(lat: 10.0, lng: 10.0, radius: 10.0));
     return StreamBuilder(
       stream: EventsProvider.eventsBloc(context).eventsStream,
       builder: (BuildContext context,
@@ -212,27 +240,9 @@ class EventCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    TransitionToImage(
+                    CardImage(
+                      image: event.image,
                       height: height > 300 ? height / 2 : height / 4,
-                      width: double.maxFinite,
-                      fit: BoxFit.cover,
-                      image: AdvancedNetworkImage(
-                        event.image,
-                        useDiskCache: true,
-                        timeoutDuration: Duration(seconds: 5),
-                      ),
-                      placeholder: Image.asset(
-                        "assets/images/placeholder.jpg",
-                        height: height > 300 ? height / 2 : height / 4,
-                        width: double.maxFinite,
-                        fit: BoxFit.cover,
-                      ),
-                      loadingWidget: Image.asset(
-                        "assets/images/placeholder.jpg",
-                        height: height > 300 ? height / 2 : height / 4,
-                        width: double.maxFinite,
-                        fit: BoxFit.cover,
-                      ),
                     ),
                     Expanded(
                       child: SingleChildScrollView(

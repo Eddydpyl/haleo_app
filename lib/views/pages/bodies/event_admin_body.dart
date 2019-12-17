@@ -1,10 +1,23 @@
-import 'package:angles/angles.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_advanced_networkimage/provider.dart';
-import 'package:flutter_advanced_networkimage/transition.dart';
+import 'dart:ui' as ui;
+import 'dart:io';
 
-import '../../custom_icons.dart';
+import 'package:angles/angles.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:haleo_app/utility.dart';
+import 'package:location/location.dart';
+
+import '../../../providers/application_provider.dart';
+import '../../../providers/state_provider.dart';
+import '../../../providers/event_admin_provider.dart';
+import '../../../blocs/state_bloc.dart';
+import '../../../blocs/event_admin_bloc.dart';
+import '../../../blocs/uploader_bloc.dart';
 import '../../../models/event.dart';
+import '../../../localization.dart';
+import '../../custom_icons.dart';
 import '../../common_widgets.dart';
 
 class EventAdminBody extends StatefulWidget {
@@ -18,49 +31,80 @@ class EventAdminBody extends StatefulWidget {
 }
 
 class _EventAdminBodyState extends State<EventAdminBody> {
-  final TextEditingController titleController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: 16.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            child: EventStack(
-              titleController: titleController,
-              descriptionController: descriptionController,
-            ),
-          ),
-          EventActions(
-            titleController: titleController,
-            descriptionController: descriptionController,
-          ),
-        ],
-      ),
+    final Localization localization = ApplicationProvider.localization(context);
+    final StateBloc stateBloc = StateProvider.stateBloc(context);
+    final EventAdminBloc eventAdminBloc = EventAdminProvider.eventAdminBloc(context);
+    final UploaderBloc uploaderBloc = EventAdminProvider.uploaderBloc(context);
+    return StreamBuilder(
+      stream: stateBloc.userKeyStream,
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.data != null) {
+          final String userKey = snapshot.data;
+          return StreamBuilder(
+            initialData: widget.event?.image ?? "",
+            stream: uploaderBloc.pathStream,
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              if (snapshot.data != null) {
+                final String image = snapshot.data;
+                return Padding(
+                  padding: EdgeInsets.only(top: 16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        child: EventStack(
+                          uploaderBloc: uploaderBloc,
+                          nameController: nameController,
+                          descriptionController: descriptionController,
+                          eventKey: widget.eventKey,
+                          image: image,
+                        ),
+                      ),
+                      EventActions(
+                        localization: localization,
+                        eventAdminBloc: eventAdminBloc,
+                        nameController: nameController,
+                        descriptionController: descriptionController,
+                        userKey: userKey,
+                        eventKey: widget.eventKey,
+                        image: image,
+                      ),
+                    ],
+                  ),
+                );
+              } else return Container();
+            },
+          );
+        } else return Container();
+      },
     );
   }
 
   @override
   void dispose() {
     super.dispose();
-    titleController.dispose();
+    nameController.dispose();
     descriptionController.dispose();
   }
 }
 
 class EventStack extends StatelessWidget {
-  final TextEditingController titleController;
+  final UploaderBloc uploaderBloc;
+  final TextEditingController nameController;
   final TextEditingController descriptionController;
   final String eventKey;
   final String image;
 
   EventStack({
-    @required this.titleController,
+    @required this.uploaderBloc,
+    @required this.nameController,
     @required this.descriptionController,
     this.eventKey,
     this.image,
@@ -84,7 +128,8 @@ class EventStack extends StatelessWidget {
             rotation: height > 400 ? -2.0 : -1.0,
           ),
           EventAdminCard(
-            titleController: titleController,
+            uploaderBloc: uploaderBloc,
+            nameController: nameController,
             descriptionController: descriptionController,
             image: image,
           ),
@@ -95,14 +140,20 @@ class EventStack extends StatelessWidget {
 }
 
 class EventActions extends StatelessWidget {
-  final TextEditingController titleController;
+  final Localization localization;
+  final EventAdminBloc eventAdminBloc;
+  final TextEditingController nameController;
   final TextEditingController descriptionController;
+  final String userKey;
   final String eventKey;
   final String image;
 
   EventActions({
-    @required this.titleController,
+    @required this.localization,
+    @required this.eventAdminBloc,
+    @required this.nameController,
     @required this.descriptionController,
+    @required this.userKey,
     this.eventKey,
     this.image,
   });
@@ -141,8 +192,38 @@ class EventActions extends StatelessWidget {
                 colorA: Color(0xff7dd624),
                 colorB: Color(0xff45b649),
               ),
-              onPressed: () {
-                // TODO: Create or update event.
+              onPressed: () async {
+                if (nameController.text.isNotEmpty
+                    && descriptionController.text.isNotEmpty) {
+                  try {
+                    LocationData location = await Location().getLocation();
+                    GeoFirePoint point = GeoFirePoint(location.latitude, location.longitude);
+                    Locale locale = ui.window.locale ?? Locale(Language.EN);
+                    // TODO: Include event slots.
+                    eventAdminBloc.createSink.add(Event(
+                      user: userKey,
+                      name: nameController.text,
+                      description: nameController.text,
+                      image: image,
+                      point: point.data,
+                      open: true,
+                      count: 0,
+                      lang: locale.languageCode,
+                    )); Navigator.of(context).pop();
+                  } on PlatformException catch (e) {
+                    if (e.code == 'PERMISSION_DENIED') {
+                      Location().requestPermission();
+                      SnackBarUtility.show(context,
+                          localization.locationPermissionText());
+                    } else {
+                      SnackBarUtility.show(context,
+                          localization.locationErrorText());
+                    }
+                  } catch (e) {
+                    SnackBarUtility.show(context,
+                        localization.locationErrorText());
+                  }
+                }
               },
             ),
           ),
@@ -153,7 +234,8 @@ class EventActions extends StatelessWidget {
 }
 
 class EventAdminCard extends StatelessWidget {
-  final TextEditingController titleController;
+  final UploaderBloc uploaderBloc;
+  final TextEditingController nameController;
   final TextEditingController descriptionController;
   final double height;
   final double width;
@@ -161,7 +243,8 @@ class EventAdminCard extends StatelessWidget {
   final String image;
 
   EventAdminCard({
-    @required this.titleController,
+    @required this.uploaderBloc,
+    @required this.nameController,
     @required this.descriptionController,
     this.height = double.maxFinite,
     this.width = double.maxFinite,
@@ -192,29 +275,8 @@ class EventAdminCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      TransitionToImage(
-                        height: height > 300 ? height / 2 : height / 4,
-                        width: double.maxFinite,
-                        fit: BoxFit.cover,
-                        image: AdvancedNetworkImage(
-                          image ?? "",
-                          useDiskCache: true,
-                          timeoutDuration: Duration(seconds: 5),
-                        ),
-                        placeholder: Image.asset(
-                          "assets/images/placeholder.jpg",
-                          height: height > 300 ? height / 2 : height / 4,
-                          width: double.maxFinite,
-                          fit: BoxFit.cover,
-                        ),
-                        loadingWidget: Image.asset(
-                          "assets/images/placeholder.jpg",
-                          height: height > 300 ? height / 2 : height / 4,
-                          width: double.maxFinite,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      titleWidget(titleController),
+                      imageWidget(height > 300 ? height / 2 : height / 4),
+                      titleWidget(nameController),
                       descriptionWidget(descriptionController),
                     ],
                   ),
@@ -227,10 +289,25 @@ class EventAdminCard extends StatelessWidget {
     );
   }
 
+  Widget imageWidget(double height) {
+    return GestureDetector(
+      child: CardImage(
+        image: image,
+        height: height,
+      ),
+      onTap: () async {
+        File file = await ImagePicker.pickImage(source: ImageSource.gallery);
+        if (file != null) uploaderBloc.fileSink.add(file.readAsBytesSync());
+      },
+    );
+  }
+
   Widget titleWidget(TextEditingController controller) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
+        maxLines: 1,
+        controller: controller,
         keyboardType: TextInputType.text,
         style: TextStyle(
           fontWeight: FontWeight.bold,
@@ -255,6 +332,7 @@ class EventAdminCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: TextField(
         maxLines: 5,
+        controller: controller,
         keyboardType: TextInputType.text,
         style: TextStyle(
           fontWeight: FontWeight.bold,

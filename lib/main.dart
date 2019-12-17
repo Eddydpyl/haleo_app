@@ -10,10 +10,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:vibration/vibration.dart';
+import 'package:location/location.dart';
 import 'package:intl/intl.dart';
 
 import 'localization.dart';
@@ -53,6 +55,7 @@ class App extends StatelessWidget {
       google: GoogleSignIn(),
       facebook: FacebookLogin(),
       preferences: preferences,
+      storage: FirebaseStorage(),
       child: Builder(
         builder: (BuildContext context) {
           return StateProvider(
@@ -97,7 +100,10 @@ class _InitializerState extends State<Initializer> {
   @override
   void initState() {
     super.initState();
+    // Initialize localization.
     LocalizationLoader.load();
+    // Request location permissions.
+    Location().requestPermission();
     // TODO: Only integrated with Android. Integrate with iOS.
     // https://pub.dev/packages/firebase_messaging#ios-integration
     widget.messaging.configure(

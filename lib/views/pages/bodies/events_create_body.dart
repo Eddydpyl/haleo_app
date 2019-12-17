@@ -67,7 +67,7 @@ class EventEditCard extends StatelessWidget {
           focusedBorder: _underlineInputBorder(color: Colors.red),
           fillColor: Colors.black54,
           hintText: 'Beber cerveza, explorar la zona, visitar la catedral ... ',
-          hintStyle: TextStyle(fontSize: 12.0),
+          hintStyle: TextStyle(fontSize: 15.0),
           hintMaxLines: 1,
         ),
       ),
@@ -89,7 +89,7 @@ class EventEditCard extends StatelessWidget {
           decoration: InputDecoration(
             hintText: 'Placeholder',
             hintStyle: TextStyle(
-              fontSize: 12.0,
+              fontSize: 15.0,
             ),
             hintMaxLines: 5,
             labelStyle: TextStyle(color: Colors.red),

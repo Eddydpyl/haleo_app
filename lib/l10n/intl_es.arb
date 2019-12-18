@@ -49,5 +49,10 @@
   "@eventFullText": {
     "type": "text",
     "placeholders": {}
+  },
+  "uploadErrorText": "Hubo un error inesperado y no se pudo subir el archivo.",
+  "@uploadErrorText": {
+    "type": "text",
+    "placeholders": {}
   }
 }

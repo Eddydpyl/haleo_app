@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,13 +12,15 @@ import '../managers/auth_manager.dart';
 import '../managers/database_manager.dart';
 import '../managers/message_manager.dart';
 import '../managers/preference_manager.dart';
+import '../managers/storage_manager.dart';
 import '../localization.dart';
 
 class ApplicationProvider extends InheritedWidget {
   final AuthManager _authManager;
   final DatabaseManager _databaseManager;
   final MessageManager _messageManager;
-  final PreferenceManager _pref;
+  final PreferenceManager _prefManager;
+  final StorageManager _storageManager;
   final Localization _localization;
 
   ApplicationProvider({
@@ -30,10 +33,12 @@ class ApplicationProvider extends InheritedWidget {
     @required Geoflutterfire geo,
     @required FirebaseMessaging messaging,
     @required SharedPreferences preferences,
+    @required FirebaseStorage storage,
   })  : _authManager = AuthManager(auth, google, facebook),
         _databaseManager = DatabaseManager(database, geo),
         _messageManager = MessageManager(messaging),
-        _pref = PreferenceManager(preferences),
+        _prefManager = PreferenceManager(preferences),
+        _storageManager = StorageManager(storage),
         _localization = Localization(),
         super(key: key, child: child);
 
@@ -51,7 +56,11 @@ class ApplicationProvider extends InheritedWidget {
 
   static PreferenceManager preferences(BuildContext context) =>
       (context.inheritFromWidgetOfExactType(ApplicationProvider)
-      as ApplicationProvider)._pref;
+      as ApplicationProvider)._prefManager;
+
+  static StorageManager storage(BuildContext context) =>
+      (context.inheritFromWidgetOfExactType(ApplicationProvider)
+      as ApplicationProvider)._storageManager;
 
   static Localization localization(BuildContext context) =>
       (context.inheritFromWidgetOfExactType(ApplicationProvider)

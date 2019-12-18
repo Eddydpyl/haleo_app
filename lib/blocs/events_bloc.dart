@@ -71,7 +71,7 @@ class EventsBloc extends BaseBloc {
       if (uid?.isNotEmpty ?? false) {
         _subscription?.cancel();
         _subscription = _databaseManager.eventRepository()
-            .collectionStream(uid: uid, open: true)
+            .collectionStream(uid: uid, open: false)
             .listen((data) => _events.add(data ?? Map()));
       }
     });

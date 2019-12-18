@@ -14,6 +14,7 @@ class SessionPage extends StatelessWidget {
       database: ApplicationProvider.database(context),
       localization: ApplicationProvider.localization(context),
       child: SessionScaffold(
+        resizeToAvoidBottomInset: false,
         body: SessionBody(),
       ),
     );

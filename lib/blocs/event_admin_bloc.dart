@@ -5,14 +5,14 @@ import 'package:darter_base/darter_base.dart';
 import '../managers/database_manager.dart';
 import '../models/event.dart';
 
-class EventsAdminBloc extends BaseBloc {
+class EventAdminBloc extends BaseBloc {
   final DatabaseManager _databaseManager;
 
   LenientSubject<Event> _create;
   LenientSubject<MapEntry<String, Event>> _update;
   LenientSubject<String> _delete;
 
-  EventsAdminBloc(DatabaseManager databaseManager)
+  EventAdminBloc(DatabaseManager databaseManager)
       : _databaseManager = databaseManager;
 
   /// Consumes a [Event] and uses it to create an instance in the database.

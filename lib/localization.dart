@@ -25,7 +25,7 @@ class LocalizationLoader {
 }
 
 class Localization {
-  static final Localization _localization = new Localization._internal();
+  static final Localization _localization = Localization._internal();
 
   factory Localization() {
     return _localization;
@@ -100,6 +100,27 @@ class Localization {
       Intl.message(
         "The event is already full!",
         name: "eventFullText",
+        args: [],
+      );
+
+  String uploadErrorText() =>
+      Intl.message(
+        "There was an unexpected issue and the file could not be uploaded.",
+        name: "uploadErrorText",
+        args: [],
+      );
+
+  String locationPermissionText() =>
+      Intl.message(
+        "We need your location to crear an event.",
+        name: "locationPermissionText",
+        args: [],
+      );
+
+  String locationErrorText() =>
+      Intl.message(
+        "There was an error retrieving your location.",
+        name: "locationErrorText",
         args: [],
       );
 }

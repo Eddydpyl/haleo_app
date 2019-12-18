@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "invalidPasswordText" : MessageLookupByLibrary.simpleMessage("The password must be at least 6 characters long."),
     "invalidSignInText" : MessageLookupByLibrary.simpleMessage("Either the email or password are incorrect."),
     "passwordSentText" : MessageLookupByLibrary.simpleMessage("A password reset link has been sent to your email."),
+    "uploadErrorText" : MessageLookupByLibrary.simpleMessage("There was an unexpected issue and the file could not be uploaded."),
     "usedEmailText" : MessageLookupByLibrary.simpleMessage("The email address is already in use.")
   };
 }

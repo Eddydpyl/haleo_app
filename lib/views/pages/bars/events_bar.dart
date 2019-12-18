@@ -6,7 +6,7 @@ import '../../../providers/events_provider.dart';
 import '../../../models/user.dart';
 import '../../custom_icons.dart';
 import '../../common_widgets.dart';
-import '../chat_page.dart';
+import '../event_listing_page.dart';
 
 class EventsBar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -27,7 +27,8 @@ class EventsBar extends StatelessWidget implements PreferredSizeWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ChatPage()),
+                      MaterialPageRoute(
+                          builder: (context) => EventListingPage()),
                     ); //TODO: fix providing data stream
                   },
                 ),

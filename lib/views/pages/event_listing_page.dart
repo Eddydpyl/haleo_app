@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:darter_base/darter_base.dart';
 import 'package:flutter/gestures.dart';
 
-import 'bars/chat_bar.dart';
-import 'bodies/chat_body.dart';
+import 'bars/event_listing_bar.dart';
+import 'bodies/event_listing_body.dart';
 import '../../providers/application_provider.dart';
 import '../../providers/events_provider.dart';
 
-class ChatPage extends StatelessWidget {
+class EventListingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: change to appropiate provider and scaffold
@@ -16,8 +16,8 @@ class ChatPage extends StatelessWidget {
       preferences: ApplicationProvider.preferences(context),
       localization: ApplicationProvider.localization(context),
       child: EventsScaffold(
-        appBar: ChatBar(),
-        body: ChatBody(),
+        appBar: EventListingBar(),
+        body: EventListingBody(),
       ),
     );
   }

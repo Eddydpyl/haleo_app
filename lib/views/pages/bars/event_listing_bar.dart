@@ -7,7 +7,7 @@ import '../../../models/user.dart';
 import '../../custom_icons.dart';
 import '../../common_widgets.dart';
 
-class ChatBar extends StatelessWidget implements PreferredSizeWidget {
+class EventListingBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -20,7 +20,10 @@ class ChatBar extends StatelessWidget implements PreferredSizeWidget {
             backgroundColor: Colors.transparent,
             elevation: 0.0,
             leading: PaintGradient(
-                child: Icon(CustomIcons.chat),
+                child: IconButton(
+                  icon: Icon(CustomIcons.left),
+                  onPressed: () {},
+                ),
                 colorA: Color(0xfffa6b40),
                 colorB: Color(0xfffd1d1d)),
             centerTitle: true,

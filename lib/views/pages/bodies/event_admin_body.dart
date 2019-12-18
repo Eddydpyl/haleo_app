@@ -52,7 +52,7 @@ class _EventAdminBodyState extends State<EventAdminBody> {
               if (snapshot.data != null) {
                 final String image = snapshot.data;
                 return Padding(
-                  padding: EdgeInsets.only(top: 16.0),
+                  padding: EdgeInsets.only(top: 8.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,

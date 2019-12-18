@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:angles/angles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,9 +24,6 @@ class EventsBody extends StatefulWidget {
 }
 
 class _EventsBodyState extends State<EventsBody> {
-
-  String eventKey;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -52,33 +51,16 @@ class _EventsBodyState extends State<EventsBody> {
 
   @override
   Widget build(BuildContext context) {
+    final EventsBloc eventsBloc = EventsProvider.eventsBloc(context);
     return StreamBuilder(
-      stream: EventsProvider.eventsBloc(context).eventsStream,
+      stream: eventsBloc.eventsStream,
       builder: (BuildContext context,
           AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
           final Map<String, Event> events = snapshot.data;
-          final List<String> sorted = List()..addAll(events.keys)
-            ..sort((String a, String b) => a.compareTo(b));
-          if (sorted.isNotEmpty && (eventKey == null
-              || !sorted.contains(eventKey)))
-            eventKey = sorted.first;
-          return Padding(
-            padding: EdgeInsets.only(top: 8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: EventStack(
-                    eventKey: eventKey,
-                    events: events,
-                  ),
-                ),
-                EventActions(eventKey),
-              ],
-            ),
+          return EventsHandler(
+            eventsBloc: eventsBloc,
+            events: events,
           );
         } else return Center(
           child: const CircularProgressIndicator(),
@@ -88,51 +70,136 @@ class _EventsBodyState extends State<EventsBody> {
   }
 }
 
-class EventStack extends StatelessWidget {
+class EventsHandler extends StatefulWidget {
+  final EventsBloc eventsBloc;
   final Map<String, Event> events;
-  final String eventKey;
 
-  EventStack({
+  EventsHandler({
+    @required this.eventsBloc,
     @required this.events,
-    @required this.eventKey,
   });
+
+  @override
+  _EventsHandlerState createState() => _EventsHandlerState();
+}
+
+class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateMixin {
+  AnimationController animationController;
+  LinkedHashMap<String, Event> events;
+  String eventKey;
+  bool direction;
+
+  @override
+  void initState() {
+    super.initState();
+    direction = true;
+    animationController = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    )..addListener(() {
+      setState(() {});
+    })..addStatusListener((AnimationStatus status) {
+      if (status == AnimationStatus.completed) {
+        setState(() {
+          events.remove(eventKey);
+          if (events.isNotEmpty)
+            eventKey = events.keys.first;
+          else eventKey = null;
+          animationController.reset();
+        });
+      }
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setState(() {
+      events = LinkedHashMap();
+      final List<String> sorted = List.from(widget.events.keys)
+        ..sort((String a, String b) => a.compareTo(b));
+      sorted.forEach((key) => events[key] = widget.events[key]);
+      if (sorted.isNotEmpty && (eventKey == null
+          || !sorted.contains(eventKey)))
+        eventKey = sorted.first;
+      else eventKey = null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
-    List<Widget> eventCards = [EventCard(eventKey: eventKey,
-        event: events[eventKey], height: height, width: width)];
-    Map.from(events)..remove(eventKey)..forEach((key, event) =>
-        eventCards.add(EventCard(eventKey: key, event: event,
-        height: height, width: width)));
+    Widget backgroundCard = events.length > 1
+        ? EventCard(eventKey: events.keys.toList()[1],
+        event: events.values.toList()[1]) : EmptyCard();
+    Widget foregroundCard = eventKey != null
+        ? SwipeWrapper(animationController: animationController, onSwipe: onSwipe,
+        direction: direction, height: height, width: width,
+        child: EventCard(eventKey: events.keys.toList()[0],
+        event: events.values.toList()[0])) : EmptyCard();
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Stack(
-        overflow: Overflow.visible,
+      padding: EdgeInsets.only(top: 8.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          BackgroundCard(
-            colorA: 0xfffa6b40,
-            colorB: 0xfffd1d1d,
-            rotation: height > 400 ? 3.0 : 2.0,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Stack(
+                overflow: Overflow.visible,
+                children: <Widget>[
+                  BackgroundCard(
+                    colorA: 0xfffa6b40,
+                    colorB: 0xfffd1d1d,
+                    rotation: height > 400 ? 3.0 : 2.0,
+                  ),
+                  BackgroundCard(
+                    colorA: 0xff7474bf,
+                    colorB: 0xff348ac7,
+                    rotation: height > 400 ? -2.0 : -1.0,
+                  ),
+                  backgroundCard,
+                  foregroundCard,
+                ],
+              ),
+            ),
           ),
-          BackgroundCard(
-            colorA: 0xff7474bf,
-            colorB: 0xff348ac7,
-            rotation: height > 400 ? -2.0 : -1.0,
+          EventActions(
+            onSwipe: onSwipe,
+            eventKey: eventKey,
           ),
-          EmptyCard(),
-        ]..addAll(eventCards),
+        ],
       ),
     );
   }
+
+  void onSwipe(bool attend) {
+    setState(() {
+      direction = attend;
+      animationController.forward();
+      // TODO: Uncomment when everything is ready.
+      // widget.eventsBloc.attendSink.add(MapEntry(eventKey, attend));
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    animationController.dispose();
+  }
 }
 
-
 class EventActions extends StatelessWidget {
+  final void Function(bool) onSwipe;
   final String eventKey;
 
-  EventActions(this.eventKey);
+  EventActions({
+    this.onSwipe,
+    this.eventKey,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -159,9 +226,7 @@ class EventActions extends StatelessWidget {
                   colorB: Color(0xfffd1d1d),
                 ),
               ),
-              onPressed: () {
-                // TODO
-              },
+              onPressed: () => onSwipe(false),
             ),
           ),
           Container(
@@ -200,9 +265,7 @@ class EventActions extends StatelessWidget {
                     colorB: Color(0xff45b649),
                   ),
                 ),
-                onPressed: () {
-                  // TODO
-                },
+                onPressed: () => onSwipe(true),
               ),
             ),
           ),
@@ -212,7 +275,73 @@ class EventActions extends StatelessWidget {
   }
 }
 
-class EventCard extends StatefulWidget {
+class SwipeWrapper extends StatelessWidget{
+  final AnimationController animationController;
+  final void Function(bool) onSwipe;
+  final Widget child;
+  final bool direction;
+  final double height;
+  final double width;
+
+  final Animation<double> rotation;
+  final Animation<double> vertical;
+  final Animation<double> horizontal;
+
+  SwipeWrapper({
+    @required this.animationController,
+    @required this.onSwipe,
+    @required this.child,
+    @required this.direction,
+    @required this.height,
+    @required this.width,
+  })  : rotation = Tween<double>(
+          begin: 0.0,
+          end: 40.0,
+      ).animate(
+        CurvedAnimation(
+          parent: animationController,
+          curve: Curves.ease,
+        ),
+      ),
+      vertical = Tween<double>(
+        begin: 0.0,
+        end: - 100.0,
+      ).animate(
+        CurvedAnimation(
+          parent: animationController,
+          curve: Curves.ease,
+        ),
+      ),
+      horizontal = Tween<double>(
+        begin: 0.0,
+        end: width * 1.5,
+      ).animate(
+        CurvedAnimation(
+          parent: animationController,
+          curve: Curves.ease,
+        ),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onHorizontalDragEnd: (DragEndDetails details) {
+        bool direction = details.velocity.pixelsPerSecond.dx > 0;
+        onSwipe(direction);
+      },
+      child: AlignPositioned(
+        dy: vertical.value,
+        dx: direction ? horizontal.value : - horizontal.value,
+        child: Transform.rotate(
+          angle: Angle.fromDegrees(rotation.value).radians,
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+class EventCard extends StatelessWidget {
   final String eventKey;
   final Event event;
   final double height;
@@ -226,179 +355,81 @@ class EventCard extends StatefulWidget {
   });
 
   @override
-  _EventCardState createState() => _EventCardState();
-}
-
-class _EventCardState extends State<EventCard> with TickerProviderStateMixin {
-  AnimationController rotationController;
-  AnimationController verticalController;
-  AnimationController horizontalController;
-
-  Animation<double> rotation;
-  Animation<double> vertical;
-  Animation<double> horizontal;
-
-  bool direction = true;
-
-  @override
-  void initState() {
-    super.initState();
-    rotationController = AnimationController(
-      duration: Duration(seconds: 1),
-      vsync: this,
-    )..addListener(() {
-      setState(() {});
-    });
-
-    verticalController = AnimationController(
-      duration: Duration(seconds: 1),
-      vsync: this,
-    )..addListener(() {
-      setState(() {});
-    });
-
-    horizontalController = AnimationController(
-      duration: Duration(seconds: 1),
-      vsync: this,
-    )..addListener(() {
-      setState(() {});
-    });
-
-    horizontalController.addStatusListener((AnimationStatus status) {
-      // Release memory when the card is dismissed.
-      if (status == AnimationStatus.completed) dispose();
-    });
-
-    rotation = Tween<double>(
-      begin: 0.0,
-      end: 40.0,
-    ).animate(
-      CurvedAnimation(
-        parent: rotationController,
-        curve: Curves.ease,
-      ),
-    );
-
-    vertical = Tween<double>(
-      begin: 0.0,
-      end: - 100.0,
-    ).animate(
-      CurvedAnimation(
-        parent: verticalController,
-        curve: Curves.ease,
-      ),
-    );
-
-    horizontal = Tween<double>(
-      begin: 0.0,
-      end: widget.width * 1.5,
-    ).animate(
-      CurvedAnimation(
-        parent: horizontalController,
-        curve: Curves.ease,
-      ),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onHorizontalDragEnd: (DragEndDetails details) {
-        direction = details.velocity.pixelsPerSecond.dx > 0;
-        rotationController.forward();
-        verticalController.forward();
-        horizontalController.forward();
-      },
-      child: AlignPositioned(
-        dy: vertical.value,
-        dx: direction ? horizontal.value : - horizontal.value,
-        child: Transform.rotate(
-          angle: Angle.fromDegrees(rotation.value).radians,
-          child: Container(
-            height: widget.height,
-            width: widget.width,
-            child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                final double height = constraints.maxHeight;
-                final double width = constraints.maxWidth;
-                return Container(
-                  height: height,
-                  width: width,
-                  child: Card(
-                    shape: ContinuousRectangleBorder(),
-                    color: Colors.white,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        CardImage(
-                          image: widget.event.image,
-                          height: height > 300 ? height / 2 : height / 4,
-                        ),
-                        Expanded(
-                          child: SingleChildScrollView(
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    widget.event.name.toUpperCase(),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.0,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  Container(height: 12.0),
-                                  Text(
-                                    widget.event.description,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 15.0,
-                                      color: Colors.black54,
-                                    ),
-                                  ),
-                                ],
+    return Container(
+      height: height,
+      width: width,
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final double height = constraints.maxHeight;
+          final double width = constraints.maxWidth;
+          return Container(
+            height: height,
+            width: width,
+            child: Card(
+              shape: ContinuousRectangleBorder(),
+              color: Colors.white,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  CardImage(
+                    image: event.image,
+                    height: height > 300 ? height / 2 : height / 4,
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              event.name.toUpperCase(),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.0,
+                                color: Colors.black87,
                               ),
                             ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: FlatButton(
-                            shape: CircleBorder(),
-                            child: PaintGradient(
-                              child: Icon(Icons.share),
-                              colorA: Color(0xff7474bf),
-                              colorB: Color(0xff348ac7),
+                            Container(height: 12.0),
+                            Text(
+                              event.description,
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 15.0,
+                                color: Colors.black54,
+                              ),
                             ),
-                            onPressed: () {
-                              Share.share("Que Haleo más grande.");
-                            },
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                );
-              },
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: FlatButton(
+                      shape: CircleBorder(),
+                      child: PaintGradient(
+                        child: Icon(Icons.share),
+                        colorA: Color(0xff7474bf),
+                        colorB: Color(0xff348ac7),
+                      ),
+                      onPressed: () {
+                        Share.share("Que Haleo más grande.");
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    rotationController.dispose();
-    verticalController.dispose();
-    horizontalController.dispose();
   }
 }
 

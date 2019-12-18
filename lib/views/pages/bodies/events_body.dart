@@ -176,12 +176,12 @@ class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateM
     );
   }
 
-  void onSwipe(bool attend) {
+  void onSwipe(bool direction) {
     setState(() {
-      direction = attend;
-      animationController.forward();
+      this.direction = direction;
+      this.animationController.forward();
       // TODO: Uncomment when everything is ready.
-      // widget.eventsBloc.attendSink.add(MapEntry(eventKey, attend));
+      // widget.eventsBloc.attendSink.add(MapEntry(eventKey, direction));
     });
   }
 

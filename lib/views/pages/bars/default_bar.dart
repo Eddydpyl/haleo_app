@@ -3,26 +3,26 @@ import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
 
 import '../../../models/user.dart';
-import '../../custom_icons.dart';
-import '../../common_widgets.dart';
 
 class DefaultBar extends StatelessWidget {
   final Widget title;
+  final Widget leading;
   final String userKey;
   final User user;
 
-  DefaultBar(this.title, this.userKey, this.user);
+  DefaultBar({
+    @required this.title,
+    @required this.leading,
+    @required this.userKey,
+    @required this.user,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0.0,
-      leading: PaintGradient(
-        child: Icon(CustomIcons.chat),
-        colorA: Color(0xfffa6b40),
-        colorB: Color(0xfffd1d1d),
-      ),
+      leading: leading,
       centerTitle: true,
       title: title,
       actions: <Widget>[

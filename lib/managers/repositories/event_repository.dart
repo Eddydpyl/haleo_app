@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:darter_base/darter_base.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../models/event.dart';
+import '../../localization.dart';
 
 /// REPOSITORIES MUST NOT BE STORED IN VARIABLES OR INSTANTIATED DIRECTLY!
 /// These are only to be used as an interface for the model's methods, and
@@ -31,8 +33,8 @@ class EventRepository {
   Future<Map<String, Event>> readAll({String uid,
     bool open, GeoFirePoint center, double radius}) async {
     Query reference = _database.collection("events");
-    if (uid != null) reference.where("attendees", arrayContains: uid);
-    if (open != null) reference.where("open", isEqualTo: open);
+    if (uid != null) reference = reference.where("attendees", arrayContains: uid);
+    if (open != null) reference = reference.where("open", isEqualTo: open);
     List<DocumentSnapshot> documents;
     if (center != null && radius != null) {
       documents = await Observable(_geo.collection(collectionRef: reference)
@@ -66,8 +68,8 @@ class EventRepository {
   Stream<Map<String, Event>> collectionStream({String uid,
     bool open, GeoFirePoint center, double radius}) {
     Query reference = _database.collection("events");
-    if (uid != null) reference.where("attendees", arrayContains: uid);
-    if (open != null) reference.where("open", isEqualTo: open);
+    if (uid != null) reference = reference.where("attendees", arrayContains: uid);
+    if (open != null) reference = reference.where("open", isEqualTo: open);
     if (center != null && radius != null) {
       return _geo.collection(collectionRef: reference).within(center: center,
           radius: radius, field: "point").map((List<DocumentSnapshot> documents) {
@@ -83,5 +85,16 @@ class EventRepository {
         return Map.fromEntries(entries);
       });
     }
+  }
+
+  Future<dynamic> attend(String key, String uid) {
+    DocumentReference reference = _database.collection("events").document(key);
+    return _database.runTransaction((Transaction transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(reference);
+      Event event = snapshot?.data != null ? Event.fromRaw(snapshot.data) : null;
+      if (!(event?.open ?? false)) throw FailedException(Localization().eventFullText());
+      Event update = Event(attendees: [uid], count: (event?.count ?? 0) + 1);
+      transaction.update(reference, update.toJson(true));
+    });
   }
 }

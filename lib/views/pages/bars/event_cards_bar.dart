@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:haleo_app/views/pages/bars/default_bar.dart';
 
-import '../../../providers/events_provider.dart';
+import '../../../providers/perimeter_events_provider.dart';
 import '../../../models/user.dart';
+import '../../custom_icons.dart';
+import '../../common_widgets.dart';
+import '../event_listing_page.dart';
 
-class EventsBar extends StatelessWidget implements PreferredSizeWidget {
+class EventCardsBar extends StatelessWidget implements PreferredSizeWidget {
  @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: EventsProvider.userBloc(context).userStream,
+      stream: PerimeterEventsProvider.userBloc(context).userStream,
       builder: (BuildContext context,
           AsyncSnapshot<MapEntry<String, User>> snapshot) {
         if (snapshot.data != null) {
           final String userKey = snapshot.data.key;
           final User user = snapshot.data.value;
-          return DefaultBar(titleWidget(), userKey, user);
+          return DefaultBar(
+            title: titleWidget(),
+            leading: leadingWidget(context),
+            userKey: userKey,
+            user: user,
+          );
         } else return Container();
       },
     );
@@ -53,6 +61,21 @@ class EventsBar extends StatelessWidget implements PreferredSizeWidget {
          )
        ],
      ),
+   );
+ }
+
+ Widget leadingWidget(BuildContext context) {
+   return PaintGradient(
+     child: IconButton(
+       icon: Icon(CustomIcons.chat),
+       onPressed: () {
+         Navigator.of(context).push(MaterialPageRoute(
+           builder: (BuildContext context) => EventListingPage(),
+         ));
+       },
+     ),
+     colorA: Color(0xfffa6b40),
+     colorB: Color(0xfffd1d1d),
    );
  }
 

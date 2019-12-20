@@ -8,8 +8,8 @@ import 'package:location/location.dart';
 import 'package:share/share.dart';
 
 import '../../../providers/application_provider.dart';
-import '../../../providers/events_provider.dart';
-import '../../../blocs/events_bloc.dart';
+import '../../../providers/perimeter_events_provider.dart';
+import '../../../blocs/perimeter_events_bloc.dart';
 import '../../../localization.dart';
 import '../../../models/event.dart';
 import '../../../models/perimeter.dart';
@@ -18,40 +18,45 @@ import '../../common_widgets.dart';
 import '../../custom_icons.dart';
 import '../event_admin_page.dart';
 
-class EventsBody extends StatefulWidget {
+class EventsCardsBody extends StatefulWidget {
   @override
-  _EventsBodyState createState() => _EventsBodyState();
+  _EventsCardsBodyState createState() => _EventsCardsBodyState();
 }
 
-class _EventsBodyState extends State<EventsBody> {
+class _EventsCardsBodyState extends State<EventsCardsBody> {
+  bool init = false;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final Localization localization = ApplicationProvider.localization(context);
-    final EventsBloc eventsBloc = EventsProvider.eventsBloc(context);
-    Location().getLocation().then((LocationData location) {
-      eventsBloc.perimeterSink.add(Perimeter(
-        lat: location.latitude,
-        lng: location.longitude,
-        // TODO: Use a more reasonable radius.
-        radius: double.maxFinite,
-      ));
-    }).catchError((e) {
-      if (e is PlatformException
-          && e.code == 'PERMISSION_DENIED') {
-        Location().requestPermission();
-        SnackBarUtility.show(context,
-            localization.locationPermissionText());
-      } else {
-        SnackBarUtility.show(context,
-            localization.locationErrorText());
-      }
-    });
+    if (!init) {
+      init = true;
+      final Localization localization = ApplicationProvider.localization(context);
+      final PerimeterEventsBloc eventsBloc = PerimeterEventsProvider.eventsBloc(context);
+      Location().getLocation().then((LocationData location) {
+        eventsBloc.perimeterSink.add(Perimeter(
+          lat: location.latitude,
+          lng: location.longitude,
+          // TODO: Use a more reasonable radius.
+          radius: double.maxFinite,
+        ));
+      }).catchError((e) {
+        if (e is PlatformException
+            && e.code == 'PERMISSION_DENIED') {
+          Location().requestPermission();
+          SnackBarUtility.show(context,
+              localization.locationPermissionText());
+        } else {
+          SnackBarUtility.show(context,
+              localization.locationErrorText());
+        }
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final EventsBloc eventsBloc = EventsProvider.eventsBloc(context);
+    final PerimeterEventsBloc eventsBloc = PerimeterEventsProvider.eventsBloc(context);
     return StreamBuilder(
       stream: eventsBloc.eventsStream,
       builder: (BuildContext context,
@@ -71,7 +76,7 @@ class _EventsBodyState extends State<EventsBody> {
 }
 
 class EventsHandler extends StatefulWidget {
-  final EventsBloc eventsBloc;
+  final PerimeterEventsBloc eventsBloc;
   final Map<String, Event> events;
 
   EventsHandler({
@@ -92,6 +97,7 @@ class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateM
   @override
   void initState() {
     super.initState();
+    resetEvents();
     direction = true;
     animationController = AnimationController(
       duration: Duration(seconds: 1),
@@ -112,32 +118,26 @@ class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateM
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    setState(() {
-      events = LinkedHashMap();
-      final List<String> sorted = List.from(widget.events.keys)
-        ..sort((String a, String b) => a.compareTo(b));
-      sorted.forEach((key) => events[key] = widget.events[key]);
-      if (sorted.isNotEmpty && (eventKey == null
-          || !sorted.contains(eventKey)))
-        eventKey = sorted.first;
-      else eventKey = null;
-    });
+  void didUpdateWidget(EventsHandler oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    setState(() => resetEvents());
   }
 
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
-    Widget backgroundCard = events.length > 1
-        ? EventCard(eventKey: events.keys.toList()[1],
-        event: events.values.toList()[1]) : EmptyCard();
+    final String next = events.keys.firstWhere((key) =>
+        key != eventKey, orElse: () => null);
+    Widget backgroundCard = next != null
+        ? EventCard(eventKey: next, event: events[next])
+        : EmptyCard();
     Widget foregroundCard = eventKey != null
-        ? SwipeWrapper(animationController: animationController, onSwipe: onSwipe,
-        direction: direction, height: height, width: width,
-        child: EventCard(eventKey: events.keys.toList()[0],
-        event: events.values.toList()[0])) : EmptyCard();
+        ? SwipeWrapper(animationController: animationController,
+          onSwipe: onSwipe, direction: direction, height: height,
+          width: width, child: EventCard(eventKey: eventKey,
+          event: events[eventKey]))
+        : EmptyCard();
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Column(
@@ -151,12 +151,12 @@ class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateM
               child: Stack(
                 overflow: Overflow.visible,
                 children: <Widget>[
-                  BackgroundCard(
+                  ColoredCard(
                     colorA: 0xfffa6b40,
                     colorB: 0xfffd1d1d,
                     rotation: height > 400 ? 3.0 : 2.0,
                   ),
-                  BackgroundCard(
+                  ColoredCard(
                     colorA: 0xff7474bf,
                     colorB: 0xff348ac7,
                     rotation: height > 400 ? -2.0 : -1.0,
@@ -176,12 +176,22 @@ class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateM
     );
   }
 
+  void resetEvents() {
+    events = LinkedHashMap();
+    List<String> sorted = List.from(widget.events.keys)..sort((String a, String b) =>
+        widget.events[b].created.compareTo(widget.events[a].created));
+    sorted.forEach((key) => events[key] = widget.events[key]);
+    if (events.isNotEmpty) {
+      if (eventKey == null || !events.keys.contains(eventKey))
+        eventKey = events.keys.first;
+    } else eventKey = null;
+  }
+
   void onSwipe(bool direction) {
     setState(() {
       this.direction = direction;
       this.animationController.forward();
-      // TODO: Uncomment when everything is ready.
-      // widget.eventsBloc.attendSink.add(MapEntry(eventKey, direction));
+      widget.eventsBloc.attendSink.add(MapEntry(eventKey, direction));
     });
   }
 
@@ -436,7 +446,7 @@ class EventCard extends StatelessWidget {
 class EmptyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BackgroundCard(
+    return ColoredCard(
       colorA: 0xffffff,
       colorB: 0xffffff,
       child: Center(

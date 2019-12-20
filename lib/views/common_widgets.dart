@@ -32,7 +32,7 @@ class PaintGradient extends StatelessWidget {
   }
 }
 
-class BackgroundCard extends StatelessWidget {
+class ColoredCard extends StatelessWidget {
   final int colorA;
   final int colorB;
   final double height;
@@ -40,7 +40,7 @@ class BackgroundCard extends StatelessWidget {
   final double rotation;
   final Widget child;
 
-  BackgroundCard({
+  ColoredCard({
     @required this.colorA,
     @required this.colorB,
     this.height = double.maxFinite,
@@ -132,15 +132,20 @@ class TearBorder extends ShapeBorder {
 class CardImage extends StatelessWidget {
   final String image;
   final double height;
+  final double width;
 
-  CardImage({this.image, this.height});
+  CardImage({
+    this.image,
+    this.height = double.maxFinite,
+    this.width = double.maxFinite,
+  });
 
   @override
   Widget build(BuildContext context) {
     return (image?.isNotEmpty ?? false)
       ? TransitionToImage(
         height: height,
-        width: double.maxFinite,
+        width: width,
         fit: BoxFit.cover,
         image: AdvancedNetworkImage(
           image,
@@ -150,24 +155,23 @@ class CardImage extends StatelessWidget {
         placeholder: Image.asset(
           "assets/images/placeholder.jpg",
           height: height,
-          width: double.maxFinite,
+          width: width,
           fit: BoxFit.cover,
         ),
         loadingWidget: Image.asset(
           "assets/images/placeholder.jpg",
           height: height,
-          width: double.maxFinite,
+          width: width,
           fit: BoxFit.cover,
         ),
       ) : Image.asset(
         "assets/images/placeholder.jpg",
         height: height,
-        width: double.maxFinite,
+        width: width,
         fit: BoxFit.cover,
       );
   }
 }
-
 
 class FadeRoute extends PageRouteBuilder {
   final Widget page;

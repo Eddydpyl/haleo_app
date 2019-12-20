@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:haleo_app/views/pages/bars/default_bar.dart';
 
-import '../../../providers/event_admin_provider.dart';
+import '../../../providers/user_events_provider.dart';
 import '../../../models/user.dart';
-import '../../common_widgets.dart';
 import '../../custom_icons.dart';
-import '../bars/default_bar.dart';
+import '../../common_widgets.dart';
 
-class EventAdminBar extends StatelessWidget implements PreferredSizeWidget {
+class EventListingBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: EventAdminProvider.userBloc(context).userStream,
+      stream: UserEventsProvider.userBloc(context).userStream,
       builder: (BuildContext context,
           AsyncSnapshot<MapEntry<String, User>> snapshot) {
         if (snapshot.data != null) {
@@ -30,7 +30,7 @@ class EventAdminBar extends StatelessWidget implements PreferredSizeWidget {
   Widget titleWidget() {
     return RichText(
       text: TextSpan(
-        text: "¡Armar hal",
+        text: "¡Tus Hal",
         style: TextStyle(
           fontWeight: FontWeight.bold,
           color: Colors.black87,
@@ -52,7 +52,7 @@ class EventAdminBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           TextSpan(
-            text: "!",
+            text: "s!",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.black87,

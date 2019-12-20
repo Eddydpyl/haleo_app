@@ -108,13 +108,12 @@ class _SessionBodyState extends State<SessionBody> {
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: <Widget>[
-            BgLoginCard(height: height / 3 - 20, radius: 16.0),
-            BgLoginCard(height: height / 3 - 40, radius: 16.0),
-            BgLoginCard(
-                height: height / 3 - 60, radius: 16.0, color: Colors.white),
+            BgLoginCard(height: ((2 * height) / 3) - 20, radius: 16.0),
+            BgLoginCard(height: ((2 * height) / 3) - 40, radius: 16.0),
+            BgLoginCard(height: ((2 * height) / 3) - 60, radius: 16.0, color: Colors.white),
             Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 signInText(),
                 Container(height: 8.0),
@@ -139,7 +138,7 @@ class _SessionBodyState extends State<SessionBody> {
 
   Widget signInText() {
     return Text(
-      "¡matarme!",
+      "¡padentro!",
       textAlign: TextAlign.center,
       style: TextStyle(
         fontWeight: FontWeight.bold,

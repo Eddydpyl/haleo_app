@@ -11,6 +11,7 @@ class Event {
   int slots; // How many attendees the host wants for the event.
   int count; // Number of people that have already shown interest.
   List<String> attendees; // Users that are interested in the event.
+  String created; // The date at which the event was created.
   String lang; // Language of the event (for notifications).
 
   Event({
@@ -24,6 +25,7 @@ class Event {
     this.slots,
     this.count,
     this.attendees,
+    this.created,
     this.lang,
   });
 
@@ -38,7 +40,9 @@ class Event {
         this.open = map["open"],
         this.slots = map["slots"],
         this.count = map["count"],
-        this.attendees = map["attendees"],
+        this.attendees = map["attendees"] != null
+            ? List<String>.from(map["attendees"]) : [],
+        this.created = map["created"],
         this.lang = map["lang"];
 
   Map<String, dynamic> toJson([bool update = false]) {
@@ -52,7 +56,8 @@ class Event {
     if (slots != null) json["slots"] = slots;
     if (count != null) json["count"] = count;
     if (attendees != null) json["attendees"] = update
-        ? FieldValue.arrayUnion([attendees]) : attendees;
+        ? FieldValue.arrayUnion(attendees) : attendees;
+    if (created != null) json["created"] = created;
     if (lang != null) json["lang"] = lang;
     return json;
   }
@@ -72,6 +77,7 @@ class Event {
               slots == other.slots &&
               count == other.count &&
               attendees == other.attendees &&
+              created == other.created &&
               lang == other.lang;
 
   @override
@@ -86,12 +92,14 @@ class Event {
       slots.hashCode ^
       count.hashCode ^
       attendees.hashCode ^
+      created.hashCode ^
       lang.hashCode;
 
   @override
   String toString() {
     return 'Event{user: $user, name: $name, description: $description,'
         ' image: $image, point: $point, topic: $topic, open: $open,'
-        ' slots: $slots, count: $count, attendees: $attendees, lang: $lang}';
+        ' slots: $slots, count: $count, attendees: $attendees,'
+        ' created: $created, lang: $lang}';
   }
 }

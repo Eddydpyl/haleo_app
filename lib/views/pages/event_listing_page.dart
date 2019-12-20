@@ -5,17 +5,16 @@ import 'package:flutter/gestures.dart';
 import 'bars/event_listing_bar.dart';
 import 'bodies/event_listing_body.dart';
 import '../../providers/application_provider.dart';
-import '../../providers/events_provider.dart';
+import '../../providers/state_provider.dart';
+import '../../providers/user_events_provider.dart';
 
 class EventListingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: change to appropiate provider and scaffold
-    return EventsProvider(
+    return UserEventsProvider(
+      stateBloc: StateProvider.stateBloc(context),
       database: ApplicationProvider.database(context),
-      preferences: ApplicationProvider.preferences(context),
-      localization: ApplicationProvider.localization(context),
-      child: EventsScaffold(
+      child: EventListingScaffold(
         appBar: EventListingBar(),
         body: EventListingBody(),
       ),
@@ -23,8 +22,8 @@ class EventListingPage extends StatelessWidget {
   }
 }
 
-class EventsScaffold extends BaseScaffold<EventsInherited> {
-  EventsScaffold({
+class EventListingScaffold extends BaseScaffold<UserEventsInherited> {
+  EventListingScaffold({
     Key key,
     PreferredSizeWidget appBar,
     Widget body,
@@ -46,25 +45,25 @@ class EventsScaffold extends BaseScaffold<EventsInherited> {
     double drawerEdgeDragWidth,
     ShowFunction showFunction,
   }) : super(
-          key: key,
-          appBar: appBar,
-          body: body,
-          floatingActionButton: floatingActionButton,
-          floatingActionButtonLocation: floatingActionButtonLocation,
-          floatingActionButtonAnimator: floatingActionButtonAnimator,
-          persistentFooterButtons: persistentFooterButtons,
-          drawer: drawer,
-          endDrawer: endDrawer,
-          bottomNavigationBar: bottomNavigationBar,
-          bottomSheet: bottomSheet,
-          backgroundColor: backgroundColor,
-          resizeToAvoidBottomPadding: resizeToAvoidBottomPadding,
-          resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-          primary: primary,
-          drawerDragStartBehavior: drawerDragStartBehavior,
-          extendBody: extendBody,
-          drawerScrimColor: drawerScrimColor,
-          drawerEdgeDragWidth: drawerEdgeDragWidth,
-          showFunction: showFunction,
-        );
+    key: key,
+    appBar: appBar,
+    body: body,
+    floatingActionButton: floatingActionButton,
+    floatingActionButtonLocation: floatingActionButtonLocation,
+    floatingActionButtonAnimator: floatingActionButtonAnimator,
+    persistentFooterButtons: persistentFooterButtons,
+    drawer: drawer,
+    endDrawer: endDrawer,
+    bottomNavigationBar: bottomNavigationBar,
+    bottomSheet: bottomSheet,
+    backgroundColor: backgroundColor,
+    resizeToAvoidBottomPadding: resizeToAvoidBottomPadding,
+    resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+    primary: primary,
+    drawerDragStartBehavior: drawerDragStartBehavior,
+    extendBody: extendBody,
+    drawerScrimColor: drawerScrimColor,
+    drawerEdgeDragWidth: drawerEdgeDragWidth,
+    showFunction: showFunction,
+  );
 }

@@ -21,7 +21,7 @@ import 'package:intl/intl.dart';
 import 'localization.dart';
 import 'providers/application_provider.dart';
 import 'providers/state_provider.dart';
-import 'views/pages/events_page.dart';
+import 'views/pages/event_cards_page.dart';
 import 'views/pages/session_page.dart';
 import 'views/themes.dart';
 import 'models/base.dart';
@@ -161,7 +161,7 @@ class _InitializerState extends State<Initializer> {
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.data != null) {
           if (snapshot.data.isNotEmpty)
-            return EventsPage();
+            return EventCardsPage();
           else return SplashScreen();
         } else return SessionPage();
       },

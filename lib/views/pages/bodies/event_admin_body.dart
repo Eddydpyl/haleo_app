@@ -117,12 +117,12 @@ class EventStack extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Stack(
         children: <Widget>[
-          BackgroundCard(
+          ColoredCard(
             colorA: 0xfffa6b40,
             colorB: 0xfffd1d1d,
             rotation: height > 400 ? 3.0 : 2.0,
           ),
-          BackgroundCard(
+          ColoredCard(
             colorA: 0xff7474bf,
             colorB: 0xff348ac7,
             rotation: height > 400 ? -2.0 : -1.0,
@@ -199,7 +199,7 @@ class EventActions extends StatelessWidget {
                     LocationData location = await Location().getLocation();
                     GeoFirePoint point = GeoFirePoint(location.latitude, location.longitude);
                     Locale locale = ui.window.locale ?? Locale(Language.EN);
-                    // TODO: Include event slots.
+                    String date = DateUtility.currentDate();
                     eventAdminBloc.createSink.add(Event(
                       user: userKey,
                       name: nameController.text,
@@ -208,6 +208,8 @@ class EventActions extends StatelessWidget {
                       point: point.data,
                       open: true,
                       count: 0,
+                      slots: 1, // TODO: Use actual event slots.
+                      created: date,
                       lang: locale.languageCode,
                     )); Navigator.of(context).pop();
                   } on PlatformException catch (e) {

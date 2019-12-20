@@ -2,30 +2,29 @@ import 'package:darter_base/darter_base.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import 'bars/events_bar.dart';
-import 'bodies/events_body.dart';
+import 'bars/event_cards_bar.dart';
+import 'bodies/event_cards_body.dart';
 import '../../providers/application_provider.dart';
 import '../../providers/state_provider.dart';
-import '../../providers/events_provider.dart';
+import '../../providers/perimeter_events_provider.dart';
 
-class EventsPage extends StatelessWidget {
+class EventCardsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return EventsProvider(
+    return PerimeterEventsProvider(
       stateBloc: StateProvider.stateBloc(context),
       database: ApplicationProvider.database(context),
       preferences: ApplicationProvider.preferences(context),
-      localization: ApplicationProvider.localization(context),
-      child: EventsScaffold(
-        appBar: EventsBar(),
-        body: EventsBody(),
+      child: EventCardsScaffold(
+        appBar: EventCardsBar(),
+        body: EventsCardsBody(),
       ),
     );
   }
 }
 
-class EventsScaffold extends BaseScaffold<EventsInherited> {
-  EventsScaffold({
+class EventCardsScaffold extends BaseScaffold<PerimeterEventsInherited> {
+  EventCardsScaffold({
     Key key,
     PreferredSizeWidget appBar,
     Widget body,

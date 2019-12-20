@@ -11,7 +11,7 @@
 ///      fonts:
 ///       - asset: fonts/CustomIcons.ttf
 ///
-/// 
+///
 /// * Font Awesome, Copyright (C) 2016 by Dave Gandy
 ///         Author:    Dave Gandy
 ///         License:   SIL ()
@@ -29,11 +29,17 @@ class CustomIcons {
   static const _kFontFam = 'CustomIcons';
 
   static const IconData chat = const IconData(0xe800, fontFamily: _kFontFam);
-  static const IconData cancel_1 = const IconData(0xe805, fontFamily: _kFontFam);
+  static const IconData users = const IconData(0xe801, fontFamily: _kFontFam);
+  static const IconData left_big =
+      const IconData(0xe802, fontFamily: _kFontFam);
+  static const IconData direction =
+      const IconData(0xe803, fontFamily: _kFontFam);
+  static const IconData cancel_1 =
+      const IconData(0xe805, fontFamily: _kFontFam);
   static const IconData ok_1 = const IconData(0xe806, fontFamily: _kFontFam);
-  static const IconData heart_filled = const IconData(0xe807, fontFamily: _kFontFam);
-  static const IconData left = const IconData(0xe808, fontFamily: _kFontFam);
-  static const IconData right = const IconData(0xe809, fontFamily: _kFontFam);
+  static const IconData heart_filled =
+      const IconData(0xe807, fontFamily: _kFontFam);
   static const IconData plus_1 = const IconData(0xe80a, fontFamily: _kFontFam);
-  static const IconData chat_alt = const IconData(0xe80b, fontFamily: _kFontFam);
+  static const IconData paper_plane =
+      const IconData(0xf1d8, fontFamily: _kFontFam);
 }

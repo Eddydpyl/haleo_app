@@ -21,7 +21,7 @@ class EventListingBar extends StatelessWidget implements PreferredSizeWidget {
             elevation: 0.0,
             leading: PaintGradient(
                 child: IconButton(
-                  icon: Icon(CustomIcons.left),
+                  icon: Icon(CustomIcons.left_big),
                   onPressed: () {},
                 ),
                 colorA: Color(0xfffa6b40),

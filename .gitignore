@@ -82,3 +82,4 @@
 
 /android/key.properties
 /pubspec.lock
+.vscode/launch.json

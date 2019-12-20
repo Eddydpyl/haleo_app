@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:darter_base/darter_base.dart';
 import 'package:flutter/gestures.dart';
 
-import 'bars/event_listing_bar.dart';
-import 'bodies/event_listing_body.dart';
+import 'bars/events_listing_bar.dart';
+import 'bodies/events_listing_body.dart';
 import '../../providers/application_provider.dart';
 import '../../providers/events_provider.dart';
 

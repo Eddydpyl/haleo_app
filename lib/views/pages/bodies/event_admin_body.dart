@@ -203,7 +203,7 @@ class EventActions extends StatelessWidget {
                     eventAdminBloc.createSink.add(Event(
                       user: userKey,
                       name: nameController.text,
-                      description: nameController.text,
+                      description: descriptionController.text,
                       image: image,
                       point: point.data,
                       open: true,
@@ -298,7 +298,7 @@ class EventAdminCard extends StatelessWidget {
         height: height,
       ),
       onTap: () async {
-        File file = await ImagePicker.pickImage(source: ImageSource.gallery);
+        File file = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 1500, maxWidth: 1500);
         if (file != null) uploaderBloc.fileSink.add(file.readAsBytesSync());
       },
     );

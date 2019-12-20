@@ -5,7 +5,6 @@ import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:haleo_app/localization_delegate.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,6 +22,8 @@ import 'providers/application_provider.dart';
 import 'providers/state_provider.dart';
 import 'views/pages/event_cards_page.dart';
 import 'views/pages/session_page.dart';
+import 'views/pages/chat_page.dart';
+import 'localization_delegate.dart';
 import 'views/themes.dart';
 import 'models/base.dart';
 
@@ -129,7 +130,9 @@ class _InitializerState extends State<Initializer> {
           if (type == Archetype.EVENT) {
             if (action == Action.OPEN
                 || action == Action.SEND_MESSAGE) {
-              // TODO: Navigate to the event's page.
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => ChatPage(key),
+              ));
             }
           }
         }
@@ -145,7 +148,9 @@ class _InitializerState extends State<Initializer> {
           if (type == Archetype.EVENT) {
             if (action == Action.OPEN
                 || action == Action.SEND_MESSAGE) {
-              // TODO: Navigate to the event's page.
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => ChatPage(key),
+              ));
             }
           }
         }

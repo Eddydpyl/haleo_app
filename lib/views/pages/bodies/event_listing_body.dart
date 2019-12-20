@@ -3,6 +3,7 @@ import 'package:haleo_app/providers/user_events_provider.dart';
 
 import '../../../models/event.dart';
 import '../../common_widgets.dart';
+import '../../pages/chat_page.dart';
 
 class EventListingBody extends StatefulWidget {
   @override
@@ -62,7 +63,9 @@ class EventTile extends StatelessWidget {
             width: 64,
           ),
           onTap: () {
-            // TODO: Navigate to the event's page.
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => ChatPage(eventKey),
+            ));
           },
         ),
         Divider(),

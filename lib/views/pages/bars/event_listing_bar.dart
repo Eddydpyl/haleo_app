@@ -66,7 +66,7 @@ class EventListingBar extends StatelessWidget implements PreferredSizeWidget {
   Widget leadingWidget(BuildContext context) {
     return PaintGradient(
       child: IconButton(
-        icon: Icon(CustomIcons.left),
+        icon: Icon(CustomIcons.left_big),
         onPressed: () => Navigator.of(context).pop(),
       ),
       colorA: Color(0xfffa6b40),

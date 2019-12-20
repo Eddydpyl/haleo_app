@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 
-import '../../../providers/event_admin_provider.dart';
+import '../../../providers/chat_provider.dart';
 import '../../../models/user.dart';
+import '../../../models/event.dart';
 import '../../common_widgets.dart';
 import '../../custom_icons.dart';
 import '../bars/default_bar.dart';
 
-class EventAdminBar extends StatelessWidget implements PreferredSizeWidget {
+class ChatBar extends StatelessWidget implements PreferredSizeWidget {
+  final Event event;
+
+  ChatBar(this.event);
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: EventAdminProvider.userBloc(context).userStream,
+      stream: ChatProvider.userBloc(context).userStream,
       builder: (BuildContext context,
           AsyncSnapshot<MapEntry<String, User>> snapshot) {
         if (snapshot.data != null) {
@@ -28,37 +33,12 @@ class EventAdminBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget titleWidget() {
-    return RichText(
-      text: TextSpan(
-        text: "¡Armar hal",
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.black87,
-          fontSize: 24.0,
-        ),
-        children: <TextSpan>[
-          TextSpan(
-            text: "e",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.red,
-            ),
-          ),
-          TextSpan(
-            text: "o",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.blue,
-            ),
-          ),
-          TextSpan(
-            text: "!",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          )
-        ],
+    return Text(
+      event.name,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Color(0xFF424242),
+        fontSize: 35.0,
       ),
     );
   }

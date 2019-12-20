@@ -38,8 +38,8 @@ class _ChatBodyState extends State<ChatBody> {
               if (snapshot.data != null) {
                 Map<String, Message> messages = snapshot.data;
                 List<String> sorted = messages.keys.toList()
-                  ..sort((String a, String b) => messages[a]
-                      .date.compareTo(messages[b].date));
+                  ..sort((String a, String b) => messages[b]
+                      .date.compareTo(messages[a].date));
                 return StreamBuilder(
                   stream: eventBloc.usersStream,
                   builder: (BuildContext context,

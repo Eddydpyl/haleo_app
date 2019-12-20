@@ -42,6 +42,7 @@ class EventBloc extends BaseBloc {
     _users = LenientSubject(ignoreRepeated: false);
     _eventKey = LenientSubject(ignoreRepeated: true);
 
+    _users.add(Map()); // Initialize with empty map.
     _messages.stream.listen((Map<String, Message> messages) async {
       if (messages?.isNotEmpty ?? false) {
         Map<String, User> users = _users.value ?? Map();

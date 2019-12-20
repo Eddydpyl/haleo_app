@@ -3,17 +3,19 @@ import 'dart:async';
 import 'package:darter_base/darter_base.dart';
 
 import '../managers/database_manager.dart';
+import '../managers/message_manager.dart';
 import '../models/event.dart';
 
 class EventAdminBloc extends BaseBloc {
   final DatabaseManager _databaseManager;
+  final MessageManager _messageManager;
 
   LenientSubject<Event> _create;
   LenientSubject<MapEntry<String, Event>> _update;
   LenientSubject<String> _delete;
 
-  EventAdminBloc(DatabaseManager databaseManager)
-      : _databaseManager = databaseManager;
+  EventAdminBloc(DatabaseManager databaseManager, MessageManager messageManager)
+      : _databaseManager = databaseManager, _messageManager = messageManager;
 
   /// Consumes a [Event] and uses it to create an instance in the database.
   LenientSink<Event> get createSink => _create.sink;
@@ -31,10 +33,16 @@ class EventAdminBloc extends BaseBloc {
     _update = LenientSubject(ignoreRepeated: false);
     _delete = LenientSubject(ignoreRepeated: false);
 
-    _create.stream.listen((Event event) {
+    _create.stream.listen((Event event) async {
       if (event != null) {
-        _databaseManager.eventRepository().create(event)
+        dynamic res = await _databaseManager
+            .eventRepository().create(event)
             .catchError((e) => forwardException(e));
+        if (!(res is BaseException)) {
+          Event event = await _databaseManager
+              .eventRepository().read(res);
+          _messageManager.subscribe(event.topic);
+        }
       }
     });
     _update.stream.listen((MapEntry<String, Event> entry) {

@@ -14,6 +14,7 @@ class EventCardsPage extends StatelessWidget {
     return PerimeterEventsProvider(
       stateBloc: StateProvider.stateBloc(context),
       database: ApplicationProvider.database(context),
+      messaging: ApplicationProvider.messaging(context),
       preferences: ApplicationProvider.preferences(context),
       child: EventCardsScaffold(
         appBar: EventCardsBar(),

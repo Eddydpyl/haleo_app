@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../managers/database_manager.dart';
+import '../managers/message_manager.dart';
 import '../managers/preference_manager.dart';
 import '../blocs/state_bloc.dart';
 import '../blocs/perimeter_events_bloc.dart';
@@ -14,12 +15,14 @@ class PerimeterEventsProvider extends StatelessWidget {
   final Widget child;
   final StateBloc stateBloc;
   final DatabaseManager database;
+  final MessageManager messaging;
   final PreferenceManager preferences;
 
   PerimeterEventsProvider({
     @required this.child,
     @required this.stateBloc,
     @required this.database,
+    @required this.messaging,
     @required this.preferences,
   });
 
@@ -30,7 +33,7 @@ class PerimeterEventsProvider extends StatelessWidget {
       inherited: PerimeterEventsInherited(
         child: child,
         blocs: {
-          "eventsBloc": PerimeterEventsBloc(database, preferences),
+          "eventsBloc": PerimeterEventsBloc(database, messaging, preferences),
           "userBloc": UserBloc(database),
         },
       ),

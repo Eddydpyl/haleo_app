@@ -5,12 +5,14 @@ import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../managers/database_manager.dart';
+import '../managers/message_manager.dart';
 import '../managers/preference_manager.dart';
 import '../models/perimeter.dart';
 import '../models/event.dart';
 
 class PerimeterEventsBloc extends BaseBloc {
   final DatabaseManager _databaseManager;
+  final MessageManager _messageManager;
   final PreferenceManager _preferenceManager;
 
   LenientSubject<Map<String, Event>> _events;
@@ -20,8 +22,8 @@ class PerimeterEventsBloc extends BaseBloc {
 
   StreamSubscription _subscription;
 
-  PerimeterEventsBloc(DatabaseManager databaseManager, PreferenceManager preferenceManager)
-      : _databaseManager = databaseManager, _preferenceManager = preferenceManager;
+  PerimeterEventsBloc(DatabaseManager databaseManager, MessageManager messageManager, PreferenceManager preferenceManager)
+      : _databaseManager = databaseManager, _messageManager = messageManager, _preferenceManager = preferenceManager;
 
   /// Returns a [Stream] of events given the filters.
   Observable<Map<String, Event>> get eventsStream => _events.stream;
@@ -47,9 +49,14 @@ class PerimeterEventsBloc extends BaseBloc {
       if (attend != null && _userKey.value != null) {
         _preferenceManager.view(attend.key);
         if (attend.value) {
-          _databaseManager.eventRepository()
+          dynamic res = await _databaseManager.eventRepository()
               .attend(attend.key, _userKey.value)
               .catchError((e) => forwardException(e));
+          if (!(res is BaseException)) {
+            Event event = await _databaseManager
+                .eventRepository().read(attend.key);
+            _messageManager.subscribe(event.topic);
+          }
         }
       }
     });

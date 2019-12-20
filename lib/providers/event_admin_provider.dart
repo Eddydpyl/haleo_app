@@ -6,6 +6,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../localization.dart';
 import '../managers/database_manager.dart';
+import '../managers/message_manager.dart';
 import '../managers/storage_manager.dart';
 import '../blocs/state_bloc.dart';
 import '../blocs/event_admin_bloc.dart';
@@ -16,6 +17,7 @@ class EventAdminProvider extends StatelessWidget {
   final Widget child;
   final StateBloc stateBloc;
   final DatabaseManager database;
+  final MessageManager messaging;
   final StorageManager storage;
   final Localization localization;
 
@@ -23,6 +25,7 @@ class EventAdminProvider extends StatelessWidget {
     @required this.child,
     @required this.stateBloc,
     @required this.database,
+    @required this.messaging,
     @required this.storage,
     @required this.localization,
   });
@@ -34,7 +37,7 @@ class EventAdminProvider extends StatelessWidget {
       inherited: EventAdminInherited(
         child: child,
         blocs: {
-          "eventAdminBloc": EventAdminBloc(database),
+          "eventAdminBloc": EventAdminBloc(database, messaging),
           "uploaderBloc": UploaderBloc(storage, localization),
           "userBloc": UserBloc(database),
         },

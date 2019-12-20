@@ -32,8 +32,7 @@ class _SessionBodyState extends State<SessionBody> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Container(
-              height: height <= 400.0
-                  ? height - 210 :  height / 3,
+              height: height <= 400.0 ? height - 210 : height / 3,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -48,7 +47,7 @@ class _SessionBodyState extends State<SessionBody> {
                     ),
                   ),
                   Text(
-                    "Encuentra eventos cerca de ti. \n ¡Estás a un click!",
+                    "Encuentra planes cerca de ti. \n ¡Estás a un click!",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
@@ -88,7 +87,7 @@ class _SessionBodyState extends State<SessionBody> {
               children: <Widget>[
                 signInText(),
                 Padding(
-                  padding:  EdgeInsets.symmetric(vertical: 20.0),
+                  padding: EdgeInsets.symmetric(vertical: 20.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -109,12 +108,13 @@ class _SessionBodyState extends State<SessionBody> {
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: <Widget>[
-            BgLoginCard(height: ((2 * height) / 3) - 20, radius: 16.0),
-            BgLoginCard(height: ((2 * height) / 3) - 40, radius: 16.0),
-            BgLoginCard(height: ((2 * height) / 3) - 60, radius: 16.0, color: Colors.white),
+            BgLoginCard(height: height / 3 - 20, radius: 16.0),
+            BgLoginCard(height: height / 3 - 40, radius: 16.0),
+            BgLoginCard(
+                height: height / 3 - 60, radius: 16.0, color: Colors.white),
             Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 signInText(),
                 Container(height: 8.0),
@@ -126,6 +126,9 @@ class _SessionBodyState extends State<SessionBody> {
                   padding: EdgeInsets.symmetric(vertical: 8.0),
                   child: facebookButton(sessionBloc),
                 ),
+                SizedBox(
+                  height: 16.0,
+                )
               ],
             ),
           ],
@@ -136,7 +139,7 @@ class _SessionBodyState extends State<SessionBody> {
 
   Widget signInText() {
     return Text(
-      "¡padentro!",
+      "¡matarme!",
       textAlign: TextAlign.center,
       style: TextStyle(
         fontWeight: FontWeight.bold,

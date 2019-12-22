@@ -8,7 +8,7 @@ import '../../common_widgets.dart';
 import '../event_listing_page.dart';
 
 class EventCardsBar extends StatelessWidget implements PreferredSizeWidget {
- @override
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: PerimeterEventsProvider.userBloc(context).userStream,
@@ -23,61 +23,62 @@ class EventCardsBar extends StatelessWidget implements PreferredSizeWidget {
             userKey: userKey,
             user: user,
           );
-        } else return Container();
+        } else
+          return Container();
       },
     );
   }
 
- Widget titleWidget() {
-   return RichText(
-     text: TextSpan(
-       text: "¡Hal",
-       style: TextStyle(
-         fontWeight: FontWeight.bold,
-         color: Colors.black87,
-         fontSize: 24.0,
-       ),
-       children: <TextSpan>[
-         TextSpan(
-           text: "e",
-           style: TextStyle(
-             fontWeight: FontWeight.bold,
-             color: Colors.red,
-           ),
-         ),
-         TextSpan(
-           text: "o",
-           style: TextStyle(
-             fontWeight: FontWeight.bold,
-             color: Colors.blue,
-           ),
-         ),
-         TextSpan(
-           text: "!",
-           style: TextStyle(
-             fontWeight: FontWeight.bold,
-             color: Colors.black87,
-           ),
-         )
-       ],
-     ),
-   );
- }
+  Widget titleWidget() {
+    return RichText(
+      text: TextSpan(
+        text: "¡Hal",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF424242),
+          fontSize: 24.0,
+        ),
+        children: <TextSpan>[
+          TextSpan(
+            text: "e",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+          TextSpan(
+            text: "o",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.blue,
+            ),
+          ),
+          TextSpan(
+            text: "!",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF424242),
+            ),
+          )
+        ],
+      ),
+    );
+  }
 
- Widget leadingWidget(BuildContext context) {
-   return PaintGradient(
-     child: IconButton(
-       icon: Icon(CustomIcons.chat),
-       onPressed: () {
-         Navigator.of(context).push(MaterialPageRoute(
-           builder: (BuildContext context) => EventListingPage(),
-         ));
-       },
-     ),
-     colorA: Color(0xfffa6b40),
-     colorB: Color(0xfffd1d1d),
-   );
- }
+  Widget leadingWidget(BuildContext context) {
+    return PaintGradient(
+      child: IconButton(
+        icon: Icon(CustomIcons.chat),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (BuildContext context) => EventListingPage(),
+          ));
+        },
+      ),
+      colorA: Color(0xfffa6b40),
+      colorB: Color(0xfffd1d1d),
+    );
+  }
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);

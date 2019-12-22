@@ -22,7 +22,8 @@ class EventListingBar extends StatelessWidget implements PreferredSizeWidget {
             userKey: userKey,
             user: user,
           );
-        } else return Container();
+        } else
+          return Container();
       },
     );
   }
@@ -33,7 +34,7 @@ class EventListingBar extends StatelessWidget implements PreferredSizeWidget {
         text: "¡Tus Hal",
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: Colors.black87,
+          color: Color(0xFF424242),
           fontSize: 24.0,
         ),
         children: <TextSpan>[
@@ -55,7 +56,7 @@ class EventListingBar extends StatelessWidget implements PreferredSizeWidget {
             text: "s!",
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Color(0xFF424242),
             ),
           )
         ],

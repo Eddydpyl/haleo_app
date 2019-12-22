@@ -30,7 +30,7 @@ class EventAdminBar extends StatelessWidget implements PreferredSizeWidget {
   Widget titleWidget() {
     return RichText(
       text: TextSpan(
-        text: "¡Armar hal",
+        text: "¡Armar Hal",
         style: TextStyle(
           fontWeight: FontWeight.bold,
           color: Colors.black87,

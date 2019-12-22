@@ -38,7 +38,8 @@ class _EventAdminBodyState extends State<EventAdminBody> {
   Widget build(BuildContext context) {
     final Localization localization = ApplicationProvider.localization(context);
     final StateBloc stateBloc = StateProvider.stateBloc(context);
-    final EventAdminBloc eventAdminBloc = EventAdminProvider.eventAdminBloc(context);
+    final EventAdminBloc eventAdminBloc =
+        EventAdminProvider.eventAdminBloc(context);
     final UploaderBloc uploaderBloc = EventAdminProvider.uploaderBloc(context);
     return StreamBuilder(
       stream: stateBloc.userKeyStream,
@@ -79,10 +80,12 @@ class _EventAdminBodyState extends State<EventAdminBody> {
                     ],
                   ),
                 );
-              } else return Container();
+              } else
+                return Container();
             },
           );
-        } else return Container();
+        } else
+          return Container();
       },
     );
   }
@@ -193,11 +196,12 @@ class EventActions extends StatelessWidget {
                 colorB: Color(0xff45b649),
               ),
               onPressed: () async {
-                if (nameController.text.isNotEmpty
-                    && descriptionController.text.isNotEmpty) {
+                if (nameController.text.isNotEmpty &&
+                    descriptionController.text.isNotEmpty) {
                   try {
                     LocationData location = await Location().getLocation();
-                    GeoFirePoint point = GeoFirePoint(location.latitude, location.longitude);
+                    GeoFirePoint point =
+                        GeoFirePoint(location.latitude, location.longitude);
                     Locale locale = ui.window.locale ?? Locale(Language.EN);
                     String date = DateUtility.currentDate();
                     eventAdminBloc.createSink.add(Event(
@@ -208,22 +212,23 @@ class EventActions extends StatelessWidget {
                       point: point.data,
                       open: true,
                       count: 0,
-                      slots: 1, // TODO: Use actual event slots.
+                      slots: 2, // TODO: Use actual event slots.
                       created: date,
                       lang: locale.languageCode,
-                    )); Navigator.of(context).pop();
+                    ));
+                    Navigator.of(context).pop();
                   } on PlatformException catch (e) {
                     if (e.code == 'PERMISSION_DENIED') {
                       Location().requestPermission();
-                      SnackBarUtility.show(context,
-                          localization.locationPermissionText());
+                      SnackBarUtility.show(
+                          context, localization.locationPermissionText());
                     } else {
-                      SnackBarUtility.show(context,
-                          localization.locationErrorText());
+                      SnackBarUtility.show(
+                          context, localization.locationErrorText());
                     }
                   } catch (e) {
-                    SnackBarUtility.show(context,
-                        localization.locationErrorText());
+                    SnackBarUtility.show(
+                        context, localization.locationErrorText());
                   }
                 }
               },
@@ -298,7 +303,8 @@ class EventAdminCard extends StatelessWidget {
         height: height,
       ),
       onTap: () async {
-        File file = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 1500, maxWidth: 1500);
+        File file = await ImagePicker.pickImage(
+            source: ImageSource.gallery, maxHeight: 1500, maxWidth: 1500);
         if (file != null) uploaderBloc.fileSink.add(file.readAsBytesSync());
       },
     );
@@ -308,6 +314,7 @@ class EventAdminCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
+        textCapitalization: TextCapitalization.sentences,
         maxLines: 1,
         controller: controller,
         keyboardType: TextInputType.text,
@@ -333,6 +340,7 @@ class EventAdminCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
+        textCapitalization: TextCapitalization.sentences,
         maxLines: 5,
         controller: controller,
         keyboardType: TextInputType.text,
@@ -342,7 +350,8 @@ class EventAdminCard extends StatelessWidget {
           color: Colors.black54,
         ),
         decoration: InputDecoration(
-          hintText: "¿Qué propones hacer? ¿Qué idioma hablas?, ¿Qué hora te viene mejor?, ...",
+          hintText:
+              "¿Qué propones hacer? ¿Qué idioma hablas?, ¿Qué hora te viene mejor?, ...",
           hintStyle: TextStyle(
             fontSize: 15.0,
           ),

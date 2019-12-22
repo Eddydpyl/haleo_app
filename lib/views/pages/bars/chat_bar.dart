@@ -38,7 +38,7 @@ class ChatBar extends StatelessWidget implements PreferredSizeWidget {
       style: TextStyle(
         fontWeight: FontWeight.bold,
         color: Color(0xFF424242),
-        fontSize: 35.0,
+        fontSize: 24.0,
       ),
     );
   }

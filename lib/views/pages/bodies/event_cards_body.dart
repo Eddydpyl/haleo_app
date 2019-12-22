@@ -31,8 +31,10 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
     super.didChangeDependencies();
     if (!init) {
       init = true;
-      final Localization localization = ApplicationProvider.localization(context);
-      final PerimeterEventsBloc eventsBloc = PerimeterEventsProvider.eventsBloc(context);
+      final Localization localization =
+          ApplicationProvider.localization(context);
+      final PerimeterEventsBloc eventsBloc =
+          PerimeterEventsProvider.eventsBloc(context);
       Location().getLocation().then((LocationData location) {
         eventsBloc.perimeterSink.add(Perimeter(
           lat: location.latitude,
@@ -41,14 +43,11 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
           radius: double.maxFinite,
         ));
       }).catchError((e) {
-        if (e is PlatformException
-            && e.code == 'PERMISSION_DENIED') {
+        if (e is PlatformException && e.code == 'PERMISSION_DENIED') {
           Location().requestPermission();
-          SnackBarUtility.show(context,
-              localization.locationPermissionText());
+          SnackBarUtility.show(context, localization.locationPermissionText());
         } else {
-          SnackBarUtility.show(context,
-              localization.locationErrorText());
+          SnackBarUtility.show(context, localization.locationErrorText());
         }
       });
     }
@@ -56,20 +55,22 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
 
   @override
   Widget build(BuildContext context) {
-    final PerimeterEventsBloc eventsBloc = PerimeterEventsProvider.eventsBloc(context);
+    final PerimeterEventsBloc eventsBloc =
+        PerimeterEventsProvider.eventsBloc(context);
     return StreamBuilder(
       stream: eventsBloc.eventsStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<Map<String, Event>> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
           final Map<String, Event> events = snapshot.data;
           return EventsHandler(
             eventsBloc: eventsBloc,
             events: events,
           );
-        } else return Center(
-          child: const CircularProgressIndicator(),
-        );
+        } else
+          return Center(
+            child: const CircularProgressIndicator(),
+          );
       },
     );
   }
@@ -88,7 +89,8 @@ class EventsHandler extends StatefulWidget {
   _EventsHandlerState createState() => _EventsHandlerState();
 }
 
-class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateMixin {
+class _EventsHandlerState extends State<EventsHandler>
+    with TickerProviderStateMixin {
   AnimationController animationController;
   LinkedHashMap<String, Event> events;
   String eventKey;
@@ -102,19 +104,22 @@ class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateM
     animationController = AnimationController(
       duration: Duration(seconds: 1),
       vsync: this,
-    )..addListener(() {
-      setState(() {});
-    })..addStatusListener((AnimationStatus status) {
-      if (status == AnimationStatus.completed) {
-        setState(() {
-          events.remove(eventKey);
-          if (events.isNotEmpty)
-            eventKey = events.keys.first;
-          else eventKey = null;
-          animationController.reset();
-        });
-      }
-    });
+    )
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((AnimationStatus status) {
+        if (status == AnimationStatus.completed) {
+          setState(() {
+            events.remove(eventKey);
+            if (events.isNotEmpty)
+              eventKey = events.keys.first;
+            else
+              eventKey = null;
+            animationController.reset();
+          });
+        }
+      });
   }
 
   @override
@@ -127,16 +132,19 @@ class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateM
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
-    final String next = events.keys.firstWhere((key) =>
-        key != eventKey, orElse: () => null);
+    final String next =
+        events.keys.firstWhere((key) => key != eventKey, orElse: () => null);
     Widget backgroundCard = next != null
         ? EventCard(eventKey: next, event: events[next])
         : EmptyCard();
     Widget foregroundCard = eventKey != null
-        ? SwipeWrapper(animationController: animationController,
-          onSwipe: onSwipe, direction: direction, height: height,
-          width: width, child: EventCard(eventKey: eventKey,
-          event: events[eventKey]))
+        ? SwipeWrapper(
+            animationController: animationController,
+            onSwipe: onSwipe,
+            direction: direction,
+            height: height,
+            width: width,
+            child: EventCard(eventKey: eventKey, event: events[eventKey]))
         : EmptyCard();
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
@@ -178,13 +186,15 @@ class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateM
 
   void resetEvents() {
     events = LinkedHashMap();
-    List<String> sorted = List.from(widget.events.keys)..sort((String a, String b) =>
-        widget.events[b].created.compareTo(widget.events[a].created));
+    List<String> sorted = List.from(widget.events.keys)
+      ..sort((String a, String b) =>
+          widget.events[b].created.compareTo(widget.events[a].created));
     sorted.forEach((key) => events[key] = widget.events[key]);
     if (events.isNotEmpty) {
       if (eventKey == null || !events.keys.contains(eventKey))
         eventKey = events.keys.first;
-    } else eventKey = null;
+    } else
+      eventKey = null;
   }
 
   void onSwipe(bool direction) {
@@ -285,7 +295,7 @@ class EventActions extends StatelessWidget {
   }
 }
 
-class SwipeWrapper extends StatelessWidget{
+class SwipeWrapper extends StatelessWidget {
   final AnimationController animationController;
   final void Function(bool) onSwipe;
   final Widget child;
@@ -307,30 +317,30 @@ class SwipeWrapper extends StatelessWidget{
   })  : rotation = Tween<double>(
           begin: 0.0,
           end: 40.0,
-      ).animate(
-        CurvedAnimation(
-          parent: animationController,
-          curve: Curves.ease,
+        ).animate(
+          CurvedAnimation(
+            parent: animationController,
+            curve: Curves.ease,
+          ),
         ),
-      ),
-      vertical = Tween<double>(
-        begin: 0.0,
-        end: - 100.0,
-      ).animate(
-        CurvedAnimation(
-          parent: animationController,
-          curve: Curves.ease,
+        vertical = Tween<double>(
+          begin: 0.0,
+          end: -100.0,
+        ).animate(
+          CurvedAnimation(
+            parent: animationController,
+            curve: Curves.ease,
+          ),
         ),
-      ),
-      horizontal = Tween<double>(
-        begin: 0.0,
-        end: width * 1.5,
-      ).animate(
-        CurvedAnimation(
-          parent: animationController,
-          curve: Curves.ease,
-        ),
-      );
+        horizontal = Tween<double>(
+          begin: 0.0,
+          end: width * 1.5,
+        ).animate(
+          CurvedAnimation(
+            parent: animationController,
+            curve: Curves.ease,
+          ),
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -341,7 +351,7 @@ class SwipeWrapper extends StatelessWidget{
       },
       child: AlignPositioned(
         dy: vertical.value,
-        dx: direction ? horizontal.value : - horizontal.value,
+        dx: direction ? horizontal.value : -horizontal.value,
         child: Transform.rotate(
           angle: Angle.fromDegrees(rotation.value).radians,
           child: child,
@@ -429,7 +439,11 @@ class EventCard extends StatelessWidget {
                         colorB: Color(0xff348ac7),
                       ),
                       onPressed: () {
-                        Share.share("Que Haleo más grande.");
+                        Share.share("¡Únete a este haleo! : *" +
+                            event.name +
+                            "* \n _" +
+                            event.description +
+                            "_  \n ¡Descarga ya la app en Google Play!"); // TODO: google play link
                       },
                     ),
                   ),

@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../../providers/chat_provider.dart';
@@ -181,9 +182,12 @@ class MessageBubble extends StatelessWidget {
       Colors.blue,
       Colors.pink,
       Colors.purple,
-      Colors.green
+      Colors.green,
+      Colors.orange,
+      Colors.teal,
     ];
-    return colors[user.name.length % colors.length];
+
+    return colors[user.email.length % colors.length];
   }
 
   @override

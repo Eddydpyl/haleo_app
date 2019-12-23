@@ -248,6 +248,7 @@ class EventAdminCard extends StatelessWidget {
   final double width;
   final double rotation;
   final String image;
+  double slots = 2;
 
   EventAdminCard({
     @required this.uploaderBloc,
@@ -279,10 +280,29 @@ class EventAdminCard extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       imageWidget(height > 300 ? height / 2 : height / 4),
+                      SizedBox(height: 16.0),
+                      Text(
+                        '¿Para cuanta gente?',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      Slider(
+                        value: slots,
+                        inactiveColor: Colors.black54,
+                        activeColor: Colors.red,
+                        onChanged: (slotsValue) {}, //TODO: implementar logica
+                        divisions: 8,
+                        label: "$slots",
+                        min: 2,
+                        max: 10,
+                      ),
                       titleWidget(nameController),
                       descriptionWidget(descriptionController),
                     ],

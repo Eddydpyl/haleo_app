@@ -306,7 +306,7 @@ class EventAdminCard extends StatelessWidget {
                       imageWidget(height > 300 ? height / 2 : height / 4),
                       SizedBox(height: 16.0),
                       Text(
-                        '¿Para cuanta gente?',
+                        '¿Mínimo de asistentes?',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15.0,

@@ -108,9 +108,9 @@ class _SessionBodyState extends State<SessionBody> {
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: <Widget>[
-            BgLoginCard(height: ((2 * height) / 3) - 20, radius: 16.0),
-            BgLoginCard(height: ((2 * height) / 3) - 40, radius: 16.0),
-            BgLoginCard(height: ((2 * height) / 3) - 60, radius: 16.0, color: Colors.white),
+            BgLoginCard(height: ((7 * height) / 12) - 20, radius: 16.0),
+            BgLoginCard(height: ((7 * height) / 12) - 40, radius: 16.0),
+            BgLoginCard(height: ((7 * height) / 12) - 60, radius: 16.0),
             Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,

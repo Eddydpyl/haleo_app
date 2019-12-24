@@ -188,7 +188,7 @@ class MessageBubble extends StatelessWidget {
       Colors.teal,
     ];
 
-    return colors[user.email?.length % colors.length ?? 0];
+    return colors[user?.email?.length % colors.length ?? 0];
   }
 
   @override

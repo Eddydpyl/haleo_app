@@ -6,7 +6,6 @@ class Event {
   String description;
   String image;
   final Map<String, dynamic> point; // Contains a geohash and geopoint.
-  String topic; // For sending notifications to the attendees.
   bool open; // Whether there are any slots remaining (filter).
   int slots; // How many attendees the host wants for the event.
   int count; // Number of people that have already shown interest.
@@ -20,7 +19,6 @@ class Event {
     this.description,
     this.image,
     this.point,
-    this.topic,
     this.open,
     this.slots,
     this.count,
@@ -36,7 +34,6 @@ class Event {
         this.image = map["image"],
         this.point = map["point"] != null
             ? Map.from(map["point"]) : null,
-        this.topic = map["topic"],
         this.open = map["open"],
         this.slots = map["slots"],
         this.count = map["count"],
@@ -47,11 +44,11 @@ class Event {
 
   Map<String, dynamic> toJson([bool update = false]) {
     Map<String, dynamic> json = {};
+    if (user != null) json["user"] = user;
     if (name != null) json["name"] = name;
     if (description != null) json["description"] = description;
     if (image != null) json["image"] = image;
     if (point != null) json["point"] = point;
-    if (topic != null) json["topic"] = topic;
     if (open != null) json["open"] = open;
     if (slots != null) json["slots"] = slots;
     if (count != null) json["count"] = count;
@@ -72,7 +69,6 @@ class Event {
               description == other.description &&
               image == other.image &&
               point == other.point &&
-              topic == other.topic &&
               open == other.open &&
               slots == other.slots &&
               count == other.count &&
@@ -87,7 +83,6 @@ class Event {
       description.hashCode ^
       image.hashCode ^
       point.hashCode ^
-      topic.hashCode ^
       open.hashCode ^
       slots.hashCode ^
       count.hashCode ^
@@ -98,8 +93,8 @@ class Event {
   @override
   String toString() {
     return 'Event{user: $user, name: $name, description: $description,'
-        ' image: $image, point: $point, topic: $topic, open: $open,'
-        ' slots: $slots, count: $count, attendees: $attendees,'
+        ' image: $image, point: $point, open: $open, slots: $slots,'
+        ' count: $count, attendees: $attendees,'
         ' created: $created, lang: $lang}';
   }
 }

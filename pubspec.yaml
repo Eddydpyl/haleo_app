@@ -22,9 +22,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_widgets: 0.1.7+1
+  streaming_shared_preferences: 1.0.1
   flutter_advanced_networkimage: 0.5.0
   flutter_ringtone_player: 1.0.3
-  shared_preferences: 0.5.4+8
   intl_translation: 0.17.3
   cupertino_icons: 0.1.2
   font_awesome_flutter: 8.5.0

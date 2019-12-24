@@ -2,18 +2,13 @@ import 'dart:collection';
 
 import 'package:angles/angles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:align_positioned/align_positioned.dart';
-import 'package:location/location.dart';
 import 'package:share/share.dart';
 
-import '../../../providers/application_provider.dart';
 import '../../../providers/perimeter_events_provider.dart';
 import '../../../blocs/perimeter_events_bloc.dart';
-import '../../../localization.dart';
 import '../../../models/event.dart';
 import '../../../models/perimeter.dart';
-import '../../../utility.dart';
 import '../../common_widgets.dart';
 import '../../custom_icons.dart';
 import '../event_admin_page.dart';
@@ -31,26 +26,13 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
     super.didChangeDependencies();
     if (!init) {
       init = true;
-      final Localization localization = ApplicationProvider.localization(context);
       final PerimeterEventsBloc eventsBloc = PerimeterEventsProvider.eventsBloc(context);
-      Location().getLocation().then((LocationData location) {
-        eventsBloc.perimeterSink.add(Perimeter(
-          lat: location.latitude,
-          lng: location.longitude,
-          // TODO: Use a more reasonable radius.
-          radius: double.maxFinite,
-        ));
-      }).catchError((e) {
-        if (e is PlatformException
-            && e.code == 'PERMISSION_DENIED') {
-          Location().requestPermission();
-          SnackBarUtility.show(context,
-              localization.locationPermissionText());
-        } else {
-          SnackBarUtility.show(context,
-              localization.locationErrorText());
-        }
-      });
+      // TODO: Use the actual user location & radius.
+      eventsBloc.perimeterSink.add(Perimeter(
+        lat: 40.4378698,
+        lng: -3.8196212,
+        radius: double.maxFinite,
+      ));
     }
   }
 
@@ -107,6 +89,8 @@ class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateM
     })..addStatusListener((AnimationStatus status) {
       if (status == AnimationStatus.completed) {
         setState(() {
+          widget.eventsBloc.attendSink
+              .add(MapEntry(eventKey, direction));
           events.remove(eventKey);
           if (events.isNotEmpty)
             eventKey = events.keys.first;
@@ -191,7 +175,6 @@ class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateM
     setState(() {
       this.direction = direction;
       this.animationController.forward();
-      widget.eventsBloc.attendSink.add(MapEntry(eventKey, direction));
     });
   }
 

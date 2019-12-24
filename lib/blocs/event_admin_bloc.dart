@@ -3,19 +3,17 @@ import 'dart:async';
 import 'package:darter_base/darter_base.dart';
 
 import '../managers/database_manager.dart';
-import '../managers/message_manager.dart';
 import '../models/event.dart';
 
 class EventAdminBloc extends BaseBloc {
   final DatabaseManager _databaseManager;
-  final MessageManager _messageManager;
 
   LenientSubject<Event> _create;
   LenientSubject<MapEntry<String, Event>> _update;
   LenientSubject<String> _delete;
 
-  EventAdminBloc(DatabaseManager databaseManager, MessageManager messageManager)
-      : _databaseManager = databaseManager, _messageManager = messageManager;
+  EventAdminBloc(DatabaseManager databaseManager)
+      : _databaseManager = databaseManager;
 
   /// Consumes a [Event] and uses it to create an instance in the database.
   LenientSink<Event> get createSink => _create.sink;

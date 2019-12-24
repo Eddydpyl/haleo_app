@@ -196,8 +196,9 @@ class EventActions extends StatelessWidget {
                 if (nameController.text.isNotEmpty
                     && descriptionController.text.isNotEmpty) {
                   try {
-                    LocationData location = await Location().getLocation();
-                    GeoFirePoint point = GeoFirePoint(location.latitude, location.longitude);
+                    // TODO: Use the actual user location.
+                    // LocationData location = await Location().getLocation();
+                    GeoFirePoint point = GeoFirePoint(40.4378698, -3.8196212);
                     Locale locale = ui.window.locale ?? Locale(Language.EN);
                     String date = DateUtility.currentDate();
                     eventAdminBloc.createSink.add(Event(

@@ -3,6 +3,9 @@ import 'dart:collection';
 import 'package:angles/angles.dart';
 import 'package:flutter/material.dart';
 import 'package:align_positioned/align_positioned.dart';
+import 'package:flutter_advanced_networkimage/provider.dart';
+import 'package:flutter_advanced_networkimage/transition.dart';
+import 'package:haleo_app/models/user.dart';
 import 'package:share/share.dart';
 
 import '../../../providers/perimeter_events_provider.dart';
@@ -360,6 +363,13 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: delete, its for testing purposes
+    final User testUser = User(
+        email: 'miesto@gmail.com',
+        name: 'Miguel Esteban',
+        image:
+            'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80');
+
     return Container(
       height: height,
       width: width,
@@ -391,15 +401,57 @@ class EventCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              event.name.toUpperCase(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.0,
-                                color: Colors.black87,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                _userAvatar(32.0,
+                                    testUser), // TODO: should be atteendees
+                                _userAvatar(48.0, testUser),
+                                _userAvatar(64.0,
+                                    testUser), // TODO: should be event creator if possible
+                                _userAvatar(48.0, testUser),
+                                _userAvatar(32.0, testUser),
+                              ],
+                            ),
+                            Center(
+                              child: Text(
+                                'y otros ${event.count - 5} más',
+                                style: TextStyle(),
                               ),
                             ),
-                            Container(height: 12.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  event.name.toUpperCase(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.0,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 2.0,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        '¡Queda${event.count > 1 ? 'n' : ''} ${event.count} hueco${event.count > 1 ? 's' : ''}!',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12.0,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                    )),
+                              ],
+                            ),
+                            SizedBox(height: 12.0),
                             Text(
                               event.description,
                               style: TextStyle(
@@ -439,6 +491,30 @@ class EventCard extends StatelessWidget {
       ),
     );
   }
+
+  Widget _userAvatar(double size, User user) {
+    return (user.image?.isNotEmpty ?? false)
+        ? CircleAvatar(
+            radius: size / 2,
+            backgroundColor: Colors.white,
+            child: TransitionToImage(
+              fit: BoxFit.cover,
+              borderRadius: BorderRadius.circular(22.0),
+              placeholder: InitialsText(user.name),
+              loadingWidget: InitialsText(user.name),
+              image: AdvancedNetworkImage(
+                user.image,
+                useDiskCache: true,
+                timeoutDuration: Duration(seconds: 5),
+              ),
+            ),
+          )
+        : CircleAvatar(
+            radius: size / 2,
+            backgroundColor: Colors.white,
+            child: InitialsText(user.name),
+          );
+  }
 }
 
 class EmptyCard extends StatelessWidget {
@@ -453,7 +529,7 @@ class EmptyCard extends StatelessWidget {
         children: <Widget>[
           Image.asset('assets/images/hangout.png'),
           Text(
-            'No te quedan más eventos por ver. \n ¡Crea el tuyo!',
+            'No te quedan más eventos por ver. ¡Crea el tuyo!',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.bold,

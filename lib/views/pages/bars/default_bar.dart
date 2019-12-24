@@ -3,6 +3,7 @@ import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
 
 import '../../../models/user.dart';
+import '../../common_widgets.dart';
 
 class DefaultBar extends StatelessWidget {
   final Widget title;
@@ -42,25 +43,26 @@ class DefaultBar extends StatelessWidget {
             ),
             child: GestureDetector(
               child: (user.image?.isNotEmpty ?? false)
-              ? CircleAvatar(
-                radius: 22.0,
-                backgroundColor: Colors.white,
-                child: TransitionToImage(
-                  fit: BoxFit.cover,
-                  borderRadius: BorderRadius.circular(22.0),
-                  placeholder: InitialsText(user.name),
-                  loadingWidget: InitialsText(user.name),
-                  image: AdvancedNetworkImage(
-                    user.image,
-                    useDiskCache: true,
-                    timeoutDuration: Duration(seconds: 5),
-                  ),
-                ),
-              ) : CircleAvatar(
-                radius: 22.0,
-                backgroundColor: Colors.white,
-                child: InitialsText(user.name),
-              ),
+                  ? CircleAvatar(
+                      radius: 22.0,
+                      backgroundColor: Colors.white,
+                      child: TransitionToImage(
+                        fit: BoxFit.cover,
+                        borderRadius: BorderRadius.circular(22.0),
+                        placeholder: InitialsText(user.name),
+                        loadingWidget: InitialsText(user.name),
+                        image: AdvancedNetworkImage(
+                          user.image,
+                          useDiskCache: true,
+                          timeoutDuration: Duration(seconds: 5),
+                        ),
+                      ),
+                    )
+                  : CircleAvatar(
+                      radius: 22.0,
+                      backgroundColor: Colors.white,
+                      child: InitialsText(user.name),
+                    ),
               onTap: () {
                 // TODO: Navigate to user profile.
               },
@@ -68,22 +70,6 @@ class DefaultBar extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class InitialsText extends StatelessWidget {
-  final String text;
-
-  InitialsText(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text.length >= 2
-          ? text.substring(0, 2).toUpperCase()
-          : text.toUpperCase(),
-      style: TextStyle(color: Colors.red),
     );
   }
 }

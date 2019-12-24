@@ -5,6 +5,22 @@ import 'package:angles/angles.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
 
+class InitialsText extends StatelessWidget {
+  final String text;
+
+  InitialsText(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text.length >= 2
+          ? text.substring(0, 2).toUpperCase()
+          : text.toUpperCase(),
+      style: TextStyle(color: Colors.red),
+    );
+  }
+}
+
 class PaintGradient extends StatelessWidget {
   final Widget child;
   final Color colorA;
@@ -109,8 +125,8 @@ class TearBorder extends ShapeBorder {
   Path getOuterPath(Rect rect, {TextDirection textDirection}) {
     return Path()
       ..moveTo(rect.left + rect.width / 2.0, rect.top)
-      ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top,
-          rect.width, rect.top + rect.height / 2.0)
+      ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top, rect.width,
+          rect.top + rect.height / 2.0)
       ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top + rect.height,
           rect.left + rect.width / 2.0, rect.bottom)
       ..arcToPoint(Offset(rect.left, rect.top + rect.height / 2.0),
@@ -143,43 +159,48 @@ class CardImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return (image?.isNotEmpty ?? false)
-      ? TransitionToImage(
-        height: height,
-        width: width,
-        fit: BoxFit.cover,
-        image: AdvancedNetworkImage(
-          image,
-          useDiskCache: true,
-          timeoutDuration: Duration(seconds: 5),
-        ),
-        placeholder: Image.asset(
-          "assets/images/placeholder.jpg",
-          height: height,
-          width: width,
-          fit: BoxFit.cover,
-        ),
-        loadingWidget: Image.asset(
-          "assets/images/placeholder.jpg",
-          height: height,
-          width: width,
-          fit: BoxFit.cover,
-        ),
-      ) : Image.asset(
-        "assets/images/placeholder.jpg",
-        height: height,
-        width: width,
-        fit: BoxFit.cover,
-      );
+        ? TransitionToImage(
+            height: height,
+            width: width,
+            fit: BoxFit.cover,
+            image: AdvancedNetworkImage(
+              image,
+              useDiskCache: true,
+              timeoutDuration: Duration(seconds: 5),
+            ),
+            placeholder: Image.asset(
+              "assets/images/placeholder.jpg",
+              height: height,
+              width: width,
+              fit: BoxFit.cover,
+            ),
+            loadingWidget: Image.asset(
+              "assets/images/placeholder.jpg",
+              height: height,
+              width: width,
+              fit: BoxFit.cover,
+            ),
+          )
+        : Image.asset(
+            "assets/images/placeholder.jpg",
+            height: height,
+            width: width,
+            fit: BoxFit.cover,
+          );
   }
 }
 
 class FadeRoute extends PageRouteBuilder {
   final Widget page;
-  FadeRoute(this.page) : super(
-    pageBuilder: (BuildContext context, Animation<double> animation,
-        Animation<double> secondaryAnimation) => page,
-    transitionsBuilder: (BuildContext context, Animation<double> animation,
-        Animation<double> secondaryAnimation, Widget child) =>
-        FadeTransition(opacity: animation, child: child),
-  );
+  FadeRoute(this.page)
+      : super(
+          pageBuilder: (BuildContext context, Animation<double> animation,
+                  Animation<double> secondaryAnimation) =>
+              page,
+          transitionsBuilder: (BuildContext context,
+                  Animation<double> animation,
+                  Animation<double> secondaryAnimation,
+                  Widget child) =>
+              FadeTransition(opacity: animation, child: child),
+        );
 }

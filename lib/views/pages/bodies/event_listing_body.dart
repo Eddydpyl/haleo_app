@@ -95,7 +95,7 @@ class EmptyWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              '¡Ooops! \n Aun no se ha llenado ningún evento. \n ¡Sigue haciendo swipe right!',
+              '¡Ooops! \n Aun no se ha llenado ningún evento. ¡Sigue haciendo swipe right!',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold,

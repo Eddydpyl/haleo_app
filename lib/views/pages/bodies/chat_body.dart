@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../../providers/chat_provider.dart';
@@ -25,7 +26,8 @@ class _ChatBodyState extends State<ChatBody> {
     final double width = MediaQuery.of(context).size.width;
     final StateBloc stateBloc = StateProvider.stateBloc(context);
     final EventBloc eventBloc = ChatProvider.eventBloc(context);
-    final MessageAdminBloc messageAdminBloc = ChatProvider.messageAdminBloc(context);
+    final MessageAdminBloc messageAdminBloc =
+        ChatProvider.messageAdminBloc(context);
     return StreamBuilder(
       stream: stateBloc.userKeyStream,
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -38,8 +40,8 @@ class _ChatBodyState extends State<ChatBody> {
               if (snapshot.data != null) {
                 Map<String, Message> messages = snapshot.data;
                 List<String> sorted = messages.keys.toList()
-                  ..sort((String a, String b) => messages[b]
-                      .date.compareTo(messages[a].date));
+                  ..sort((String a, String b) =>
+                      messages[b].date.compareTo(messages[a].date));
                 return StreamBuilder(
                   stream: eventBloc.usersStream,
                   builder: (BuildContext context,
@@ -125,29 +127,27 @@ class _MessageComposerState extends State<MessageComposer> {
             child: TextField(
               controller: controller,
               textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration.collapsed(hintText: 'Escribir mensaje'),
+              decoration:
+                  InputDecoration.collapsed(hintText: 'Escribir mensaje'),
             ),
           ),
-          PaintGradient(
-            child: IconButton(
-              iconSize: 25.0,
-              icon: Icon(Icons.send),
-              onPressed: () {
-                if (controller.text?.isNotEmpty ?? false) {
-                  widget.messageAdminBloc.createSink.add(Message(
-                    event: widget.eventKey,
-                    user: widget.userKey,
-                    date: DateUtility.currentDate(),
-                    data: controller.text,
-                    type: MessageType.text,
-                  ));
-                  FocusScope.of(context).unfocus();
-                  controller.clear();
-                }
-              },
-            ),
-            colorA: Color(0xfffa6b40),
-            colorB: Color(0xfffd1d1d),
+          IconButton(
+            iconSize: 25.0,
+            color: Colors.grey,
+            icon: Icon(Icons.send),
+            onPressed: () {
+              if (controller.text?.isNotEmpty ?? false) {
+                widget.messageAdminBloc.createSink.add(Message(
+                  event: widget.eventKey,
+                  user: widget.userKey,
+                  date: DateUtility.currentDate(),
+                  data: controller.text,
+                  type: MessageType.text,
+                ));
+                FocusScope.of(context).unfocus();
+                controller.clear();
+              }
+            },
           ),
         ],
       ),
@@ -166,13 +166,29 @@ class MessageBubble extends StatelessWidget {
   final User user;
   final bool direction;
   final double spacing;
+  final Color userColor;
 
   MessageBubble({
     @required this.message,
     @required this.user,
     @required this.direction,
     @required this.spacing,
-  });
+  }) : userColor = _assignColor(user);
+
+  // Assigns "unique" color to a given user
+  static Color _assignColor(User user) {
+    List<Color> colors = [
+      Colors.red,
+      Colors.blue,
+      Colors.pink,
+      Colors.purple,
+      Colors.green,
+      Colors.orange,
+      Colors.teal,
+    ];
+
+    return colors[user.email.length % colors.length];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,19 +196,12 @@ class MessageBubble extends StatelessWidget {
       margin: direction
           ? EdgeInsets.only(top: 8.0, bottom: 8.0, left: spacing)
           : EdgeInsets.only(top: 8.0, bottom: 8.0, right: spacing),
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       decoration: BoxDecoration(
-        gradient: direction
-            ? LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [Color(0xfffa6b40), Color(0xfffd1d1d)],
-              )
-            : LinearGradient(
-                begin: Alignment.centerRight,
-                end: Alignment.centerLeft,
-                colors: [Color(0xff348ac7), Color(0xff7474bf)],
-              ),
+        border: Border.all(
+          color: userColor,
+          width: 2.0,
+        ),
         borderRadius: direction
             ? BorderRadius.only(
                 topLeft: Radius.circular(15.0),
@@ -211,8 +220,9 @@ class MessageBubble extends StatelessWidget {
           Text(
             user?.name ?? "",
             style: TextStyle(
-              fontSize: 20.0,
+              fontSize: 14.0,
               fontWeight: FontWeight.bold,
+              color: userColor,
             ),
           ),
           SizedBox(height: 2.0),
@@ -220,6 +230,7 @@ class MessageBubble extends StatelessWidget {
             DateUtility.formatFullDate(message.date),
             style: TextStyle(
               fontSize: 12.0,
+              color: Color(0xFF424242),
             ),
           ),
           SizedBox(height: 2.0),
@@ -227,6 +238,7 @@ class MessageBubble extends StatelessWidget {
             message.data,
             style: TextStyle(
               fontSize: 16.0,
+              color: Color(0xFF424242),
             ),
           ),
         ],
@@ -234,3 +246,15 @@ class MessageBubble extends StatelessWidget {
     );
   }
 }
+
+/*  gradient: direction
+            ? LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Color(0xfffa6b40), Color(0xfffd1d1d)],
+              )
+            : LinearGradient(
+                begin: Alignment.centerRight,
+                end: Alignment.centerLeft,
+                colors: [Color(0xff348ac7), Color(0xff7474bf)],
+              ), */

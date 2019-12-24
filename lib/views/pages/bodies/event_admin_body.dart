@@ -38,7 +38,8 @@ class _EventAdminBodyState extends State<EventAdminBody> {
   Widget build(BuildContext context) {
     final Localization localization = ApplicationProvider.localization(context);
     final StateBloc stateBloc = StateProvider.stateBloc(context);
-    final EventAdminBloc eventAdminBloc = EventAdminProvider.eventAdminBloc(context);
+    final EventAdminBloc eventAdminBloc =
+        EventAdminProvider.eventAdminBloc(context);
     final UploaderBloc uploaderBloc = EventAdminProvider.uploaderBloc(context);
     return StreamBuilder(
       stream: stateBloc.userKeyStream,
@@ -79,10 +80,12 @@ class _EventAdminBodyState extends State<EventAdminBody> {
                     ],
                   ),
                 );
-              } else return Container();
+              } else
+                return Container();
             },
           );
-        } else return Container();
+        } else
+          return Container();
       },
     );
   }
@@ -193,8 +196,8 @@ class EventActions extends StatelessWidget {
                 colorB: Color(0xff45b649),
               ),
               onPressed: () async {
-                if (nameController.text.isNotEmpty
-                    && descriptionController.text.isNotEmpty) {
+                if (nameController.text.isNotEmpty &&
+                    descriptionController.text.isNotEmpty) {
                   try {
                     // TODO: Use the actual user location.
                     // LocationData location = await Location().getLocation();
@@ -209,22 +212,23 @@ class EventActions extends StatelessWidget {
                       point: point.data,
                       open: true,
                       count: 0,
-                      slots: 1, // TODO: Use actual event slots.
+                      slots: 2, // TODO: Use actual event slots.
                       created: date,
                       lang: locale.languageCode,
-                    )); Navigator.of(context).pop();
+                    ));
+                    Navigator.of(context).pop();
                   } on PlatformException catch (e) {
                     if (e.code == 'PERMISSION_DENIED') {
                       Location().requestPermission();
-                      SnackBarUtility.show(context,
-                          localization.locationPermissionText());
+                      SnackBarUtility.show(
+                          context, localization.locationPermissionText());
                     } else {
-                      SnackBarUtility.show(context,
-                          localization.locationErrorText());
+                      SnackBarUtility.show(
+                          context, localization.locationErrorText());
                     }
                   } catch (e) {
-                    SnackBarUtility.show(context,
-                        localization.locationErrorText());
+                    SnackBarUtility.show(
+                        context, localization.locationErrorText());
                   }
                 }
               },
@@ -244,6 +248,7 @@ class EventAdminCard extends StatelessWidget {
   final double width;
   final double rotation;
   final String image;
+  double slots = 2;
 
   EventAdminCard({
     @required this.uploaderBloc,
@@ -275,10 +280,29 @@ class EventAdminCard extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       imageWidget(height > 300 ? height / 2 : height / 4),
+                      SizedBox(height: 16.0),
+                      Text(
+                        '¿Para cuanta gente?',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      Slider(
+                        value: slots,
+                        inactiveColor: Colors.black54,
+                        activeColor: Colors.red,
+                        onChanged: (slotsValue) {}, //TODO: implementar logica
+                        divisions: 8,
+                        label: "$slots",
+                        min: 2,
+                        max: 10,
+                      ),
                       titleWidget(nameController),
                       descriptionWidget(descriptionController),
                     ],
@@ -299,7 +323,8 @@ class EventAdminCard extends StatelessWidget {
         height: height,
       ),
       onTap: () async {
-        File file = await ImagePicker.pickImage(source: ImageSource.gallery, maxHeight: 1500, maxWidth: 1500);
+        File file = await ImagePicker.pickImage(
+            source: ImageSource.gallery, maxHeight: 1500, maxWidth: 1500);
         if (file != null) uploaderBloc.fileSink.add(file.readAsBytesSync());
       },
     );
@@ -309,6 +334,7 @@ class EventAdminCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
+        textCapitalization: TextCapitalization.sentences,
         maxLines: 1,
         controller: controller,
         keyboardType: TextInputType.text,
@@ -334,6 +360,7 @@ class EventAdminCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
+        textCapitalization: TextCapitalization.sentences,
         maxLines: 5,
         controller: controller,
         keyboardType: TextInputType.text,
@@ -343,7 +370,8 @@ class EventAdminCard extends StatelessWidget {
           color: Colors.black54,
         ),
         decoration: InputDecoration(
-          hintText: "¿Qué propones hacer? ¿Qué idioma hablas?, ¿Qué hora te viene mejor?, ...",
+          hintText:
+              "¿Qué propones hacer? ¿Qué idioma hablas?, ¿Qué hora te viene mejor?, ...",
           hintStyle: TextStyle(
             fontSize: 15.0,
           ),

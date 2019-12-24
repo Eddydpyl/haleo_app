@@ -22,7 +22,8 @@ class EventAdminBar extends StatelessWidget implements PreferredSizeWidget {
             userKey: userKey,
             user: user,
           );
-        } else return Container();
+        } else
+          return Container();
       },
     );
   }
@@ -30,10 +31,10 @@ class EventAdminBar extends StatelessWidget implements PreferredSizeWidget {
   Widget titleWidget() {
     return RichText(
       text: TextSpan(
-        text: "¡Armar hal",
+        text: "¡Armar Hal",
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          color: Colors.black87,
+          color: Color(0xFF424242),
           fontSize: 24.0,
         ),
         children: <TextSpan>[
@@ -55,7 +56,7 @@ class EventAdminBar extends StatelessWidget implements PreferredSizeWidget {
             text: "!",
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Color(0xFF424242),
             ),
           )
         ],

@@ -10,8 +10,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:vibration/vibration.dart';
 import 'package:location/location.dart';
@@ -28,7 +28,7 @@ import 'views/themes.dart';
 import 'models/base.dart';
 
 void main() async {
-  final SharedPreferences preferences = await SharedPreferences.getInstance();
+  final StreamingSharedPreferences preferences = await StreamingSharedPreferences.instance;
   final FirebaseAuth auth = FirebaseAuth.fromApp(FirebaseApp.instance);
   Locale locale = ui.window.locale ?? Locale(Language.EN);
   Intl.systemLocale = locale.languageCode;
@@ -42,7 +42,7 @@ class App extends StatelessWidget {
 
   final Locale locale;
   final FirebaseAuth auth;
-  final SharedPreferences preferences;
+  final StreamingSharedPreferences preferences;
 
   App(this.locale, this.auth, this.preferences);
 

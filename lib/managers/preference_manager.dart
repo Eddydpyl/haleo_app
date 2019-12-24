@@ -1,15 +1,10 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 class PreferenceManager {
-  final SharedPreferences _pref;
+  final StreamingSharedPreferences  _pref;
 
   PreferenceManager(this._pref);
 
-  List<String> get viewed => _pref.getStringList("viewed") ?? [];
-  set viewed(List<String> viewed) => _pref.setStringList("viewed", viewed ?? []);
-
-  void view(String key) => viewed = viewed..add(key);
-
-  String get lang => _pref.getString("lang");
-  set lang(String lang) => _pref.setString("lang", lang);
+  Preference<List<String>> get viewed => _pref.getStringList("viewed", defaultValue: []);
+  void view(String key) => _pref.setStringList("viewed", viewed.getValue()..add(key));
 }

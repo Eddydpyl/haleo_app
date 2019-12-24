@@ -5,8 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
+
 
 import '../managers/auth_manager.dart';
 import '../managers/database_manager.dart';
@@ -32,7 +33,7 @@ class ApplicationProvider extends InheritedWidget {
     @required FacebookLogin facebook,
     @required Geoflutterfire geo,
     @required FirebaseMessaging messaging,
-    @required SharedPreferences preferences,
+    @required StreamingSharedPreferences preferences,
     @required FirebaseStorage storage,
   })  : _authManager = AuthManager(auth, google, facebook),
         _databaseManager = DatabaseManager(database, geo),

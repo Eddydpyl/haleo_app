@@ -35,14 +35,9 @@ class EventAdminBloc extends BaseBloc {
 
     _create.stream.listen((Event event) async {
       if (event != null) {
-        dynamic res = await _databaseManager
+        await _databaseManager
             .eventRepository().create(event)
             .catchError((e) => forwardException(e));
-        if (!(res is BaseException)) {
-          Event event = await _databaseManager
-              .eventRepository().read(res);
-          _messageManager.subscribe(event.topic);
-        }
       }
     });
     _update.stream.listen((MapEntry<String, Event> entry) {

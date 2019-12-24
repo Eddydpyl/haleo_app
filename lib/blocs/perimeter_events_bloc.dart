@@ -49,14 +49,9 @@ class PerimeterEventsBloc extends BaseBloc {
       if (attend != null && _userKey.value != null) {
         _preferenceManager.view(attend.key);
         if (attend.value) {
-          dynamic res = await _databaseManager.eventRepository()
+          await _databaseManager.eventRepository()
               .attend(attend.key, _userKey.value)
               .catchError((e) => forwardException(e));
-          if (!(res is BaseException)) {
-            Event event = await _databaseManager
-                .eventRepository().read(attend.key);
-            _messageManager.subscribe(event.topic);
-          }
         }
       }
     });

@@ -26,7 +26,8 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
     super.didChangeDependencies();
     if (!init) {
       init = true;
-      final PerimeterEventsBloc eventsBloc = PerimeterEventsProvider.eventsBloc(context);
+      final PerimeterEventsBloc eventsBloc =
+          PerimeterEventsProvider.eventsBloc(context);
       // TODO: Use the actual user location & radius.
       eventsBloc.perimeterSink.add(Perimeter(
         lat: 40.4378698,
@@ -87,21 +88,23 @@ class _EventsHandlerState extends State<EventsHandler>
     animationController = AnimationController(
       duration: Duration(seconds: 1),
       vsync: this,
-    )..addListener(() {
-      setState(() {});
-    })..addStatusListener((AnimationStatus status) {
-      if (status == AnimationStatus.completed) {
-        setState(() {
-          widget.eventsBloc.attendSink
-              .add(MapEntry(eventKey, direction));
-          events.remove(eventKey);
-          if (events.isNotEmpty)
-            eventKey = events.keys.first;
-          else eventKey = null;
-          animationController.reset();
-        });
-      }
-    });
+    )
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((AnimationStatus status) {
+        if (status == AnimationStatus.completed) {
+          setState(() {
+            widget.eventsBloc.attendSink.add(MapEntry(eventKey, direction));
+            events.remove(eventKey);
+            if (events.isNotEmpty)
+              eventKey = events.keys.first;
+            else
+              eventKey = null;
+            animationController.reset();
+          });
+        }
+      });
   }
 
   @override
@@ -444,10 +447,21 @@ class EmptyCard extends StatelessWidget {
     return ColoredCard(
       colorA: 0xffffff,
       colorB: 0xffffff,
-      child: Center(
-        child: Text(
-          "No hay eventos...",
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Image.asset('assets/images/hangout.png'),
+          Text(
+            'No te quedan más eventos por ver. \n ¡Crea el tuyo!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16.0,
+              color: Colors.black54,
+            ),
+          ),
+        ],
       ),
     );
   }

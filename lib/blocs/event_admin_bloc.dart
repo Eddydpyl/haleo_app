@@ -14,8 +14,10 @@ class EventAdminBloc extends BaseBloc {
   LenientSubject<MapEntry<String, Event>> _update;
   LenientSubject<String> _delete;
 
-  EventAdminBloc(DatabaseManager databaseManager, PreferenceManager preferenceManager)
-      : _databaseManager = databaseManager, _preferenceManager = preferenceManager;
+  EventAdminBloc(
+      DatabaseManager databaseManager, PreferenceManager preferenceManager)
+      : _databaseManager = databaseManager,
+        _preferenceManager = preferenceManager;
 
   /// Consumes a [Event] and uses it to create an instance in the database.
   LenientSink<Event> get createSink => _create.sink;
@@ -36,20 +38,25 @@ class EventAdminBloc extends BaseBloc {
     _create.stream.listen((Event event) async {
       if (event != null) {
         String key = await _databaseManager
-            .eventRepository().create(event)
+            .eventRepository()
+            .create(event)
             .catchError((e) => forwardException(e));
         _preferenceManager.view(key);
       }
     });
     _update.stream.listen((MapEntry<String, Event> entry) {
       if (entry != null) {
-        _databaseManager.eventRepository().update(entry.key, entry.value)
+        _databaseManager
+            .eventRepository()
+            .update(entry.key, entry.value)
             .catchError((e) => forwardException(e));
       }
     });
     _delete.stream.listen((String key) {
       if (key?.isNotEmpty ?? false) {
-        _databaseManager.eventRepository().delete(key)
+        _databaseManager
+            .eventRepository()
+            .delete(key)
             .catchError((e) => forwardException(e));
       }
     });

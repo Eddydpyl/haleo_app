@@ -34,12 +34,13 @@ class _EventAdminBodyState extends State<EventAdminBody> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
+  int slots = 2;
+
   @override
   Widget build(BuildContext context) {
     final Localization localization = ApplicationProvider.localization(context);
     final StateBloc stateBloc = StateProvider.stateBloc(context);
-    final EventAdminBloc eventAdminBloc =
-        EventAdminProvider.eventAdminBloc(context);
+    final EventAdminBloc eventAdminBloc = EventAdminProvider.eventAdminBloc(context);
     final UploaderBloc uploaderBloc = EventAdminProvider.uploaderBloc(context);
     return StreamBuilder(
       stream: stateBloc.userKeyStream,
@@ -64,8 +65,10 @@ class _EventAdminBodyState extends State<EventAdminBody> {
                           uploaderBloc: uploaderBloc,
                           nameController: nameController,
                           descriptionController: descriptionController,
+                          updateSlots: setSlots,
                           eventKey: widget.eventKey,
                           image: image,
+                          slots: slots,
                         ),
                       ),
                       EventActions(
@@ -76,18 +79,23 @@ class _EventAdminBodyState extends State<EventAdminBody> {
                         userKey: userKey,
                         eventKey: widget.eventKey,
                         image: image,
+                        slots: slots,
                       ),
                     ],
                   ),
                 );
-              } else
-                return Container();
+              } else return Container();
             },
           );
-        } else
-          return Container();
+        } else return Container();
       },
     );
+  }
+
+  void setSlots(int slots) {
+    setState(() {
+      this.slots = slots;
+    });
   }
 
   @override
@@ -102,15 +110,19 @@ class EventStack extends StatelessWidget {
   final UploaderBloc uploaderBloc;
   final TextEditingController nameController;
   final TextEditingController descriptionController;
+  final void Function(int) updateSlots;
   final String eventKey;
   final String image;
+  final int slots;
 
   EventStack({
     @required this.uploaderBloc,
     @required this.nameController,
     @required this.descriptionController,
+    @required this.updateSlots,
     this.eventKey,
     this.image,
+    this.slots,
   });
 
   @override
@@ -134,7 +146,9 @@ class EventStack extends StatelessWidget {
             uploaderBloc: uploaderBloc,
             nameController: nameController,
             descriptionController: descriptionController,
+            updateSlots: updateSlots,
             image: image,
+            slots: slots,
           ),
         ],
       ),
@@ -150,6 +164,7 @@ class EventActions extends StatelessWidget {
   final String userKey;
   final String eventKey;
   final String image;
+  final int slots;
 
   EventActions({
     @required this.localization,
@@ -159,6 +174,7 @@ class EventActions extends StatelessWidget {
     @required this.userKey,
     this.eventKey,
     this.image,
+    this.slots,
   });
 
   @override
@@ -211,8 +227,9 @@ class EventActions extends StatelessWidget {
                       image: image,
                       point: point.data,
                       open: true,
-                      count: 0,
-                      slots: 2, // TODO: Use actual event slots.
+                      count: 1,
+                      slots: slots ?? 2,
+                      attendees: [userKey],
                       created: date,
                       lang: locale.languageCode,
                     ));
@@ -220,15 +237,15 @@ class EventActions extends StatelessWidget {
                   } on PlatformException catch (e) {
                     if (e.code == 'PERMISSION_DENIED') {
                       Location().requestPermission();
-                      SnackBarUtility.show(
-                          context, localization.locationPermissionText());
+                      SnackBarUtility.show(context,
+                          localization.locationPermissionText());
                     } else {
-                      SnackBarUtility.show(
-                          context, localization.locationErrorText());
+                      SnackBarUtility.show(context,
+                          localization.locationErrorText());
                     }
                   } catch (e) {
-                    SnackBarUtility.show(
-                        context, localization.locationErrorText());
+                    SnackBarUtility.show(context,
+                        localization.locationErrorText());
                   }
                 }
               },
@@ -244,20 +261,23 @@ class EventAdminCard extends StatelessWidget {
   final UploaderBloc uploaderBloc;
   final TextEditingController nameController;
   final TextEditingController descriptionController;
+  final void Function(int) updateSlots;
   final double height;
   final double width;
   final double rotation;
   final String image;
-  double slots = 2;
+  final int slots;
 
   EventAdminCard({
     @required this.uploaderBloc,
     @required this.nameController,
     @required this.descriptionController,
+    @required this.updateSlots,
     this.height = double.maxFinite,
     this.width = double.maxFinite,
     this.rotation = 0.0,
     this.image,
+    this.slots,
   });
 
   @override
@@ -294,14 +314,15 @@ class EventAdminCard extends StatelessWidget {
                         ),
                       ),
                       Slider(
-                        value: slots,
+                        value: (slots ?? 2) / 1.0,
                         inactiveColor: Colors.black54,
                         activeColor: Colors.red,
-                        onChanged: (slotsValue) {}, //TODO: implementar logica
+                        onChanged: (double value) =>
+                            updateSlots(value.floor()),
                         divisions: 8,
                         label: "$slots",
-                        min: 2,
-                        max: 10,
+                        min: 2.0,
+                        max: 10.0,
                       ),
                       titleWidget(nameController),
                       descriptionWidget(descriptionController),
@@ -370,8 +391,7 @@ class EventAdminCard extends StatelessWidget {
           color: Colors.black54,
         ),
         decoration: InputDecoration(
-          hintText:
-              "¿Qué propones hacer? ¿Qué idioma hablas?, ¿Qué hora te viene mejor?, ...",
+          hintText: "¿Qué propones hacer? ¿Qué idioma hablas?, ¿Qué hora te viene mejor?, ...",
           hintStyle: TextStyle(
             fontSize: 15.0,
           ),

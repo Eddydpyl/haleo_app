@@ -22,6 +22,7 @@ class EventAdminPage extends StatelessWidget {
     return EventAdminProvider(
       stateBloc: StateProvider.stateBloc(context),
       database: ApplicationProvider.database(context),
+      preferences: ApplicationProvider.preferences(context),
       storage: ApplicationProvider.storage(context),
       localization: ApplicationProvider.localization(context),
       child: EventAdminScaffold(

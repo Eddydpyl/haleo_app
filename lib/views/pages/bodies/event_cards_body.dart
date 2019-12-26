@@ -380,48 +380,29 @@ class EventCard extends StatelessWidget {
           return Container(
             height: height,
             width: width,
-            child: Card(
-              shape: ContinuousRectangleBorder(),
-              color: Colors.white,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  CardImage(
-                    image: event.image,
-                    height: height > 300 ? height / 2 : height / 4,
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                _userAvatar(32.0,
-                                    testUser), // TODO: should be atteendees
-                                _userAvatar(48.0, testUser),
-                                _userAvatar(64.0,
-                                    testUser), // TODO: should be event creator if possible
-                                _userAvatar(48.0, testUser),
-                                _userAvatar(32.0, testUser),
-                              ],
-                            ),
-                            Center(
-                              child: Text(
-                                'y otros ${event.count - 5} más',
-                                style: TextStyle(),
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Stack(
+              children: <Widget>[
+                Card(
+                  shape: ContinuousRectangleBorder(),
+                  color: Colors.white,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      CardImage(
+                        image: event.image,
+                        height: height > 300 ? height / 2 : height / 4,
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 64.0, horizontal: 12.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
                                   event.name.toUpperCase(),
@@ -431,64 +412,82 @@ class EventCard extends StatelessWidget {
                                     color: Colors.black87,
                                   ),
                                 ),
-                                Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        width: 2.0,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        '¡Queda${event.count > 1 ? 'n' : ''} ${event.count} hueco${event.count > 1 ? 's' : ''}!',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12.0,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                    )),
+                                SizedBox(height: 12.0),
+                                Text(
+                                  event.description,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15.0,
+                                    color: Colors.black54,
+                                  ),
+                                ),
                               ],
                             ),
-                            SizedBox(height: 12.0),
-                            Text(
-                              event.description,
-                              style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                fontSize: 15.0,
-                                color: Colors.black54,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: FlatButton(
-                      shape: CircleBorder(),
-                      child: PaintGradient(
-                        child: Icon(Icons.share),
-                        colorA: Color(0xff7474bf),
-                        colorB: Color(0xff348ac7),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: FlatButton(
+                          shape: CircleBorder(),
+                          child: PaintGradient(
+                            child: Icon(Icons.share),
+                            colorA: Color(0xff7474bf),
+                            colorB: Color(0xff348ac7),
+                          ),
+                          onPressed: () {
+                            Share.share("¡Únete a este haleo! : *" +
+                                event.name +
+                                "* \n _" +
+                                event.description +
+                                "_  \n ¡Descarga ya la app en Google Play!"); // TODO: google play link
+                          },
+                        ),
                       ),
-                      onPressed: () {
-                        Share.share("¡Únete a este haleo! : *" +
-                            event.name +
-                            "* \n _" +
-                            event.description +
-                            "_  \n ¡Descarga ya la app en Google Play!"); // TODO: google play link
-                      },
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        top: height > 300 ? height / 2 - 32 : height / 4 - 16),
+                    child: _userInfoRow(testUser),
+                  ),
+                ),
+              ],
             ),
           );
         },
       ),
+    );
+  }
+
+  Widget _userInfoRow(User testUser) {
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            _userAvatar(32.0, testUser), // TODO: should be atteendees
+            _userAvatar(48.0, testUser),
+            _userAvatar(
+                64.0, testUser), // TODO: should be event creator if possible
+            _userAvatar(48.0, testUser),
+            _userAvatar(32.0, testUser),
+          ],
+        ),
+        SizedBox(
+          height: 8.0,
+        ),
+        Center(
+          child: Text(
+            '¡Se apunt${event.attendees.length > 1 ? 'aron' : 'ó'} ${event.attendees.length} y solo queda${event.count > 1 ? 'n' : ''} ${event.count} hueco${event.count > 1 ? 's' : ''}!',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
     );
   }
 
@@ -528,13 +527,16 @@ class EmptyCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Image.asset('assets/images/hangout.png'),
-          Text(
-            'No te quedan más eventos por ver. ¡Crea el tuyo!',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16.0,
-              color: Colors.black54,
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'No te quedan más eventos por ver. \n ¡Crea el tuyo!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0,
+                color: Colors.black54,
+              ),
             ),
           ),
         ],

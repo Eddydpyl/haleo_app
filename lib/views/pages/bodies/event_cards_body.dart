@@ -487,6 +487,8 @@ class EventCard extends StatelessWidget {
       if (keys.length > 3) avatars.add(userAvatar(users[keys[3]], 32.0));
     }
 
+    final int spaces = event.slots - event.count;
+
     return Column(
       children: <Widget>[
         Row(
@@ -497,7 +499,8 @@ class EventCard extends StatelessWidget {
         SizedBox(height: 8.0),
         Center(
           child: Text(
-            '¡Se apunt${event.attendees.length > 1 ? 'aron' : 'ó'} ${event.attendees.length} y solo queda${event.count > 1 ? 'n' : ''} ${event.count} hueco${event.count > 1 ? 's' : ''}!',
+            '¡Se apunt${event.count > 1 ? 'aron' : 'ó'} ${event.count} y solo '
+                'queda${spaces > 1 ? 'n' : ''} ''$spaces hueco${spaces > 1 ? 's' : ''}!',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         )

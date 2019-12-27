@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 import 'dart:io';
 
 import 'package:flutter/material.dart' hide Action;
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -28,6 +29,7 @@ import 'views/themes.dart';
 import 'models/base.dart';
 
 void main() async {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   final StreamingSharedPreferences preferences = await StreamingSharedPreferences.instance;
   final FirebaseAuth auth = FirebaseAuth.fromApp(FirebaseApp.instance);
   Locale locale = ui.window.locale ?? Locale(Language.EN);

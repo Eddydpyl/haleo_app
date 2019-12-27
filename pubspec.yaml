@@ -55,8 +55,8 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path_android: "assets/images/icon.png"
-  image_path_ios: "assets/images/icon_ios.jpg"
+  image_path_android: "assets/images/haleo_android.png"
+  image_path_ios: "assets/images/haleo_ios.jpg"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

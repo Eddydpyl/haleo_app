@@ -3,6 +3,9 @@ import 'dart:collection';
 import 'package:angles/angles.dart';
 import 'package:flutter/material.dart';
 import 'package:align_positioned/align_positioned.dart';
+import 'package:flutter_advanced_networkimage/provider.dart';
+import 'package:flutter_advanced_networkimage/transition.dart';
+import 'package:haleo_app/models/user.dart';
 import 'package:share/share.dart';
 
 import '../../../providers/perimeter_events_provider.dart';
@@ -26,7 +29,8 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
     super.didChangeDependencies();
     if (!init) {
       init = true;
-      final PerimeterEventsBloc eventsBloc = PerimeterEventsProvider.eventsBloc(context);
+      final PerimeterEventsBloc eventsBloc =
+          PerimeterEventsProvider.eventsBloc(context);
       // TODO: Use the actual user location & radius.
       eventsBloc.perimeterSink.add(Perimeter(
         lat: 40.4378698,
@@ -87,21 +91,23 @@ class _EventsHandlerState extends State<EventsHandler>
     animationController = AnimationController(
       duration: Duration(seconds: 1),
       vsync: this,
-    )..addListener(() {
-      setState(() {});
-    })..addStatusListener((AnimationStatus status) {
-      if (status == AnimationStatus.completed) {
-        setState(() {
-          widget.eventsBloc.attendSink
-              .add(MapEntry(eventKey, direction));
-          events.remove(eventKey);
-          if (events.isNotEmpty)
-            eventKey = events.keys.first;
-          else eventKey = null;
-          animationController.reset();
-        });
-      }
-    });
+    )
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((AnimationStatus status) {
+        if (status == AnimationStatus.completed) {
+          setState(() {
+            widget.eventsBloc.attendSink.add(MapEntry(eventKey, direction));
+            events.remove(eventKey);
+            if (events.isNotEmpty)
+              eventKey = events.keys.first;
+            else
+              eventKey = null;
+            animationController.reset();
+          });
+        }
+      });
   }
 
   @override
@@ -357,6 +363,13 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: delete, its for testing purposes
+    final User testUser = User(
+        email: 'miesto@gmail.com',
+        name: 'Miguel Esteban',
+        image:
+            'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80');
+
     return Container(
       height: height,
       width: width,
@@ -367,74 +380,139 @@ class EventCard extends StatelessWidget {
           return Container(
             height: height,
             width: width,
-            child: Card(
-              shape: ContinuousRectangleBorder(),
-              color: Colors.white,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  CardImage(
-                    image: event.image,
-                    height: height > 300 ? height / 2 : height / 4,
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              event.name.toUpperCase(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.0,
-                                color: Colors.black87,
-                              ),
+            child: Stack(
+              children: <Widget>[
+                Card(
+                  shape: ContinuousRectangleBorder(),
+                  color: Colors.white,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      CardImage(
+                        image: event.image,
+                        height: height > 300 ? height / 2 : height / 4,
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 64.0, horizontal: 12.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  event.name.toUpperCase(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.0,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                SizedBox(height: 12.0),
+                                Text(
+                                  event.description,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15.0,
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Container(height: 12.0),
-                            Text(
-                              event.description,
-                              style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                fontSize: 15.0,
-                                color: Colors.black54,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: FlatButton(
-                      shape: CircleBorder(),
-                      child: PaintGradient(
-                        child: Icon(Icons.share),
-                        colorA: Color(0xff7474bf),
-                        colorB: Color(0xff348ac7),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: FlatButton(
+                          shape: CircleBorder(),
+                          child: PaintGradient(
+                            child: Icon(Icons.share),
+                            colorA: Color(0xff7474bf),
+                            colorB: Color(0xff348ac7),
+                          ),
+                          onPressed: () {
+                            Share.share("¡Únete a este haleo! : *" +
+                                event.name +
+                                "* \n _" +
+                                event.description +
+                                "_  \n ¡Descarga ya la app en Google Play!"); // TODO: google play link
+                          },
+                        ),
                       ),
-                      onPressed: () {
-                        Share.share("¡Únete a este haleo! : *" +
-                            event.name +
-                            "* \n _" +
-                            event.description +
-                            "_  \n ¡Descarga ya la app en Google Play!"); // TODO: google play link
-                      },
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        top: height > 300 ? height / 2 - 32 : height / 4 - 16),
+                    child: _userInfoRow(testUser),
+                  ),
+                ),
+              ],
             ),
           );
         },
       ),
     );
+  }
+
+  Widget _userInfoRow(User testUser) {
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            _userAvatar(32.0, testUser), // TODO: should be atteendees
+            _userAvatar(48.0, testUser),
+            _userAvatar(
+                64.0, testUser), // TODO: should be event creator if possible
+            _userAvatar(48.0, testUser),
+            _userAvatar(32.0, testUser),
+          ],
+        ),
+        SizedBox(
+          height: 8.0,
+        ),
+        Center(
+          child: Text(
+            '¡Se apunt${event.attendees.length > 1 ? 'aron' : 'ó'} ${event.attendees.length} y solo queda${event.count > 1 ? 'n' : ''} ${event.count} hueco${event.count > 1 ? 's' : ''}!',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _userAvatar(double size, User user) {
+    return (user.image?.isNotEmpty ?? false)
+        ? CircleAvatar(
+            radius: size / 2,
+            backgroundColor: Colors.white,
+            child: TransitionToImage(
+              fit: BoxFit.cover,
+              borderRadius: BorderRadius.circular(22.0),
+              placeholder: InitialsText(user.name),
+              loadingWidget: InitialsText(user.name),
+              image: AdvancedNetworkImage(
+                user.image,
+                useDiskCache: true,
+                timeoutDuration: Duration(seconds: 5),
+              ),
+            ),
+          )
+        : CircleAvatar(
+            radius: size / 2,
+            backgroundColor: Colors.white,
+            child: InitialsText(user.name),
+          );
   }
 }
 
@@ -444,10 +522,24 @@ class EmptyCard extends StatelessWidget {
     return ColoredCard(
       colorA: 0xffffff,
       colorB: 0xffffff,
-      child: Center(
-        child: Text(
-          "No hay eventos...",
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Image.asset('assets/images/hangout.png'),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'No te quedan más eventos por ver. \n ¡Crea el tuyo!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0,
+                color: Colors.black54,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

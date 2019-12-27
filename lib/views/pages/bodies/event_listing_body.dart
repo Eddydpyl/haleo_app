@@ -15,17 +15,22 @@ class _EventListingBodyState extends State<EventListingBody> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: UserEventsProvider.eventsBloc(context).eventsStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<Map<String, Event>> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
           final Map<String, Event> events = snapshot.data;
           if (events.isNotEmpty) {
-            return ListView(children: events.keys.map((String key) =>
-                EventTile(eventKey: key, event: events[key])).toList());
-          } else return EmptyWidget();
-        } else return Center(
-          child: const CircularProgressIndicator(),
-        );
+            return ListView(
+                children: events.keys
+                    .map((String key) =>
+                        EventTile(eventKey: key, event: events[key]))
+                    .toList());
+          } else
+            return EmptyWidget();
+        } else
+          return Center(
+            child: const CircularProgressIndicator(),
+          );
       },
     );
   }
@@ -80,15 +85,27 @@ class EventTile extends StatelessWidget {
 class EmptyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        "No hay eventos",
-        style: TextStyle(
-          fontSize: 25.0,
-          color: Colors.grey,
-        ),
+    return Container(
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Image.asset('assets/images/having_fun.png'),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              '¡Ooops! \n Aun no se ha llenado ningún evento. ¡Sigue haciendo swipe right!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0,
+                color: Colors.black54,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
-

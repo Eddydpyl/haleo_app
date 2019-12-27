@@ -178,6 +178,7 @@ class MessageBubble extends StatelessWidget {
   // Assigns "unique" color to a given user
   static Color _assignColor(User user) {
     List<Color> colors = [
+      Colors.transparent,
       Colors.red,
       Colors.blue,
       Colors.pink,
@@ -187,7 +188,7 @@ class MessageBubble extends StatelessWidget {
       Colors.teal,
     ];
 
-    return colors[user.email.length % colors.length];
+    return colors[(user?.email?.length ?? 0) % colors.length];
   }
 
   @override
@@ -246,15 +247,3 @@ class MessageBubble extends StatelessWidget {
     );
   }
 }
-
-/*  gradient: direction
-            ? LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [Color(0xfffa6b40), Color(0xfffd1d1d)],
-              )
-            : LinearGradient(
-                begin: Alignment.centerRight,
-                end: Alignment.centerLeft,
-                colors: [Color(0xff348ac7), Color(0xff7474bf)],
-              ), */

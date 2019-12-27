@@ -40,7 +40,8 @@ class _EventAdminBodyState extends State<EventAdminBody> {
   Widget build(BuildContext context) {
     final Localization localization = ApplicationProvider.localization(context);
     final StateBloc stateBloc = StateProvider.stateBloc(context);
-    final EventAdminBloc eventAdminBloc = EventAdminProvider.eventAdminBloc(context);
+    final EventAdminBloc eventAdminBloc =
+        EventAdminProvider.eventAdminBloc(context);
     final UploaderBloc uploaderBloc = EventAdminProvider.uploaderBloc(context);
     return StreamBuilder(
       stream: stateBloc.userKeyStream,
@@ -84,10 +85,12 @@ class _EventAdminBodyState extends State<EventAdminBody> {
                     ],
                   ),
                 );
-              } else return Container();
+              } else
+                return Container();
             },
           );
-        } else return Container();
+        } else
+          return Container();
       },
     );
   }
@@ -233,19 +236,20 @@ class EventActions extends StatelessWidget {
                       created: date,
                       lang: locale.languageCode,
                     ));
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(
+                        "¡Evento creado con éxito! Ahora a esperar a tus invitados."); //TODO: implementar snackbar al volver a vista principal
                   } on PlatformException catch (e) {
                     if (e.code == 'PERMISSION_DENIED') {
                       Location().requestPermission();
-                      SnackBarUtility.show(context,
-                          localization.locationPermissionText());
+                      SnackBarUtility.show(
+                          context, localization.locationPermissionText());
                     } else {
-                      SnackBarUtility.show(context,
-                          localization.locationErrorText());
+                      SnackBarUtility.show(
+                          context, localization.locationErrorText());
                     }
                   } catch (e) {
-                    SnackBarUtility.show(context,
-                        localization.locationErrorText());
+                    SnackBarUtility.show(
+                        context, localization.locationErrorText());
                   }
                 }
               },
@@ -306,19 +310,18 @@ class EventAdminCard extends StatelessWidget {
                       imageWidget(height > 300 ? height / 2 : height / 4),
                       SizedBox(height: 16.0),
                       Text(
-                        '¿Para cuanta gente?',
+                        '¿Mínimo de asistentes?',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15.0,
-                          color: Colors.black54,
+                          color: Colors.black87,
                         ),
                       ),
                       Slider(
                         value: (slots ?? 2) / 1.0,
-                        inactiveColor: Colors.black54,
+                        inactiveColor: Colors.grey,
                         activeColor: Colors.red,
-                        onChanged: (double value) =>
-                            updateSlots(value.floor()),
+                        onChanged: (double value) => updateSlots(value.floor()),
                         divisions: 8,
                         label: "$slots",
                         min: 2.0,
@@ -368,9 +371,8 @@ class EventAdminCard extends StatelessWidget {
           border: underlineInputBorder(),
           enabledBorder: underlineInputBorder(),
           focusedBorder: underlineInputBorder(Colors.red),
-          fillColor: Colors.black54,
           hintText: "Beber cerveza, explorar la zona, visitar la catedral ... ",
-          hintStyle: TextStyle(fontSize: 15.0),
+          hintStyle: TextStyle(fontSize: 15.0, color: Colors.grey),
           hintMaxLines: 1,
         ),
       ),
@@ -388,12 +390,14 @@ class EventAdminCard extends StatelessWidget {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 15.0,
-          color: Colors.black54,
+          color: Colors.black87,
         ),
         decoration: InputDecoration(
-          hintText: "¿Qué propones hacer? ¿Qué idioma hablas?, ¿Qué hora te viene mejor?, ...",
+          hintText:
+              "¿Qué propones hacer? ¿Qué idioma hablas?, ¿Qué hora te viene mejor?, ...",
           hintStyle: TextStyle(
             fontSize: 15.0,
+            color: Colors.grey,
           ),
           hintMaxLines: 5,
           labelStyle: TextStyle(
@@ -407,7 +411,7 @@ class EventAdminCard extends StatelessWidget {
     );
   }
 
-  UnderlineInputBorder underlineInputBorder([Color color = Colors.black54]) {
+  UnderlineInputBorder underlineInputBorder([Color color = Colors.grey]) {
     return UnderlineInputBorder(
       borderSide: BorderSide(
         color: color,
@@ -416,7 +420,7 @@ class EventAdminCard extends StatelessWidget {
     );
   }
 
-  OutlineInputBorder outlineInputBorder([Color color = Colors.black54]) {
+  OutlineInputBorder outlineInputBorder([Color color = Colors.grey]) {
     return OutlineInputBorder(
       borderSide: BorderSide(
         color: color,

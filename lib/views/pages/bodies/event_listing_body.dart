@@ -15,22 +15,20 @@ class _EventListingBodyState extends State<EventListingBody> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: UserEventsProvider.eventsBloc(context).eventsStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
           final Map<String, Event> events = snapshot.data;
           if (events.isNotEmpty) {
-            return ListView(
-                children: events.keys
-                    .map((String key) =>
-                        EventTile(eventKey: key, event: events[key]))
-                    .toList());
-          } else
-            return EmptyWidget();
-        } else
+            return ListView(children: events.keys
+                .map((String key) => EventTile(eventKey: key,
+                event: events[key])).toList());
+          } else return EmptyWidget();
+        } else {
           return Center(
             child: const CircularProgressIndicator(),
           );
+        }
       },
     );
   }

@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../../providers/chat_provider.dart';
@@ -8,7 +7,6 @@ import '../../../blocs/event_bloc.dart';
 import '../../../blocs/message_admin_bloc.dart';
 import '../../../models/message.dart';
 import '../../../models/user.dart';
-import '../../common_widgets.dart';
 import '../../../utility.dart';
 
 class ChatBody extends StatefulWidget {
@@ -26,8 +24,7 @@ class _ChatBodyState extends State<ChatBody> {
     final double width = MediaQuery.of(context).size.width;
     final StateBloc stateBloc = StateProvider.stateBloc(context);
     final EventBloc eventBloc = ChatProvider.eventBloc(context);
-    final MessageAdminBloc messageAdminBloc =
-        ChatProvider.messageAdminBloc(context);
+    final MessageAdminBloc messageAdminBloc = ChatProvider.messageAdminBloc(context);
     return StreamBuilder(
       stream: stateBloc.userKeyStream,
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -40,8 +37,8 @@ class _ChatBodyState extends State<ChatBody> {
               if (snapshot.data != null) {
                 Map<String, Message> messages = snapshot.data;
                 List<String> sorted = messages.keys.toList()
-                  ..sort((String a, String b) =>
-                      messages[b].date.compareTo(messages[a].date));
+                  ..sort((String a, String b) => messages[b].date
+                      .compareTo(messages[a].date));
                 return StreamBuilder(
                   stream: eventBloc.usersStream,
                   builder: (BuildContext context,

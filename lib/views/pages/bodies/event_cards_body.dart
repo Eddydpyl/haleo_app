@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:align_positioned/align_positioned.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
-import 'package:haleo_app/models/user.dart';
+import 'package:haleo_app/utility.dart';
 import 'package:share/share.dart';
 
 import '../../../providers/perimeter_events_provider.dart';
 import '../../../blocs/perimeter_events_bloc.dart';
 import '../../../models/event.dart';
 import '../../../models/perimeter.dart';
+import '../../../models/user.dart';
 import '../../common_widgets.dart';
 import '../../custom_icons.dart';
 import '../event_admin_page.dart';
@@ -29,8 +30,7 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
     super.didChangeDependencies();
     if (!init) {
       init = true;
-      final PerimeterEventsBloc eventsBloc =
-          PerimeterEventsProvider.eventsBloc(context);
+      final eventsBloc = PerimeterEventsProvider.eventsBloc(context);
       // TODO: Use the actual user location & radius.
       eventsBloc.perimeterSink.add(Perimeter(
         lat: 40.4378698,
@@ -42,22 +42,32 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
 
   @override
   Widget build(BuildContext context) {
-    final PerimeterEventsBloc eventsBloc =
-        PerimeterEventsProvider.eventsBloc(context);
+    final eventsBloc = PerimeterEventsProvider.eventsBloc(context);
     return StreamBuilder(
       stream: eventsBloc.eventsStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
           final Map<String, Event> events = snapshot.data;
-          return EventsHandler(
-            eventsBloc: eventsBloc,
-            events: events,
+          return StreamBuilder(
+            stream: eventsBloc.usersStream,
+            builder: (BuildContext context,
+                AsyncSnapshot<Map<String, User>> snapshot) {
+              if (snapshot.data != null) {
+                final Map<String, User> users = snapshot.data;
+                return EventsHandler(
+                  eventsBloc: eventsBloc,
+                  events: events,
+                  users: users,
+                );
+              } else return Container();
+            },
           );
-        } else
+        } else {
           return Center(
             child: const CircularProgressIndicator(),
           );
+        }
       },
     );
   }
@@ -66,18 +76,19 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
 class EventsHandler extends StatefulWidget {
   final PerimeterEventsBloc eventsBloc;
   final Map<String, Event> events;
+  final Map<String, User> users;
 
   EventsHandler({
     @required this.eventsBloc,
     @required this.events,
+    @required this.users,
   });
 
   @override
   _EventsHandlerState createState() => _EventsHandlerState();
 }
 
-class _EventsHandlerState extends State<EventsHandler>
-    with TickerProviderStateMixin {
+class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateMixin {
   AnimationController animationController;
   LinkedHashMap<String, Event> events;
   String eventKey;
@@ -91,23 +102,21 @@ class _EventsHandlerState extends State<EventsHandler>
     animationController = AnimationController(
       duration: Duration(seconds: 1),
       vsync: this,
-    )
-      ..addListener(() {
+    )..addListener(() {
         setState(() {});
-      })
-      ..addStatusListener((AnimationStatus status) {
-        if (status == AnimationStatus.completed) {
-          setState(() {
-            widget.eventsBloc.attendSink.add(MapEntry(eventKey, direction));
-            events.remove(eventKey);
-            if (events.isNotEmpty)
-              eventKey = events.keys.first;
-            else
-              eventKey = null;
-            animationController.reset();
-          });
-        }
-      });
+    })..addStatusListener((AnimationStatus status) {
+      if (status == AnimationStatus.completed) {
+        setState(() {
+          widget.eventsBloc.attendSink
+              .add(MapEntry(eventKey, direction));
+          events.remove(eventKey);
+          if (events.isNotEmpty)
+            eventKey = events.keys.first;
+          else eventKey = null;
+          animationController.reset();
+        });
+      }
+    });
   }
 
   @override
@@ -120,20 +129,15 @@ class _EventsHandlerState extends State<EventsHandler>
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
-    final String next =
-        events.keys.firstWhere((key) => key != eventKey, orElse: () => null);
-    Widget backgroundCard = next != null
-        ? EventCard(eventKey: next, event: events[next])
-        : EmptyCard();
-    Widget foregroundCard = eventKey != null
-        ? SwipeWrapper(
-            animationController: animationController,
-            onSwipe: onSwipe,
-            direction: direction,
-            height: height,
-            width: width,
-            child: EventCard(eventKey: eventKey, event: events[eventKey]))
-        : EmptyCard();
+    final String next = events.keys.firstWhere((key) =>
+        key != eventKey, orElse: () => null);
+    Widget backgroundCard = next != null ? EventCard(eventKey: next,
+        event: events[next], users: widget.users) : EmptyCard();
+    Widget foregroundCard = eventKey != null ? SwipeWrapper(
+        animationController: animationController, onSwipe: onSwipe,
+        direction: direction, height: height, width: width,
+        child: EventCard(eventKey: eventKey, event: events[eventKey],
+        users: widget.users)) : EmptyCard();
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Column(
@@ -175,14 +179,14 @@ class _EventsHandlerState extends State<EventsHandler>
   void resetEvents() {
     events = LinkedHashMap();
     List<String> sorted = List.from(widget.events.keys)
-      ..sort((String a, String b) =>
-          widget.events[b].created.compareTo(widget.events[a].created));
+      ..sort((String a, String b) => widget.events[b]
+        .created.compareTo(widget.events[a].created));
     sorted.forEach((key) => events[key] = widget.events[key]);
     if (events.isNotEmpty) {
-      if (eventKey == null || !events.keys.contains(eventKey))
+      if (eventKey == null
+          || !events.keys.contains(eventKey))
         eventKey = events.keys.first;
-    } else
-      eventKey = null;
+    } else eventKey = null;
   }
 
   void onSwipe(bool direction) {
@@ -247,11 +251,11 @@ class EventActions extends StatelessWidget {
                 colorA: Color(0xff7474bf),
                 colorB: Color(0xff348ac7),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  FadeRoute(EventAdminPage()),
-                );
+              onPressed: () async {
+                Navigator.push(context, FadeRoute<bool>(EventAdminPage()))
+                    .then((result) => (result ?? false) ? SnackBarUtility
+                    .show(context, "¡Evento creado con éxito! Ahora a"
+                    " esperar a tus invitados.") : null);
               },
             ),
           ),
@@ -333,8 +337,9 @@ class SwipeWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onHorizontalDragEnd: (DragEndDetails details) {
-        bool direction = details.velocity.pixelsPerSecond.dx > 0;
-        onSwipe(direction);
+        double speed = details.velocity.pixelsPerSecond.dx;
+        if (speed.abs() < 500.0) return;
+        onSwipe(speed > 0);
       },
       child: AlignPositioned(
         dy: vertical.value,
@@ -349,12 +354,14 @@ class SwipeWrapper extends StatelessWidget {
 }
 
 class EventCard extends StatelessWidget {
+  final Map<String, User> users;
   final String eventKey;
   final Event event;
   final double height;
   final double width;
 
   EventCard({
+    @required this.users,
     @required this.eventKey,
     @required this.event,
     this.height = double.maxFinite,
@@ -363,13 +370,6 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: delete, its for testing purposes
-    final User testUser = User(
-        email: 'miesto@gmail.com',
-        name: 'Miguel Esteban',
-        image:
-            'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80');
-
     return Container(
       height: height,
       width: width,
@@ -450,9 +450,9 @@ class EventCard extends StatelessWidget {
                 Align(
                   alignment: Alignment.topCenter,
                   child: Padding(
-                    padding: EdgeInsets.only(
-                        top: height > 300 ? height / 2 - 32 : height / 4 - 16),
-                    child: _userInfoRow(testUser),
+                    padding: EdgeInsets.only(top: height > 300
+                        ? height / 2 - 32 : height / 4 - 16),
+                    child: IgnorePointer(child: userRow()),
                   ),
                 ),
               ],
@@ -463,24 +463,38 @@ class EventCard extends StatelessWidget {
     );
   }
 
-  Widget _userInfoRow(User testUser) {
+  Widget userRow() {
+    List<Widget> avatars = List();
+    List<String> keys = List.from(event.attendees)..remove(event.user);
+
+    if (keys.isNotEmpty) {
+      // Add the first attendee (excluding the organizer).
+      if (keys.length <= 2) avatars.add(userAvatar(users[keys[0]], 48.0));
+      else avatars.add(userAvatar(users[keys[0]], 32.0));
+      // Add the second attendee (excluding the organizer).
+      if (keys.length > 2) avatars.add(userAvatar(users[keys[1]], 48.0));
+    }
+
+    // Add the event organizer in the centre (if present).
+    if (event.attendees.contains(event.user))
+      avatars.add(userAvatar(users[event.user], 64.0));
+
+    if (keys.isNotEmpty) {
+      // Add the third attendee (excluding the organizer).
+      if (keys.length == 2) avatars.add(userAvatar(users[keys[1]], 48.0));
+      else if (keys.length > 2) avatars.add(userAvatar(users[keys[2]], 48.0));
+      // Add the fourth attendee (excluding the organizer).
+      if (keys.length > 3) avatars.add(userAvatar(users[keys[3]], 32.0));
+    }
+
     return Column(
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            _userAvatar(32.0, testUser), // TODO: should be atteendees
-            _userAvatar(48.0, testUser),
-            _userAvatar(
-                64.0, testUser), // TODO: should be event creator if possible
-            _userAvatar(48.0, testUser),
-            _userAvatar(32.0, testUser),
-          ],
+          children: avatars,
         ),
-        SizedBox(
-          height: 8.0,
-        ),
+        SizedBox(height: 8.0),
         Center(
           child: Text(
             '¡Se apunt${event.attendees.length > 1 ? 'aron' : 'ó'} ${event.attendees.length} y solo queda${event.count > 1 ? 'n' : ''} ${event.count} hueco${event.count > 1 ? 's' : ''}!',
@@ -491,28 +505,27 @@ class EventCard extends StatelessWidget {
     );
   }
 
-  Widget _userAvatar(double size, User user) {
+  Widget userAvatar(User user, double size) {
     return (user.image?.isNotEmpty ?? false)
-        ? CircleAvatar(
-            radius: size / 2,
-            backgroundColor: Colors.white,
-            child: TransitionToImage(
-              fit: BoxFit.cover,
-              borderRadius: BorderRadius.circular(22.0),
-              placeholder: InitialsText(user.name),
-              loadingWidget: InitialsText(user.name),
-              image: AdvancedNetworkImage(
-                user.image,
-                useDiskCache: true,
-                timeoutDuration: Duration(seconds: 5),
-              ),
-            ),
-          )
-        : CircleAvatar(
-            radius: size / 2,
-            backgroundColor: Colors.white,
-            child: InitialsText(user.name),
-          );
+      ? CircleAvatar(
+        radius: size / 2,
+        backgroundColor: Colors.white,
+        child: TransitionToImage(
+          fit: BoxFit.cover,
+          borderRadius: BorderRadius.circular(22.0),
+          placeholder: InitialsText(user.name),
+          loadingWidget: InitialsText(user.name),
+          image: AdvancedNetworkImage(
+            user.image,
+            useDiskCache: true,
+            timeoutDuration: Duration(seconds: 5),
+          ),
+        ),
+      ) : CircleAvatar(
+        radius: size / 2,
+        backgroundColor: Colors.white,
+        child: InitialsText(user.name),
+      );
   }
 }
 

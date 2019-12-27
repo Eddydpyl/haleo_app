@@ -40,8 +40,7 @@ class _EventAdminBodyState extends State<EventAdminBody> {
   Widget build(BuildContext context) {
     final Localization localization = ApplicationProvider.localization(context);
     final StateBloc stateBloc = StateProvider.stateBloc(context);
-    final EventAdminBloc eventAdminBloc =
-        EventAdminProvider.eventAdminBloc(context);
+    final EventAdminBloc eventAdminBloc = EventAdminProvider.eventAdminBloc(context);
     final UploaderBloc uploaderBloc = EventAdminProvider.uploaderBloc(context);
     return StreamBuilder(
       stream: stateBloc.userKeyStream,
@@ -85,12 +84,10 @@ class _EventAdminBodyState extends State<EventAdminBody> {
                     ],
                   ),
                 );
-              } else
-                return Container();
+              } else return Container();
             },
           );
-        } else
-          return Container();
+        } else return Container();
       },
     );
   }
@@ -200,7 +197,7 @@ class EventActions extends StatelessWidget {
                 colorA: Color(0xfffa6b40),
                 colorB: Color(0xfffd1d1d),
               ),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.of(context).pop(false),
             ),
           ),
           Container(
@@ -215,8 +212,9 @@ class EventActions extends StatelessWidget {
                 colorB: Color(0xff45b649),
               ),
               onPressed: () async {
-                if (nameController.text.isNotEmpty &&
-                    descriptionController.text.isNotEmpty) {
+                if (nameController.text.isNotEmpty
+                    && descriptionController.text.isNotEmpty
+                    && image != UploaderBloc.uploading) {
                   try {
                     // TODO: Use the actual user location.
                     // LocationData location = await Location().getLocation();
@@ -236,8 +234,7 @@ class EventActions extends StatelessWidget {
                       created: date,
                       lang: locale.languageCode,
                     ));
-                    Navigator.of(context).pop(
-                        "¡Evento creado con éxito! Ahora a esperar a tus invitados."); //TODO: implementar snackbar al volver a vista principal
+                    Navigator.of(context).pop(true);
                   } on PlatformException catch (e) {
                     if (e.code == 'PERMISSION_DENIED') {
                       Location().requestPermission();
@@ -341,6 +338,14 @@ class EventAdminCard extends StatelessWidget {
   }
 
   Widget imageWidget(double height) {
+    // The image is being uploaded.
+    if (image == UploaderBloc.uploading) {
+      return Container(
+        height: height,
+        width: double.maxFinite,
+        child: Center(child: const CircularProgressIndicator()),
+      );
+    }
     return GestureDetector(
       child: CardImage(
         image: image,

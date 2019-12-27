@@ -14,6 +14,9 @@ class UploaderBloc extends BaseBloc {
   LenientSubject<String> _path;
   LenientSubject<String> _delete;
 
+  // Indicates that the image is being uploaded.
+  static final String uploading = "UPLOADING";
+
   UploaderBloc(StorageManager storageManager, Localization localization)
       : _storageManager = storageManager, _localization = localization;
 
@@ -35,10 +38,14 @@ class UploaderBloc extends BaseBloc {
 
     _file.stream.listen((dynamic file) async {
       if (file != null) {
+        _path.add(uploading);
         await _storageManager.uploadImage(file)
             .then((String path) => _path.add(path))
-            .catchError((e) => forwardException(e is BaseException
-            ? e : FailedException(_localization.uploadErrorText())));
+            .catchError((e) {
+              _path.add(null); // Failed to upload.
+              forwardException(e is BaseException ? e
+                  : FailedException(_localization.uploadErrorText()));
+            });
       }
     });
     _delete.stream.listen((String path) {

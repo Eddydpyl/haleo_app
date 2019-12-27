@@ -125,8 +125,8 @@ class TearBorder extends ShapeBorder {
   Path getOuterPath(Rect rect, {TextDirection textDirection}) {
     return Path()
       ..moveTo(rect.left + rect.width / 2.0, rect.top)
-      ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top, rect.width,
-          rect.top + rect.height / 2.0)
+      ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top,
+          rect.width, rect.top + rect.height / 2.0)
       ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top + rect.height,
           rect.left + rect.width / 2.0, rect.bottom)
       ..arcToPoint(Offset(rect.left, rect.top + rect.height / 2.0),
@@ -190,17 +190,14 @@ class CardImage extends StatelessWidget {
   }
 }
 
-class FadeRoute extends PageRouteBuilder {
+class FadeRoute<T> extends PageRouteBuilder<T> {
   final Widget page;
   FadeRoute(this.page)
       : super(
           pageBuilder: (BuildContext context, Animation<double> animation,
-                  Animation<double> secondaryAnimation) =>
-              page,
-          transitionsBuilder: (BuildContext context,
-                  Animation<double> animation,
-                  Animation<double> secondaryAnimation,
-                  Widget child) =>
+                  Animation<double> secondaryAnimation) => page,
+          transitionsBuilder: (BuildContext context, Animation<double> animation,
+                  Animation<double> secondaryAnimation, Widget child) =>
               FadeTransition(opacity: animation, child: child),
         );
 }

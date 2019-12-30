@@ -88,6 +88,23 @@ class EventTile extends StatelessWidget {
             height: 64,
             width: 64,
           ),
+          trailing: unread
+              ? Container(
+                  width: 16,
+                  height: 16,
+                  decoration: new BoxDecoration(
+                    color: Colors.lightGreen,
+                    shape: BoxShape.circle,
+                  ),
+                )
+              : Container(
+                  width: 16,
+                  height: 16,
+                  decoration: new BoxDecoration(
+                    color: Colors.redAccent,
+                    shape: BoxShape.circle,
+                  ),
+                ),
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) => ChatPage(eventKey),

@@ -40,7 +40,8 @@ class _EventAdminBodyState extends State<EventAdminBody> {
   Widget build(BuildContext context) {
     final Localization localization = ApplicationProvider.localization(context);
     final StateBloc stateBloc = StateProvider.stateBloc(context);
-    final EventAdminBloc eventAdminBloc = EventAdminProvider.eventAdminBloc(context);
+    final EventAdminBloc eventAdminBloc =
+        EventAdminProvider.eventAdminBloc(context);
     final UploaderBloc uploaderBloc = EventAdminProvider.uploaderBloc(context);
     return StreamBuilder(
       stream: stateBloc.userKeyStream,
@@ -84,10 +85,12 @@ class _EventAdminBodyState extends State<EventAdminBody> {
                     ],
                   ),
                 );
-              } else return Container();
+              } else
+                return Container();
             },
           );
-        } else return Container();
+        } else
+          return Container();
       },
     );
   }
@@ -212,9 +215,9 @@ class EventActions extends StatelessWidget {
                 colorB: Color(0xff45b649),
               ),
               onPressed: () async {
-                if (nameController.text.isNotEmpty
-                    && descriptionController.text.isNotEmpty
-                    && image != UploaderBloc.uploading) {
+                if (nameController.text.isNotEmpty &&
+                    descriptionController.text.isNotEmpty &&
+                    image != UploaderBloc.uploading) {
                   try {
                     // TODO: Use the actual user location.
                     // LocationData location = await Location().getLocation();

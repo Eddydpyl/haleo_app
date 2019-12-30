@@ -125,8 +125,8 @@ class TearBorder extends ShapeBorder {
   Path getOuterPath(Rect rect, {TextDirection textDirection}) {
     return Path()
       ..moveTo(rect.left + rect.width / 2.0, rect.top)
-      ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top,
-          rect.width, rect.top + rect.height / 2.0)
+      ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top, rect.width,
+          rect.top + rect.height / 2.0)
       ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top + rect.height,
           rect.left + rect.width / 2.0, rect.bottom)
       ..arcToPoint(Offset(rect.left, rect.top + rect.height / 2.0),
@@ -147,11 +147,13 @@ class TearBorder extends ShapeBorder {
 
 class CardImage extends StatelessWidget {
   final String image;
+  final String asset;
   final double height;
   final double width;
 
   CardImage({
     this.image,
+    this.asset,
     this.height = double.maxFinite,
     this.width = double.maxFinite,
   });
@@ -182,7 +184,7 @@ class CardImage extends StatelessWidget {
             ),
           )
         : Image.asset(
-            "assets/images/placeholder.jpg",
+            asset ?? 'assets/images/placeholder.jpg',
             height: height,
             width: width,
             fit: BoxFit.cover,
@@ -195,9 +197,12 @@ class FadeRoute<T> extends PageRouteBuilder<T> {
   FadeRoute(this.page)
       : super(
           pageBuilder: (BuildContext context, Animation<double> animation,
-                  Animation<double> secondaryAnimation) => page,
-          transitionsBuilder: (BuildContext context, Animation<double> animation,
-                  Animation<double> secondaryAnimation, Widget child) =>
+                  Animation<double> secondaryAnimation) =>
+              page,
+          transitionsBuilder: (BuildContext context,
+                  Animation<double> animation,
+                  Animation<double> secondaryAnimation,
+                  Widget child) =>
               FadeTransition(opacity: animation, child: child),
         );
 }

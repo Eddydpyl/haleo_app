@@ -86,7 +86,7 @@ class PerimeterEventsBloc extends BaseBloc {
       }
     });
     _preferenceSubscription = _preferenceManager
-        .viewed.listen((List<String> viewed) {
+        .viewed().listen((List<String> viewed) {
       if (viewed != null) {
         this.viewed = viewed;
         if (_events.value != null)

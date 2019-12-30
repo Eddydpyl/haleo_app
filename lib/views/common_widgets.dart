@@ -125,8 +125,8 @@ class TearBorder extends ShapeBorder {
   Path getOuterPath(Rect rect, {TextDirection textDirection}) {
     return Path()
       ..moveTo(rect.left + rect.width / 2.0, rect.top)
-      ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top, rect.width,
-          rect.top + rect.height / 2.0)
+      ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top,
+          rect.width, rect.top + rect.height / 2.0)
       ..quadraticBezierTo(rect.left + rect.width / 1.5, rect.top + rect.height,
           rect.left + rect.width / 2.0, rect.bottom)
       ..arcToPoint(Offset(rect.left, rect.top + rect.height / 2.0),
@@ -153,7 +153,7 @@ class CardImage extends StatelessWidget {
 
   CardImage({
     this.image,
-    this.asset,
+    this.asset = "assets/images/placeholder.jpg",
     this.height = double.maxFinite,
     this.width = double.maxFinite,
   });
@@ -171,20 +171,20 @@ class CardImage extends StatelessWidget {
               timeoutDuration: Duration(seconds: 5),
             ),
             placeholder: Image.asset(
-              "assets/images/placeholder.jpg",
+              asset,
               height: height,
               width: width,
               fit: BoxFit.cover,
             ),
             loadingWidget: Image.asset(
-              "assets/images/placeholder.jpg",
+              asset,
               height: height,
               width: width,
               fit: BoxFit.cover,
             ),
           )
         : Image.asset(
-            asset ?? 'assets/images/placeholder.jpg',
+            asset,
             height: height,
             width: width,
             fit: BoxFit.cover,

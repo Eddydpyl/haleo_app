@@ -174,23 +174,7 @@ class MessageBubble extends StatelessWidget {
     @required this.user,
     @required this.direction,
     @required this.spacing,
-  }) : userColor = _assignColor(user);
-
-  // Assigns "unique" color to a given user
-  static Color _assignColor(User user) {
-    List<Color> colors = [
-      Colors.transparent,
-      Colors.red,
-      Colors.blue,
-      Colors.pink,
-      Colors.purple,
-      Colors.green,
-      Colors.orange,
-      Colors.teal,
-    ];
-
-    return colors[(user?.email?.length ?? 0) % colors.length];
-  }
+  }) : userColor = assignColor(user, direction);
 
   @override
   Widget build(BuildContext context) {
@@ -246,5 +230,21 @@ class MessageBubble extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  // Assigns "unique" color to a given user
+  static Color assignColor(User user, bool direction) {
+    List<Color> colors = [
+      Colors.transparent,
+      Colors.blue,
+      Colors.pink,
+      Colors.purple,
+      Colors.green,
+      Colors.orange,
+      Colors.teal,
+    ];
+
+    if (direction) return Colors.red;
+    return colors[(user?.email?.length ?? 0) % colors.length];
   }
 }

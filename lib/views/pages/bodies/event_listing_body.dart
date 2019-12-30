@@ -17,22 +17,17 @@ class _EventListingBodyState extends State<EventListingBody> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: UserEventsProvider.eventsBloc(context).eventsStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
           final Map<String, Event> events = snapshot.data;
           List<String> sorted = List.from(events.keys)
-            ..sort((String a, String b) =>
-                events[b].lastMessage?.compareTo(events[a].lastMessage ?? "") ??
-                -1);
+            ..sort((String a, String b) => events[b].lastMessage
+                ?.compareTo(events[a].lastMessage ?? "") ?? -1);
           if (sorted.isNotEmpty) {
-            return ListView(
-                children: sorted
-                    .map((String key) =>
-                        EventTile(eventKey: key, event: events[key]))
-                    .toList());
-          } else
-            return EmptyWidget();
+            return ListView(children: sorted.map((String key) =>
+                EventTile(eventKey: key, event: events[key])).toList());
+          } else return EmptyWidget();
         } else {
           return Center(
             child: const CircularProgressIndicator(),
@@ -52,21 +47,13 @@ class EventTile extends StatelessWidget {
     @required this.event,
   });
 
-  String _randomImage(String eventName) {
-    int assetNumber = eventName.length % 6;
-    String asset = 'assets/images/event_' + assetNumber.toString() + ".png";
-    return asset;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final String lastRead =
-        ApplicationProvider.preferences(context).lastRead(eventKey).getValue();
+    final String lastRead = ApplicationProvider
+        .preferences(context).lastRead(eventKey).getValue();
     final bool hasMessages = event.lastMessage?.isNotEmpty ?? false;
-    final bool unread = hasMessages &&
-        (lastRead.isEmpty ||
-            DateUtility.parseDate(lastRead)
-                .isBefore(DateUtility.parseDate(event.lastMessage)));
+    final bool unread = hasMessages && (lastRead.isEmpty || DateUtility
+        .parseDate(lastRead).isBefore(DateUtility.parseDate(event.lastMessage)));
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -84,27 +71,19 @@ class EventTile extends StatelessWidget {
           ),
           leading: CardImage(
             image: event.image,
-            asset: _randomImage(event.name),
+            asset: randomImage(event.name),
             height: 64,
             width: 64,
           ),
           trailing: unread
-              ? Container(
-                  width: 16,
-                  height: 16,
-                  decoration: new BoxDecoration(
-                    color: Colors.lightGreen,
-                    shape: BoxShape.circle,
-                  ),
-                )
-              : Container(
-                  width: 16,
-                  height: 16,
-                  decoration: new BoxDecoration(
-                    color: Colors.redAccent,
-                    shape: BoxShape.circle,
-                  ),
-                ),
+            ? Container(
+              width: 16,
+              height: 16,
+              decoration: BoxDecoration(
+                color: Colors.lightGreen,
+                shape: BoxShape.circle,
+              ),
+            ) : Container(width: 0.0),
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) => ChatPage(eventKey),
@@ -117,6 +96,12 @@ class EventTile extends StatelessWidget {
         )
       ],
     );
+  }
+
+  String randomImage(String eventName) {
+    int assetNumber = eventName.length % 6;
+    String asset = 'assets/images/event_' + assetNumber.toString() + ".png";
+    return asset;
   }
 }
 

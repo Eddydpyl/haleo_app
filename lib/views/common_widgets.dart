@@ -147,23 +147,16 @@ class TearBorder extends ShapeBorder {
 
 class CardImage extends StatelessWidget {
   final String image;
-  final String eventName;
+  final String asset;
   final double height;
   final double width;
 
   CardImage({
     this.image,
-    this.eventName,
+    this.asset,
     this.height = double.maxFinite,
     this.width = double.maxFinite,
   });
-
-  String _randomImage() {
-    if (this.eventName == null) return 'assets/images/placeholder.jpg';
-    int assetNumber = eventName.length % 6;
-    String asset = 'assets/images/event_' + assetNumber.toString() + ".png";
-    return asset;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +184,7 @@ class CardImage extends StatelessWidget {
             ),
           )
         : Image.asset(
-            _randomImage(),
+            asset ?? 'assets/images/placeholder.jpg',
             height: height,
             width: width,
             fit: BoxFit.cover,

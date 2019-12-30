@@ -383,6 +383,12 @@ class EventCard extends StatelessWidget {
     this.width = double.maxFinite,
   });
 
+  String _randomImage(String eventName) {
+    int assetNumber = eventName.length % 6;
+    String asset = 'assets/images/event_' + assetNumber.toString() + ".png";
+    return asset;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -407,7 +413,7 @@ class EventCard extends StatelessWidget {
                     children: <Widget>[
                       CardImage(
                         image: event.image,
-                        eventName: event.name,
+                        asset: _randomImage(event.name),
                         height: height > 300 ? height / 2 : height / 4,
                       ),
                       Expanded(

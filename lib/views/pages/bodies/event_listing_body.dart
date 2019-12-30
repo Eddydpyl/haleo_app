@@ -98,8 +98,12 @@ class EventTile extends StatelessWidget {
                   ),
                 )
               : Container(
-                  width: 0,
-                  height: 0,
+                  width: 16,
+                  height: 16,
+                  decoration: new BoxDecoration(
+                    color: Colors.redAccent,
+                    shape: BoxShape.circle,
+                  ),
                 ),
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(

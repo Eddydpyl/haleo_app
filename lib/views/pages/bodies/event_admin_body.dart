@@ -180,10 +180,6 @@ class EventActions extends StatelessWidget {
     this.slots,
   });
 
-  String _randomImage() {
-    return 'assets/images/having_fun.png';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -232,7 +228,7 @@ class EventActions extends StatelessWidget {
                       user: userKey,
                       name: nameController.text,
                       description: descriptionController.text,
-                      image: image != '' ? image : _randomImage(),
+                      image: image,
                       point: point.data,
                       open: true,
                       count: 1,

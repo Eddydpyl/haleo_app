@@ -9,6 +9,7 @@ class Archetype {
 class Action {
   static const int ERROR = -1;
   static const int OPEN = 0;
-  static const int CLOSE = 0;
-  static const int SEND_MESSAGE = 0;
+  static const int CLOSE = 1;
+  static const int SEND_MESSAGE = 2;
+  static const int ATTEND = 3;
 }

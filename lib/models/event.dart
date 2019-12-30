@@ -12,6 +12,7 @@ class Event {
   List<String> attendees; // Users that are interested in the event.
   String created; // The date at which the event was created.
   String lang; // Language of the event (for notifications).
+  String lastMessage; // Time at which the last message was sent.
 
   Event({
     this.user,
@@ -25,6 +26,7 @@ class Event {
     this.attendees,
     this.created,
     this.lang,
+    this.lastMessage,
   });
 
   Event.fromRaw(Map map)
@@ -40,7 +42,8 @@ class Event {
         this.attendees = map["attendees"] != null
             ? List<String>.from(map["attendees"]) : [],
         this.created = map["created"],
-        this.lang = map["lang"];
+        this.lang = map["lang"],
+        this.lastMessage = map["lastMessage"];
 
   Map<String, dynamic> toJson([bool update = false]) {
     Map<String, dynamic> json = {};
@@ -56,6 +59,7 @@ class Event {
         ? FieldValue.arrayUnion(attendees) : attendees;
     if (created != null) json["created"] = created;
     if (lang != null) json["lang"] = lang;
+    if (lastMessage != null) json["lastMessage"] = lastMessage;
     return json;
   }
 
@@ -74,7 +78,8 @@ class Event {
               count == other.count &&
               attendees == other.attendees &&
               created == other.created &&
-              lang == other.lang;
+              lang == other.lang &&
+              lastMessage == other.lastMessage;
 
   @override
   int get hashCode =>
@@ -88,13 +93,14 @@ class Event {
       count.hashCode ^
       attendees.hashCode ^
       created.hashCode ^
-      lang.hashCode;
+      lang.hashCode ^
+      lastMessage.hashCode;
 
   @override
   String toString() {
     return 'Event{user: $user, name: $name, description: $description,'
         ' image: $image, point: $point, open: $open, slots: $slots,'
-        ' count: $count, attendees: $attendees,'
-        ' created: $created, lang: $lang}';
+        ' count: $count, attendees: $attendees, created: $created,'
+        ' lang: $lang, lastMessage: $lastMessage}';
   }
 }

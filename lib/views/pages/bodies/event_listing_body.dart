@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:haleo_app/providers/user_events_provider.dart';
 
+import '../../../providers/application_provider.dart';
+import '../../../providers/user_events_provider.dart';
 import '../../../models/event.dart';
 import '../../common_widgets.dart';
 import '../../pages/chat_page.dart';
+import '../../../utility.dart';
 
 class EventListingBody extends StatefulWidget {
   @override
@@ -19,14 +21,13 @@ class _EventListingBodyState extends State<EventListingBody> {
           (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
           final Map<String, Event> events = snapshot.data;
-          if (events.isNotEmpty) {
-            return ListView(
-                children: events.keys
-                    .map((String key) =>
-                        EventTile(eventKey: key, event: events[key]))
-                    .toList());
-          } else
-            return EmptyWidget();
+          List<String> sorted = List.from(events.keys)
+            ..sort((String a, String b) => events[b].lastMessage
+                ?.compareTo(events[a].lastMessage ?? "") ?? -1);
+          if (sorted.isNotEmpty) {
+            return ListView(children: sorted.map((String key) =>
+                EventTile(eventKey: key, event: events[key])).toList());
+          } else return EmptyWidget();
         } else {
           return Center(
             child: const CircularProgressIndicator(),
@@ -48,6 +49,11 @@ class EventTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String lastRead = ApplicationProvider
+        .preferences(context).lastRead(eventKey).getValue();
+    final bool hasMessages = event.lastMessage?.isNotEmpty ?? false;
+    final bool unread = hasMessages && (lastRead.isEmpty || DateUtility
+        .parseDate(lastRead).isBefore(DateUtility.parseDate(event.lastMessage)));
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,

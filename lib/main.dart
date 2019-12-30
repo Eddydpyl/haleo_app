@@ -131,6 +131,7 @@ class _InitializerState extends State<Initializer> {
           final String key = data["key"];
           if (type == Archetype.EVENT) {
             if (action == Action.OPEN
+                || action == Action.ATTEND
                 || action == Action.SEND_MESSAGE) {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) => ChatPage(key),
@@ -149,6 +150,7 @@ class _InitializerState extends State<Initializer> {
           final String key = data["key"];
           if (type == Archetype.EVENT) {
             if (action == Action.OPEN
+                || action == Action.ATTEND
                 || action == Action.SEND_MESSAGE) {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) => ChatPage(key),

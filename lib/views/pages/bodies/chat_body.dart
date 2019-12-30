@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../providers/chat_provider.dart';
+import '../../../providers/application_provider.dart';
 import '../../../providers/state_provider.dart';
+import '../../../providers/chat_provider.dart';
 import '../../../blocs/state_bloc.dart';
 import '../../../blocs/event_bloc.dart';
 import '../../../blocs/message_admin_bloc.dart';
@@ -35,6 +36,9 @@ class _ChatBodyState extends State<ChatBody> {
             builder: (BuildContext context,
                 AsyncSnapshot<Map<String, Message>> snapshot) {
               if (snapshot.data != null) {
+                // Every time we receive new messages, we update
+                // the date at which we last read the event's messages.
+                ApplicationProvider.preferences(context).read(widget.eventKey);
                 Map<String, Message> messages = snapshot.data;
                 List<String> sorted = messages.keys.toList()
                   ..sort((String a, String b) => messages[b].date

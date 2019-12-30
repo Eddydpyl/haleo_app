@@ -4,6 +4,7 @@ import 'package:darter_base/darter_base.dart';
 
 import '../managers/database_manager.dart';
 import '../models/message.dart';
+import '../models/event.dart';
 
 class MessageAdminBloc extends BaseBloc {
   final DatabaseManager _databaseManager;
@@ -39,6 +40,8 @@ class MessageAdminBloc extends BaseBloc {
     _create.stream.listen((Message message) {
       if (message != null && _eventKey.value != null) {
         _databaseManager.messageRepository(_eventKey.value).create(message)
+            .then((_) => _databaseManager.eventRepository()
+            .update(message.event, Event(lastMessage: message.date)))
             .catchError((e) => forwardException(e));
       }
     });

@@ -14,6 +14,16 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="haleo"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="fcm_fallback_notification_channel"/>
+
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification"/>
+
+        <meta-data android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent"/>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

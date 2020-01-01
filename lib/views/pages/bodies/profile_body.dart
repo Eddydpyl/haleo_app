@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
@@ -67,8 +66,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                   ),
                 ),
               ),
-              Container(
-                height: 2 * height / 3,
+              Expanded(
                 child: ListView(
                     children: sorted
                         .map((String key) =>
@@ -159,28 +157,13 @@ class EventTile extends StatelessWidget {
             height: 64,
             width: 64,
           ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: unread
-                    ? Container(
-                        width: 16,
-                        height: 16,
-                        decoration: BoxDecoration(
-                          color: Colors.lightGreen,
-                          shape: BoxShape.circle,
-                        ),
-                      )
-                    : Container(width: 0.0),
-              ),
-              IconButton(
-                icon: Icon(Icons.cancel, color: Colors.redAccent),
-                onPressed: () =>
-                    leaveDialog(context, eventKey, event, userEventsBloc),
-              ),
-            ],
+          trailing: Text(
+            event.count.toString() + " / " + event.slots.toString(),
+            style: TextStyle(
+              fontSize: 12.0,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF424242),
+            ),
           ),
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(

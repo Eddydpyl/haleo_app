@@ -24,10 +24,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "disabledUserText" : MessageLookupByLibrary.simpleMessage("Tu usuario ha sido deshabilitado por un administrador."),
     "errorSignInText" : MessageLookupByLibrary.simpleMessage("Hubo un problema y no se pudo iniciar sesión."),
     "errorSignUpText" : MessageLookupByLibrary.simpleMessage("Hubo un problema y no se pudo registrar."),
-    "eventFullText" : MessageLookupByLibrary.simpleMessage("¡El evento está lleno!"),
+    "eventClosedText" : MessageLookupByLibrary.simpleMessage("¡Este evento ha sido cerrado!"),
     "invalidEmailText" : MessageLookupByLibrary.simpleMessage("La dirección de correo electrónico no es válida."),
     "invalidPasswordText" : MessageLookupByLibrary.simpleMessage("La contraseña debe de tener por lo menos 6 caracteres."),
     "invalidSignInText" : MessageLookupByLibrary.simpleMessage("La dirección de correo electrónico o la contraseña son incorrectas."),
+    "locationErrorText" : MessageLookupByLibrary.simpleMessage("Hubo un error recuperando tu ubicación."),
+    "locationPermissionText" : MessageLookupByLibrary.simpleMessage("Necesitamos tu ubicación para crear un evento."),
     "passwordSentText" : MessageLookupByLibrary.simpleMessage("Se ha enviado un enlace para restablecer tu contraseña a tu correo."),
     "uploadErrorText" : MessageLookupByLibrary.simpleMessage("Hubo un error inesperado y no se pudo subir el archivo."),
     "usedEmailText" : MessageLookupByLibrary.simpleMessage("La dirección de correo electrónico ya está en uso.")

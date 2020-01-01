@@ -45,13 +45,23 @@
     "type": "text",
     "placeholders": {}
   },
-  "eventFullText": "¡El evento está lleno!",
-  "@eventFullText": {
+  "eventClosedText": "¡Este evento ha sido cerrado!",
+  "@eventClosedText": {
     "type": "text",
     "placeholders": {}
   },
   "uploadErrorText": "Hubo un error inesperado y no se pudo subir el archivo.",
   "@uploadErrorText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "locationPermissionText": "Necesitamos tu ubicación para crear un evento.",
+  "@locationPermissionText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "locationErrorText": "Hubo un error recuperando tu ubicación.",
+  "@locationErrorText": {
     "type": "text",
     "placeholders": {}
   }

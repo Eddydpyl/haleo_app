@@ -51,7 +51,7 @@ class EventRepository {
 
   Future<dynamic> update(String key, Event event) {
     DocumentReference reference = _database.collection("events").document(key);
-    return reference.updateData(event.toJson(true));
+    return reference.updateData(event.toJson());
   }
 
   Future<dynamic> delete(String key) async {
@@ -92,9 +92,20 @@ class EventRepository {
     return _database.runTransaction((Transaction transaction) async {
       DocumentSnapshot snapshot = await transaction.get(reference);
       Event event = snapshot?.data != null ? Event.fromRaw(snapshot.data) : null;
-      if (!(event?.open ?? false)) throw FailedException(Localization().eventFullText());
+      if (!(event?.open ?? false)) throw FailedException(Localization().eventClosedText());
       Event update = Event(attendees: [uid], count: (event?.count ?? 0) + 1);
-      transaction.update(reference, update.toJson(true));
+      transaction.update(reference, update.toJson(true, true));
+    });
+  }
+
+  Future<dynamic> leave(String key, String uid) {
+    DocumentReference reference = _database.collection("events").document(key);
+    return _database.runTransaction((Transaction transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(reference);
+      Event event = snapshot?.data != null ? Event.fromRaw(snapshot.data) : null;
+      Event update = Event(open: (event?.user?.length ?? 0) > 1,
+          attendees: [uid], count: (event?.count ?? 0) - 1);
+      transaction.update(reference, update.toJson(true, false));
     });
   }
 }

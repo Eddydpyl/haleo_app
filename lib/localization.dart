@@ -96,10 +96,10 @@ class Localization {
         args: [],
       );
 
-  String eventFullText() =>
+  String eventClosedText() =>
       Intl.message(
-        "The event is already full!",
-        name: "eventFullText",
+        "The event has been closed!",
+        name: "eventClosedText",
         args: [],
       );
 
@@ -112,7 +112,7 @@ class Localization {
 
   String locationPermissionText() =>
       Intl.message(
-        "We need your location to crear an event.",
+        "We need your location to create an event.",
         name: "locationPermissionText",
         args: [],
       );

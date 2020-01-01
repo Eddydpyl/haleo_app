@@ -45,7 +45,7 @@ class Event {
         this.lang = map["lang"],
         this.lastMessage = map["lastMessage"];
 
-  Map<String, dynamic> toJson([bool update = false]) {
+  Map<String, dynamic> toJson([bool array = false, bool union]) {
     Map<String, dynamic> json = {};
     if (user != null) json["user"] = user;
     if (name != null) json["name"] = name;
@@ -55,8 +55,9 @@ class Event {
     if (open != null) json["open"] = open;
     if (slots != null) json["slots"] = slots;
     if (count != null) json["count"] = count;
-    if (attendees != null) json["attendees"] = update
-        ? FieldValue.arrayUnion(attendees) : attendees;
+    if (attendees != null) json["attendees"] = array
+        ? (union ? FieldValue.arrayUnion(attendees)
+        : FieldValue.arrayRemove(attendees)) : attendees;
     if (created != null) json["created"] = created;
     if (lang != null) json["lang"] = lang;
     if (lastMessage != null) json["lastMessage"] = lastMessage;

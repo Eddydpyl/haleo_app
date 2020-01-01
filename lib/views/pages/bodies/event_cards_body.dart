@@ -274,7 +274,7 @@ class EventActions extends StatelessWidget {
                   // Displace the icon within the button.
                   padding: const EdgeInsets.only(right: 12.0),
                   child: PaintGradient(
-                    child: Icon(CustomIcons.heart_filled),
+                    child: MirrorWidget(child:Icon(CustomIcons.ok_1)),
                     colorA: Color(0xff7dd624),
                     colorB: Color(0xff45b649),
                   ),

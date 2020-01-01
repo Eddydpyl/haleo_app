@@ -43,54 +43,30 @@ class _ProfileBodyState extends State<ProfileBody> {
                 -1);
           if (sorted.isNotEmpty) {
             return Column(children: <Widget>[
-              Stack(
-                alignment: AlignmentDirectional.center,
-                children: <Widget>[
-                Container(
-                  height: height / 3,
-                  color: Colors.blueGrey,
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Center(
+                  child: _userAvatar(user, width / 6),
                 ),
-                Center(
-                  child: Container(
-                    width: width/3,
-                    height: width/3,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Color(0xfffa6b40), Color(0xfffd1d1d)],
-                      ),
-                    ),
-                    child: GestureDetector(
-                      child: (user.image?.isNotEmpty ?? false)
-                          ? CircleAvatar(
-                              radius: width/3,
-                              backgroundColor: Colors.white,
-                              child: TransitionToImage(
-                                fit: BoxFit.cover,
-                                borderRadius: BorderRadius.circular(width/3),
-                                placeholder: InitialsText(user.name),
-                                loadingWidget: InitialsText(user.name),
-                                image: AdvancedNetworkImage(
-                                  user.image,
-                                  useDiskCache: true,
-                                  timeoutDuration: Duration(seconds: 5),
-                                ),
-                              ),
-                            )
-                          : CircleAvatar(
-                              radius: width/3,
-                              backgroundColor: Colors.white,
-                              child: InitialsText(user.name),
-                            ),
-                      onTap: () {
-                        // TODO: change profile user image
-                      },
-                    ),
+              ),
+              Text(
+                user.name,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF424242),
+                  fontSize: 24.0,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  user.description,
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 16.0,
                   ),
                 ),
-              ]),
+              ),
               Container(
                 height: 2 * height / 3,
                 child: ListView(
@@ -110,6 +86,35 @@ class _ProfileBodyState extends State<ProfileBody> {
       },
     );
   }
+}
+
+Widget _userAvatar(User user, double radius) {
+  return GestureDetector(
+    child: (user.image?.isNotEmpty ?? false)
+        ? CircleAvatar(
+            radius: radius,
+            backgroundColor: Colors.white,
+            child: TransitionToImage(
+              fit: BoxFit.cover,
+              borderRadius: BorderRadius.circular(radius),
+              placeholder: InitialsText(user.name),
+              loadingWidget: InitialsText(user.name),
+              image: AdvancedNetworkImage(
+                user.image,
+                useDiskCache: true,
+                timeoutDuration: Duration(seconds: 5),
+              ),
+            ),
+          )
+        : CircleAvatar(
+            radius: radius,
+            backgroundColor: Colors.white,
+            child: InitialsText(user.name),
+          ),
+    onTap: () {
+      // TODO: change profile user image
+    },
+  );
 }
 
 class EventTile extends StatelessWidget {

@@ -30,45 +30,14 @@ class ProfileBar extends StatelessWidget implements PreferredSizeWidget {
 
   Widget titleWidget() {
     return RichText(
-      text: TextSpan(
-        text: "¡Tu Car",
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Color(0xFF424242),
-          fontSize: 24.0,
-        ),
-        children: <TextSpan>[
-          TextSpan(
-            text: "e",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.red,
-            ),
-          ),
-          TextSpan(
-            text: "t",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF424242),
-            ),
-          ),
-          TextSpan(
-            text: "o",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.blue,
-            ),
-          ),
-          TextSpan(
-            text: "!",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF424242),
-            ),
-          )
-        ],
+        text: TextSpan(
+      text: "¡Tu Perfil!",
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Color(0xFF424242),
+        fontSize: 24.0,
       ),
-    );
+    ));
   }
 
   Widget leadingWidget(BuildContext context) {

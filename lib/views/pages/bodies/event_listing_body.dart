@@ -18,22 +18,17 @@ class _EventListingBodyState extends State<EventListingBody> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: UserEventsProvider.eventsBloc(context).eventsStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
           final Map<String, Event> events = snapshot.data;
           List<String> sorted = List.from(events.keys)
-            ..sort((String a, String b) =>
-                events[b].lastMessage?.compareTo(events[a].lastMessage ?? "") ??
-                -1);
+            ..sort((String a, String b) => events[b].lastMessage
+                ?.compareTo(events[a].lastMessage ?? "") ?? -1);
           if (sorted.isNotEmpty) {
-            return ListView(
-                children: sorted
-                    .map((String key) =>
-                        EventTile(eventKey: key, event: events[key]))
-                    .toList());
-          } else
-            return EmptyWidget();
+            return ListView(children: sorted.map((String key) =>
+                EventTile(eventKey: key, event: events[key])).toList());
+          } else return EmptyWidget();
         } else {
           return Center(
             child: const CircularProgressIndicator(),
@@ -53,62 +48,14 @@ class EventTile extends StatelessWidget {
     @required this.event,
   });
 
-  void _showDialog(
-      BuildContext context, Event event, UserEventsBloc userEventsBloc) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: new Text(
-            "Salir de " + event.name,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          content: new Text("¿Seguro que quieres abandonar este evento?"),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text(
-                "NO",
-                style: TextStyle(
-                  color: Colors.redAccent,
-                  fontSize: 16.0,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            new FlatButton(
-              child: new Text(
-                "SÍ, ¡SACAME DE AQUÍ!",
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 16.0,
-                ),
-              ),
-              onPressed: () {
-                userEventsBloc.leaveSink
-                    .add(''); // TODO: fill this up with event,key
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final UserEventsBloc userEventsBloc =
-        UserEventsProvider.eventsBloc(context);
-    final String lastRead =
-        ApplicationProvider.preferences(context).lastRead(eventKey).getValue();
+    final String lastRead = ApplicationProvider
+        .preferences(context).lastRead(eventKey).getValue();
     final bool hasMessages = event.lastMessage?.isNotEmpty ?? false;
-    final bool unread = hasMessages &&
-        (lastRead.isEmpty ||
-            DateUtility.parseDate(lastRead)
-                .isBefore(DateUtility.parseDate(event.lastMessage)));
+    final bool unread = hasMessages && (lastRead.isEmpty || DateUtility
+        .parseDate(lastRead).isBefore(DateUtility.parseDate(event.lastMessage)));
+    final UserEventsBloc userEventsBloc = UserEventsProvider.eventsBloc(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -149,9 +96,8 @@ class EventTile extends StatelessWidget {
               ),
               IconButton(
                 icon: Icon(Icons.cancel, color: Colors.redAccent),
-                onPressed: () {
-                  _showDialog(context, event, userEventsBloc);
-                },
+                onPressed: () => leaveDialog(context,
+                    eventKey, event, userEventsBloc),
               ),
             ],
           ),
@@ -173,6 +119,50 @@ class EventTile extends StatelessWidget {
     int assetNumber = eventName.length % 6;
     String asset = 'assets/images/event_' + assetNumber.toString() + ".png";
     return asset;
+  }
+
+  void leaveDialog(BuildContext context, String key,
+      Event event, UserEventsBloc userEventsBloc) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(
+            "Salir de " + event.name,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          content: new Text("¿Seguro que quieres abandonar este evento?"),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text(
+                "NO",
+                style: TextStyle(
+                  color: Colors.redAccent,
+                  fontSize: 16.0,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text(
+                "SÍ, ¡SACAME DE AQUÍ!",
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 16.0,
+                ),
+              ),
+              onPressed: () {
+                userEventsBloc.leaveSink.add(eventKey);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

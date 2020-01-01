@@ -319,7 +319,7 @@ class EventAdminCard extends StatelessWidget {
                       Slider(
                         value: (slots ?? 2) / 1.0,
                         inactiveColor: Colors.grey,
-                        activeColor: Colors.red,
+                        activeColor: Colors.redAccent,
                         onChanged: (double value) => updateSlots(value.floor()),
                         divisions: 8,
                         label: "$slots",
@@ -377,7 +377,7 @@ class EventAdminCard extends StatelessWidget {
         decoration: InputDecoration(
           border: underlineInputBorder(),
           enabledBorder: underlineInputBorder(),
-          focusedBorder: underlineInputBorder(Colors.red),
+          focusedBorder: underlineInputBorder(Colors.redAccent),
           hintText: "Beber cerveza, explorar la zona, visitar la catedral ... ",
           hintStyle: TextStyle(fontSize: 15.0, color: Colors.grey),
           hintMaxLines: 1,
@@ -408,11 +408,11 @@ class EventAdminCard extends StatelessWidget {
           ),
           hintMaxLines: 5,
           labelStyle: TextStyle(
-            color: Colors.red,
+            color: Colors.redAccent,
           ),
           border: outlineInputBorder(),
           enabledBorder: outlineInputBorder(),
-          focusedBorder: outlineInputBorder(Colors.red),
+          focusedBorder: outlineInputBorder(Colors.redAccent),
         ),
       ),
     );

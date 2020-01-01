@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:haleo_app/blocs/user_events_bloc.dart';
 
 import '../../../providers/application_provider.dart';
 import '../../../providers/user_events_provider.dart';
@@ -17,17 +18,22 @@ class _EventListingBodyState extends State<EventListingBody> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: UserEventsProvider.eventsBloc(context).eventsStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<Map<String, Event>> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
           final Map<String, Event> events = snapshot.data;
           List<String> sorted = List.from(events.keys)
-            ..sort((String a, String b) => events[b].lastMessage
-                ?.compareTo(events[a].lastMessage ?? "") ?? -1);
+            ..sort((String a, String b) =>
+                events[b].lastMessage?.compareTo(events[a].lastMessage ?? "") ??
+                -1);
           if (sorted.isNotEmpty) {
-            return ListView(children: sorted.map((String key) =>
-                EventTile(eventKey: key, event: events[key])).toList());
-          } else return EmptyWidget();
+            return ListView(
+                children: sorted
+                    .map((String key) =>
+                        EventTile(eventKey: key, event: events[key]))
+                    .toList());
+          } else
+            return EmptyWidget();
         } else {
           return Center(
             child: const CircularProgressIndicator(),
@@ -47,13 +53,62 @@ class EventTile extends StatelessWidget {
     @required this.event,
   });
 
+  void _showDialog(
+      BuildContext context, Event event, UserEventsBloc userEventsBloc) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text(
+            "Salir de " + event.name,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          content: new Text("¿Seguro que quieres abandonar este evento?"),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text(
+                "NO",
+                style: TextStyle(
+                  color: Colors.redAccent,
+                  fontSize: 16.0,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text(
+                "SÍ, ¡SACAME DE AQUÍ!",
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 16.0,
+                ),
+              ),
+              onPressed: () {
+                userEventsBloc.leaveSink
+                    .add(''); // TODO: fill this up with event,key
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final String lastRead = ApplicationProvider
-        .preferences(context).lastRead(eventKey).getValue();
+    final UserEventsBloc userEventsBloc =
+        UserEventsProvider.eventsBloc(context);
+    final String lastRead =
+        ApplicationProvider.preferences(context).lastRead(eventKey).getValue();
     final bool hasMessages = event.lastMessage?.isNotEmpty ?? false;
-    final bool unread = hasMessages && (lastRead.isEmpty || DateUtility
-        .parseDate(lastRead).isBefore(DateUtility.parseDate(event.lastMessage)));
+    final bool unread = hasMessages &&
+        (lastRead.isEmpty ||
+            DateUtility.parseDate(lastRead)
+                .isBefore(DateUtility.parseDate(event.lastMessage)));
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -63,6 +118,7 @@ class EventTile extends StatelessWidget {
           title: Text(
             event.name,
             maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           subtitle: Text(
             event.description,
@@ -75,15 +131,30 @@ class EventTile extends StatelessWidget {
             height: 64,
             width: 64,
           ),
-          trailing: unread
-            ? Container(
-              width: 16,
-              height: 16,
-              decoration: BoxDecoration(
-                color: Colors.lightGreen,
-                shape: BoxShape.circle,
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: unread
+                    ? Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: Colors.lightGreen,
+                          shape: BoxShape.circle,
+                        ),
+                      )
+                    : Container(width: 0.0),
               ),
-            ) : Container(width: 0.0),
+              IconButton(
+                icon: Icon(Icons.cancel, color: Colors.redAccent),
+                onPressed: () {
+                  _showDialog(context, event, userEventsBloc);
+                },
+              ),
+            ],
+          ),
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) => ChatPage(eventKey),

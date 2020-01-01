@@ -148,7 +148,7 @@ class EventTile extends StatelessWidget {
             ),
             new FlatButton(
               child: new Text(
-                "SÍ, ¡SACAME DE AQUÍ!",
+                "SÍ, ¡SÁCAME DE AQUÍ!",
                 style: TextStyle(
                   color: Colors.blue,
                   fontSize: 16.0,

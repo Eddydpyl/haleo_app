@@ -44,7 +44,8 @@ class ProfileBar extends StatelessWidget implements PreferredSizeWidget {
               fontWeight: FontWeight.bold,
               color: Colors.red,
             ),
-          ),  TextSpan(
+          ),
+          TextSpan(
             text: "t",
             style: TextStyle(
               fontWeight: FontWeight.bold,

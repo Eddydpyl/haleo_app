@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_networkimage/provider.dart';
+import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:haleo_app/blocs/user_events_bloc.dart';
+import 'package:haleo_app/models/user.dart';
 
 import '../../../providers/application_provider.dart';
 import '../../../providers/user_events_provider.dart';
@@ -16,7 +20,18 @@ class ProfileBody extends StatefulWidget {
 class _ProfileBodyState extends State<ProfileBody> {
   @override
   Widget build(BuildContext context) {
+    // TODO: get current user instead of this
+    final User user = new User(
+        email: 'miestgo@gmail.com',
+        name: 'Miguel Esteban',
+        image:
+            'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80',
+        description: 'Me gusta jugar a crear empresas.');
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
+
     return StreamBuilder(
+      // TODO: these should be events you've created that haven't being filled up yet
       stream: UserEventsProvider.eventsBloc(context).eventsStream,
       builder:
           (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
@@ -27,11 +42,64 @@ class _ProfileBodyState extends State<ProfileBody> {
                 events[b].lastMessage?.compareTo(events[a].lastMessage ?? "") ??
                 -1);
           if (sorted.isNotEmpty) {
-            return ListView(
-                children: sorted
-                    .map((String key) =>
-                        EventTile(eventKey: key, event: events[key]))
-                    .toList());
+            return Column(children: <Widget>[
+              Stack(
+                alignment: AlignmentDirectional.center,
+                children: <Widget>[
+                Container(
+                  height: height / 3,
+                  color: Colors.blueGrey,
+                ),
+                Center(
+                  child: Container(
+                    width: width/3,
+                    height: width/3,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Color(0xfffa6b40), Color(0xfffd1d1d)],
+                      ),
+                    ),
+                    child: GestureDetector(
+                      child: (user.image?.isNotEmpty ?? false)
+                          ? CircleAvatar(
+                              radius: width/3,
+                              backgroundColor: Colors.white,
+                              child: TransitionToImage(
+                                fit: BoxFit.cover,
+                                borderRadius: BorderRadius.circular(width/3),
+                                placeholder: InitialsText(user.name),
+                                loadingWidget: InitialsText(user.name),
+                                image: AdvancedNetworkImage(
+                                  user.image,
+                                  useDiskCache: true,
+                                  timeoutDuration: Duration(seconds: 5),
+                                ),
+                              ),
+                            )
+                          : CircleAvatar(
+                              radius: width/3,
+                              backgroundColor: Colors.white,
+                              child: InitialsText(user.name),
+                            ),
+                      onTap: () {
+                        // TODO: change profile user image
+                      },
+                    ),
+                  ),
+                ),
+              ]),
+              Container(
+                height: 2 * height / 3,
+                child: ListView(
+                    children: sorted
+                        .map((String key) =>
+                            EventTile(eventKey: key, event: events[key]))
+                        .toList()),
+              ),
+            ]);
           } else
             return EmptyWidget();
         } else {

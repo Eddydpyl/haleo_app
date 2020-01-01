@@ -4,6 +4,7 @@ import 'package:flutter_advanced_networkimage/transition.dart';
 
 import '../../../models/user.dart';
 import '../../common_widgets.dart';
+import '../profile_page.dart';
 
 class DefaultBar extends StatelessWidget {
   final Widget title;
@@ -64,7 +65,9 @@ class DefaultBar extends StatelessWidget {
                       child: InitialsText(user.name),
                     ),
               onTap: () {
-                // TODO: Navigate to user profile.
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => ProfilePage(),
+                ));
               },
             ),
           ),

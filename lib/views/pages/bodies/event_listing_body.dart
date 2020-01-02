@@ -18,17 +18,22 @@ class _EventListingBodyState extends State<EventListingBody> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: UserEventsProvider.eventsBloc(context).eventsStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<Map<String, Event>> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
           final Map<String, Event> events = snapshot.data;
           List<String> sorted = List.from(events.keys)
-            ..sort((String a, String b) => events[b].lastMessage
-                ?.compareTo(events[a].lastMessage ?? "") ?? -1);
+            ..sort((String a, String b) =>
+                events[b].lastMessage?.compareTo(events[a].lastMessage ?? "") ??
+                -1);
           if (sorted.isNotEmpty) {
-            return ListView(children: sorted.map((String key) =>
-                EventTile(eventKey: key, event: events[key])).toList());
-          } else return EmptyWidget();
+            return ListView(
+                children: sorted
+                    .map((String key) =>
+                        EventTile(eventKey: key, event: events[key]))
+                    .toList());
+          } else
+            return EmptyWidget();
         } else {
           return Center(
             child: const CircularProgressIndicator(),
@@ -50,12 +55,15 @@ class EventTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String lastRead = ApplicationProvider
-        .preferences(context).lastRead(eventKey).getValue();
+    final String lastRead =
+        ApplicationProvider.preferences(context).lastRead(eventKey).getValue();
     final bool hasMessages = event.lastMessage?.isNotEmpty ?? false;
-    final bool unread = hasMessages && (lastRead.isEmpty || DateUtility
-        .parseDate(lastRead).isBefore(DateUtility.parseDate(event.lastMessage)));
-    final UserEventsBloc userEventsBloc = UserEventsProvider.eventsBloc(context);
+    final bool unread = hasMessages &&
+        (lastRead.isEmpty ||
+            DateUtility.parseDate(lastRead)
+                .isBefore(DateUtility.parseDate(event.lastMessage)));
+    final UserEventsBloc userEventsBloc =
+        UserEventsProvider.eventsBloc(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -96,8 +104,8 @@ class EventTile extends StatelessWidget {
               ),
               IconButton(
                 icon: Icon(Icons.cancel, color: Colors.redAccent),
-                onPressed: () => leaveDialog(context,
-                    eventKey, event, userEventsBloc),
+                onPressed: () =>
+                    leaveDialog(context, eventKey, event, userEventsBloc),
               ),
             ],
           ),
@@ -121,8 +129,8 @@ class EventTile extends StatelessWidget {
     return asset;
   }
 
-  void leaveDialog(BuildContext context, String key,
-      Event event, UserEventsBloc userEventsBloc) {
+  void leaveDialog(BuildContext context, String key, Event event,
+      UserEventsBloc userEventsBloc) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

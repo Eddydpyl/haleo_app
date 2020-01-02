@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:haleo_app/blocs/user_events_bloc.dart';
@@ -29,8 +30,11 @@ class _ProfileBodyState extends State<ProfileBody> {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
 
+    /*final TextEditingController nameController;
+    final TextEditingController descriptionController;*/
+
     return StreamBuilder(
-      // TODO: these should be events you've created that haven't being filled up yet
+      // TODO: these should be events you've joined / created that haven't being filled up yet
       stream: UserEventsProvider.eventsBloc(context).eventsStream,
       builder:
           (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
@@ -48,21 +52,49 @@ class _ProfileBodyState extends State<ProfileBody> {
                   child: _userAvatar(user, width / 6),
                 ),
               ),
-              Text(
-                user.name,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF424242),
-                  fontSize: 24.0,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 32.0),
+                child: TextFormField(
+                  initialValue: user.name,
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.words,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  inputFormatters: [
+                    new LengthLimitingTextInputFormatter(36),
+                  ],
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF424242),
+                    fontSize: 24.0,
+                  ),
+                  decoration: InputDecoration(
+                    border: underlineInputBorder(Colors.transparent),
+                    enabledBorder: underlineInputBorder(Colors.transparent),
+                    focusedBorder: underlineInputBorder(Colors.transparent),
+                  ),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  user.description,
+                padding: EdgeInsets.symmetric(horizontal: 32.0),
+                child: TextFormField(
+                  initialValue: user.description,
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.sentences,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  maxLength: 70,
+                  inputFormatters: [
+                    new LengthLimitingTextInputFormatter(70),
+                  ],
                   style: TextStyle(
                     color: Colors.black54,
                     fontSize: 16.0,
+                  ),
+                  decoration: InputDecoration(
+                    border: underlineInputBorder(Colors.transparent),
+                    enabledBorder: underlineInputBorder(Colors.transparent),
+                    focusedBorder: underlineInputBorder(Colors.transparent),
                   ),
                 ),
               ),
@@ -84,6 +116,15 @@ class _ProfileBodyState extends State<ProfileBody> {
       },
     );
   }
+}
+
+UnderlineInputBorder underlineInputBorder([Color color = Colors.grey]) {
+  return UnderlineInputBorder(
+    borderSide: BorderSide(
+      color: color,
+      width: 2.0,
+    ),
+  );
 }
 
 Widget _userAvatar(User user, double radius) {
@@ -160,9 +201,9 @@ class EventTile extends StatelessWidget {
           trailing: Text(
             event.count.toString() + " / " + event.slots.toString(),
             style: TextStyle(
-              fontSize: 12.0,
+              fontSize: 16.0,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF424242),
+              color: Colors.green,
             ),
           ),
           onTap: () {

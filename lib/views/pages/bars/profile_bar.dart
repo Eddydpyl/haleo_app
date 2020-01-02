@@ -31,7 +31,7 @@ class ProfileBar extends StatelessWidget implements PreferredSizeWidget {
   Widget titleWidget() {
     return RichText(
         text: TextSpan(
-      text: "¡Tu Perfil!",
+      text: "¡Tu Cara!",
       style: TextStyle(
         fontWeight: FontWeight.bold,
         color: Color(0xFF424242),

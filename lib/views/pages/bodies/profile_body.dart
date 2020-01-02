@@ -4,6 +4,7 @@ import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:haleo_app/blocs/user_events_bloc.dart';
 import 'package:haleo_app/models/user.dart';
+import 'package:share/share.dart';
 
 import '../../../providers/application_provider.dart';
 import '../../../providers/user_events_provider.dart';
@@ -47,7 +48,7 @@ class _ProfileBodyState extends State<ProfileBody> {
           if (sorted.isNotEmpty) {
             return Column(children: <Widget>[
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.only(top: 8.0),
                 child: Center(
                   child: _userAvatar(user, width / 6),
                 ),
@@ -198,13 +199,33 @@ class EventTile extends StatelessWidget {
             height: 64,
             width: 64,
           ),
-          trailing: Text(
-            event.count.toString() + " / " + event.slots.toString(),
-            style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-              color: Colors.green,
-            ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                event.count.toString() + " / " + event.slots.toString(),
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
+                ),
+              ),
+              FlatButton(
+                shape: CircleBorder(),
+                child: PaintGradient(
+                  child: Icon(Icons.share),
+                  colorA: Color(0xff7474bf),
+                  colorB: Color(0xff348ac7),
+                ),
+                onPressed: () {
+                  Share.share("¡Únete a este haleo! : *" +
+                      event.name +
+                      "* \n _" +
+                      event.description +
+                      "_  \n ¡Descarga ya la app en Google Play!"); // TODO: google play link
+                },
+              ),
+            ],
           ),
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(

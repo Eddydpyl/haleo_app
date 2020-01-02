@@ -69,6 +69,9 @@ class EventTile extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
+        SizedBox(
+          height: 4.0,
+        ),
         ListTile(
           title: Text(
             event.name,
@@ -86,6 +89,7 @@ class EventTile extends StatelessWidget {
             height: 64,
             width: 64,
           ),
+          // TODO: align trailing to the right so that it has the same padding as profile icon in bar
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -115,10 +119,10 @@ class EventTile extends StatelessWidget {
             ));
           },
         ),
-        Divider(),
         SizedBox(
-          height: 8.0,
-        )
+          height: 4.0,
+        ),
+        Divider(),
       ],
     );
   }

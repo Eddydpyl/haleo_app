@@ -50,7 +50,7 @@ class _ProfileBodyState extends State<ProfileBody> {
               Padding(
                 padding: EdgeInsets.only(top: 8.0),
                 child: Center(
-                  child: _userAvatar(user, width / 6),
+                  child: _profileImage(user, width / 6),
                 ),
               ),
               Padding(
@@ -128,7 +128,7 @@ UnderlineInputBorder underlineInputBorder([Color color = Colors.grey]) {
   );
 }
 
-Widget _userAvatar(User user, double radius) {
+Widget _profileImage(User user, double radius) {
   return GestureDetector(
     child: (user.image?.isNotEmpty ?? false)
         ? CircleAvatar(
@@ -177,28 +177,34 @@ class EventTile extends StatelessWidget {
                 .isBefore(DateUtility.parseDate(event.lastMessage)));
     final UserEventsBloc userEventsBloc =
         UserEventsProvider.eventsBloc(context);
+
+    // TODO: get current users instead of this
+    final User user = new User(
+        email: 'miestgo@gmail.com',
+        name: 'Miguel Esteban',
+        image:
+            'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80',
+        description: 'Me gusta jugar a crear empresas.');
+
     return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        ListTile(
-          title: Text(
-            event.name,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          subtitle: Text(
-            event.description,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-          ),
+        SizedBox(
+          height: 4.0,
+        ),
+        ExpansionTile(
+          backgroundColor: Colors.white,
           leading: CardImage(
             image: event.image,
             asset: randomImage(event.name),
             height: 64,
             width: 64,
           ),
+          title: Text(
+            event.name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          // TODO: align trailing to the right so that it has the same padding as profile icon in bar
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -227,17 +233,77 @@ class EventTile extends StatelessWidget {
               ),
             ],
           ),
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => ChatPage(eventKey),
-            ));
-          },
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    event.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                      color: Color(0xFF424242),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      event.description,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // TODO: as many user tiles as attendees
+            _userTile(user),
+            _userTile(user),
+            _userTile(user),
+
+            SizedBox(height: 16.0),
+          ],
+        ),
+        SizedBox(
+          height: 4.0,
         ),
         Divider(),
-        SizedBox(
-          height: 8.0,
-        )
       ],
+    );
+  }
+
+  Widget _userTile(User user) {
+    return Padding(
+      padding: EdgeInsets.only(left: 32.0),
+      child: ListTile(
+        leading: CircleAvatar(
+          radius: 24.0,
+          backgroundColor: Colors.white,
+          child: (user.image?.isNotEmpty ?? false)
+              ? TransitionToImage(
+                  fit: BoxFit.cover,
+                  borderRadius: BorderRadius.circular(24.0),
+                  placeholder: InitialsText(user.name),
+                  loadingWidget: InitialsText(user.name),
+                  image: AdvancedNetworkImage(
+                    user.image,
+                    useDiskCache: true,
+                    timeoutDuration: Duration(seconds: 5),
+                  ),
+                )
+              : InitialsText(user.name),
+        ),
+        title: Text(user.name),
+        subtitle: Text(user.description),
+      ),
     );
   }
 
@@ -245,50 +311,6 @@ class EventTile extends StatelessWidget {
     int assetNumber = eventName.length % 6;
     String asset = 'assets/images/event_' + assetNumber.toString() + ".png";
     return asset;
-  }
-
-  void leaveDialog(BuildContext context, String key, Event event,
-      UserEventsBloc userEventsBloc) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: new Text(
-            "Salir de " + event.name,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          content: new Text("¿Seguro que quieres abandonar este evento?"),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text(
-                "NO",
-                style: TextStyle(
-                  color: Colors.redAccent,
-                  fontSize: 16.0,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            new FlatButton(
-              child: new Text(
-                "SÍ, ¡SACAME DE AQUÍ!",
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 16.0,
-                ),
-              ),
-              onPressed: () {
-                userEventsBloc.leaveSink.add(eventKey);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 }
 

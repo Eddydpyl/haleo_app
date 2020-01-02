@@ -16,6 +16,7 @@ class ProfileBar extends StatelessWidget implements PreferredSizeWidget {
         if (snapshot.data != null) {
           final String userKey = snapshot.data.key;
           final User user = snapshot.data.value;
+          // TODO: change default bar, we dont need profile here
           return DefaultBar(
             title: titleWidget(),
             leading: leadingWidget(context),
@@ -44,6 +45,7 @@ class ProfileBar extends StatelessWidget implements PreferredSizeWidget {
     return PaintGradient(
       child: IconButton(
         icon: Icon(CustomIcons.left_big),
+        // TODO: this should always go back to main events screen overriding any other historic routes.
         onPressed: () => Navigator.of(context).pop(),
       ),
       colorA: Color(0xfffa6b40),

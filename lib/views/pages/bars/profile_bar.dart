@@ -17,6 +17,7 @@ class ProfileBar extends StatelessWidget implements PreferredSizeWidget {
           final String userKey = snapshot.data.key;
           final User user = snapshot.data.value;
           // TODO: change default bar, we dont need profile here
+          // TODO: en su lugar metemos un lapiz para activar desactivar edición, además se cambia el icono entre lapiz y guardado.
           return DefaultBar(
             title: titleWidget(),
             leading: leadingWidget(context),

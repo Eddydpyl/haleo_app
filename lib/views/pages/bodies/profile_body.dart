@@ -62,12 +62,12 @@ class _ProfileBodyState extends State<ProfileBody> {
                   textAlign: TextAlign.center,
                   maxLines: 1,
                   inputFormatters: [
-                    new LengthLimitingTextInputFormatter(36),
+                    new LengthLimitingTextInputFormatter(25),
                   ],
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF424242),
-                    fontSize: 24.0,
+                    fontSize: 20.0,
                   ),
                   decoration: InputDecoration(
                     border: underlineInputBorder(Colors.transparent),
@@ -90,7 +90,7 @@ class _ProfileBodyState extends State<ProfileBody> {
                   ],
                   style: TextStyle(
                     color: Colors.black54,
-                    fontSize: 16.0,
+                    fontSize: 14.0,
                   ),
                   decoration: InputDecoration(
                     border: underlineInputBorder(Colors.transparent),
@@ -168,13 +168,6 @@ class EventTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String lastRead =
-        ApplicationProvider.preferences(context).lastRead(eventKey).getValue();
-    final bool hasMessages = event.lastMessage?.isNotEmpty ?? false;
-    final bool unread = hasMessages &&
-        (lastRead.isEmpty ||
-            DateUtility.parseDate(lastRead)
-                .isBefore(DateUtility.parseDate(event.lastMessage)));
     final UserEventsBloc userEventsBloc =
         UserEventsProvider.eventsBloc(context);
 
@@ -255,7 +248,7 @@ class EventTile extends StatelessWidget {
                       event.description,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: 14.0,
                         color: Colors.grey,
                       ),
                     ),
@@ -268,7 +261,6 @@ class EventTile extends StatelessWidget {
             _userTile(user),
             _userTile(user),
             _userTile(user),
-
             SizedBox(height: 16.0),
           ],
         ),
@@ -282,7 +274,7 @@ class EventTile extends StatelessWidget {
 
   Widget _userTile(User user) {
     return Padding(
-      padding: EdgeInsets.only(left: 32.0),
+      padding: EdgeInsets.only(left: 8.0),
       child: ListTile(
         leading: CircleAvatar(
           radius: 24.0,

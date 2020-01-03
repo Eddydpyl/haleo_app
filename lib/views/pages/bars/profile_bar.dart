@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:haleo_app/views/pages/bars/default_bar.dart';
 
 import '../../../providers/user_events_provider.dart';
 import '../../../models/user.dart';
@@ -16,13 +15,41 @@ class ProfileBar extends StatelessWidget implements PreferredSizeWidget {
         if (snapshot.data != null) {
           final String userKey = snapshot.data.key;
           final User user = snapshot.data.value;
-          // TODO: change default bar, we dont need profile here
-          // TODO: en su lugar metemos un lapiz para activar desactivar edición, además se cambia el icono entre lapiz y guardado.
-          return DefaultBar(
-            title: titleWidget(),
+          bool isEditing = false;
+
+          return AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0.0,
             leading: leadingWidget(context),
-            userKey: userKey,
-            user: user,
+            centerTitle: true,
+            title: titleWidget(),
+            actions: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: Container(
+                  width: 32.0,
+                  height: 32.0,
+                  child: isEditing
+                      ? PaintGradient(
+                          child: IconButton(
+                            icon: Icon(Icons.save),
+                            onPressed: () =>
+                                {}, //TODO: save profile data, also we should save on exit perhaps ?
+                          ),
+                          colorA: Color(0xfffa6b40),
+                          colorB: Color(0xfffd1d1d),
+                        )
+                      : PaintGradient(
+                          child: IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () => {}, // TODO: turn isEditing mode on
+                          ),
+                          colorA: Color(0xfffa6b40),
+                          colorB: Color(0xfffd1d1d),
+                        ),
+                ),
+              ),
+            ],
           );
         } else
           return Container();

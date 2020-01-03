@@ -18,7 +18,7 @@ class ProfileBody extends StatefulWidget {
 class _ProfileBodyState extends State<ProfileBody> {
   @override
   Widget build(BuildContext context) {
-    final isEditing = true; // TODO: get from app bar
+    final bool isEditing = false; // TODO: get from app bar
     // TODO: get current user instead of this
     final User user = new User(
         email: 'miestgo@gmail.com',
@@ -35,7 +35,7 @@ class _ProfileBodyState extends State<ProfileBody> {
     final TextEditingController descriptionController;*/
 
     return StreamBuilder(
-      // TODO: these should be events you've joined / created that haven't being filled up yet
+      // TODO: these should be events you've joined or created that haven't being filled up yet
       stream: UserEventsProvider.eventsBloc(context).eventsStream,
       builder:
           (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
@@ -45,95 +45,94 @@ class _ProfileBodyState extends State<ProfileBody> {
             ..sort((String a, String b) =>
                 events[b].lastMessage?.compareTo(events[a].lastMessage ?? "") ??
                 -1);
-          if (sorted.isNotEmpty) {
-            return Column(children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top: 8.0),
-                child: Center(
-                  child: _profileImage(user, width / 6),
-                ),
+          return Column(children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: 8.0),
+              child: Center(
+                child: _profileImage(user, width / 6),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 32.0),
-                child: isEditing
-                    ? TextFormField(
-                        initialValue: user.name,
-                        keyboardType: TextInputType.text,
-                        textCapitalization: TextCapitalization.words,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 32.0),
+              child: isEditing
+                  ? TextFormField(
+                      initialValue: user.name,
+                      keyboardType: TextInputType.text,
+                      textCapitalization: TextCapitalization.words,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      inputFormatters: [
+                        new LengthLimitingTextInputFormatter(25),
+                      ],
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF424242),
+                        fontSize: 20.0,
+                      ),
+                      decoration: InputDecoration(
+                        border: underlineInputBorder(),
+                        enabledBorder: underlineInputBorder(),
+                        focusedBorder: underlineInputBorder(Colors.redAccent),
+                      ),
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        user.name,
                         textAlign: TextAlign.center,
-                        maxLines: 1,
-                        inputFormatters: [
-                          new LengthLimitingTextInputFormatter(25),
-                        ],
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF424242),
                           fontSize: 20.0,
                         ),
-                        decoration: InputDecoration(
-                          border: underlineInputBorder(),
-                          enabledBorder: underlineInputBorder(),
-                          focusedBorder: underlineInputBorder(Colors.redAccent),
-                        ),
-                      )
-                    : Padding(
-                        padding: EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          user.name,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF424242),
-                            fontSize: 20.0,
-                          ),
-                        ),
                       ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 32.0),
-                child: isEditing
-                    ? TextFormField(
-                        initialValue: user.description,
-                        keyboardType: TextInputType.text,
-                        textCapitalization: TextCapitalization.sentences,
+                    ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 32.0),
+              child: isEditing
+                  ? TextFormField(
+                      initialValue: user.description,
+                      keyboardType: TextInputType.text,
+                      textCapitalization: TextCapitalization.sentences,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      maxLength: 70,
+                      inputFormatters: [
+                        new LengthLimitingTextInputFormatter(70),
+                      ],
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 14.0,
+                      ),
+                      decoration: InputDecoration(
+                        border: underlineInputBorder(),
+                        enabledBorder: underlineInputBorder(),
+                        focusedBorder: underlineInputBorder(Colors.redAccent),
+                      ),
+                    )
+                  : Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        user.description,
                         textAlign: TextAlign.center,
-                        maxLines: 2,
-                        maxLength: 70,
-                        inputFormatters: [
-                          new LengthLimitingTextInputFormatter(70),
-                        ],
                         style: TextStyle(
                           color: Colors.black54,
                           fontSize: 14.0,
                         ),
-                        decoration: InputDecoration(
-                          border: underlineInputBorder(),
-                          enabledBorder: underlineInputBorder(),
-                          focusedBorder: underlineInputBorder(Colors.redAccent),
-                        ),
-                      )
-                    : Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(
-                          user.description,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black54,
-                            fontSize: 14.0,
-                          ),
-                        ),
                       ),
-              ),
-              Expanded(
-                child: ListView(
-                    children: sorted
-                        .map((String key) =>
-                            EventTile(eventKey: key, event: events[key]))
-                        .toList()),
-              ),
-            ]);
-          } else
-            return EmptyWidget();
+                    ),
+            ),
+            sorted.isNotEmpty
+                ? Expanded(
+                    child: ListView(
+                        children: sorted
+                            .map((String key) =>
+                                EventTile(eventKey: key, event: events[key]))
+                            .toList()),
+                  )
+                : EmptyWidget(),
+          ]);
         } else {
           return Center(
             child: const CircularProgressIndicator(),
@@ -282,7 +281,7 @@ class EventTile extends StatelessWidget {
               ),
             ),
 
-            // TODO: as many user tiles as attendees
+            // TODO: as many user tiles as attendees to this particular event
             _userTile(user),
             _userTile(user),
             _userTile(user),
@@ -334,26 +333,28 @@ class EventTile extends StatelessWidget {
 class EmptyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Image.asset('assets/images/having_fun.png'),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              '¡Ooops! \n Aun no se ha llenado ningún evento. ¡Sigue haciendo swipe right!',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16.0,
-                color: Colors.black54,
+    return Expanded(
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Image.asset('assets/images/event_3.png'),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                '¡Ooops! \n Aun no te apuntaste a ningún evento. \n ¡Sigue haciendo swipe right!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
+                  color: Colors.black54,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

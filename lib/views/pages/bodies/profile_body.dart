@@ -6,12 +6,9 @@ import 'package:haleo_app/blocs/user_events_bloc.dart';
 import 'package:haleo_app/models/user.dart';
 import 'package:share/share.dart';
 
-import '../../../providers/application_provider.dart';
 import '../../../providers/user_events_provider.dart';
 import '../../../models/event.dart';
 import '../../common_widgets.dart';
-import '../../pages/chat_page.dart';
-import '../../../utility.dart';
 
 class ProfileBody extends StatefulWidget {
   @override
@@ -21,6 +18,7 @@ class ProfileBody extends StatefulWidget {
 class _ProfileBodyState extends State<ProfileBody> {
   @override
   Widget build(BuildContext context) {
+    final isEditing = true; // TODO: get from app bar
     // TODO: get current user instead of this
     final User user = new User(
         email: 'miestgo@gmail.com',
@@ -28,7 +26,9 @@ class _ProfileBodyState extends State<ProfileBody> {
         image:
             'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=80',
         description: 'Me gusta jugar a crear empresas.');
-    final double height = MediaQuery.of(context).size.height;
+    final double height = MediaQuery.of(context)
+        .size
+        .height; // TODO: maybe increase profile name, description font size based on height
     final double width = MediaQuery.of(context).size.width;
 
     /*final TextEditingController nameController;
@@ -55,49 +55,74 @@ class _ProfileBodyState extends State<ProfileBody> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 32.0),
-                child: TextFormField(
-                  initialValue: user.name,
-                  keyboardType: TextInputType.text,
-                  textCapitalization: TextCapitalization.words,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  inputFormatters: [
-                    new LengthLimitingTextInputFormatter(25),
-                  ],
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF424242),
-                    fontSize: 20.0,
-                  ),
-                  decoration: InputDecoration(
-                    border: underlineInputBorder(Colors.transparent),
-                    enabledBorder: underlineInputBorder(Colors.transparent),
-                    focusedBorder: underlineInputBorder(Colors.transparent),
-                  ),
-                ),
+                child: isEditing
+                    ? TextFormField(
+                        initialValue: user.name,
+                        keyboardType: TextInputType.text,
+                        textCapitalization: TextCapitalization.words,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        inputFormatters: [
+                          new LengthLimitingTextInputFormatter(25),
+                        ],
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF424242),
+                          fontSize: 20.0,
+                        ),
+                        decoration: InputDecoration(
+                          border: underlineInputBorder(),
+                          enabledBorder: underlineInputBorder(),
+                          focusedBorder: underlineInputBorder(Colors.redAccent),
+                        ),
+                      )
+                    : Padding(
+                        padding: EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          user.name,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF424242),
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 32.0),
-                child: TextFormField(
-                  initialValue: user.description,
-                  keyboardType: TextInputType.text,
-                  textCapitalization: TextCapitalization.sentences,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  maxLength: 70,
-                  inputFormatters: [
-                    new LengthLimitingTextInputFormatter(70),
-                  ],
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 14.0,
-                  ),
-                  decoration: InputDecoration(
-                    border: underlineInputBorder(Colors.transparent),
-                    enabledBorder: underlineInputBorder(Colors.transparent),
-                    focusedBorder: underlineInputBorder(Colors.transparent),
-                  ),
-                ),
+                child: isEditing
+                    ? TextFormField(
+                        initialValue: user.description,
+                        keyboardType: TextInputType.text,
+                        textCapitalization: TextCapitalization.sentences,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        maxLength: 70,
+                        inputFormatters: [
+                          new LengthLimitingTextInputFormatter(70),
+                        ],
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 14.0,
+                        ),
+                        decoration: InputDecoration(
+                          border: underlineInputBorder(),
+                          enabledBorder: underlineInputBorder(),
+                          focusedBorder: underlineInputBorder(Colors.redAccent),
+                        ),
+                      )
+                    : Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8.0),
+                        child: Text(
+                          user.description,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 14.0,
+                          ),
+                        ),
+                      ),
               ),
               Expanded(
                 child: ListView(

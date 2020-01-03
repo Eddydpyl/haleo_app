@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-01-01T11:34:59.956700",
+  "@@last_modified": "2020-01-03T19:29:37.860710",
   "invalidEmailText": "The email address is not valid.",
   "@invalidEmailText": {
     "type": "text",
@@ -62,6 +62,11 @@
   },
   "locationErrorText": "There was an error retrieving your location.",
   "@locationErrorText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "userUpdatedText": "Your user profile has been updated.",
+  "@userUpdatedText": {
     "type": "text",
     "placeholders": {}
   }

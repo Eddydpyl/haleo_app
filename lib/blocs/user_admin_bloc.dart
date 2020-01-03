@@ -4,16 +4,18 @@ import 'package:darter_base/darter_base.dart';
 
 import '../managers/database_manager.dart';
 import '../models/user.dart';
+import '../localization.dart';
 
 class UserAdminBloc extends BaseBloc {
   final DatabaseManager _databaseManager;
+  final Localization _localization;
 
   LenientSubject<MapEntry<String, User>> _create;
   LenientSubject<MapEntry<String, User>> _update;
   LenientSubject<String> _delete;
 
-  UserAdminBloc(DatabaseManager databaseManager)
-      : _databaseManager = databaseManager;
+  UserAdminBloc(DatabaseManager databaseManager, Localization localization)
+      : _databaseManager = databaseManager, _localization = localization;
 
   /// Consumes a [MapEntry] and uses it to create an instance in the database.
   LenientSink<MapEntry<String, User>> get createSink => _create.sink;
@@ -40,6 +42,7 @@ class UserAdminBloc extends BaseBloc {
     _update.stream.listen((MapEntry<String, User> entry) {
       if (entry != null) {
         _databaseManager.userRepository().update(entry.key, entry.value)
+            .then((_) => forwardException(SuccessfulException(_localization.userUpdatedText())))
             .catchError((e) => forwardException(e));
       }
     });

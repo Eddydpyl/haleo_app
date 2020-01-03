@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:align_positioned/align_positioned.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
-import 'package:haleo_app/utility.dart';
 import 'package:share/share.dart';
 
 import '../../../providers/perimeter_events_provider.dart';
@@ -16,6 +15,7 @@ import '../../../models/user.dart';
 import '../../common_widgets.dart';
 import '../../custom_icons.dart';
 import '../event_admin_page.dart';
+import '../../../utility.dart';
 
 class EventsCardsBody extends StatefulWidget {
   @override
@@ -45,8 +45,8 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
     final eventsBloc = PerimeterEventsProvider.eventsBloc(context);
     return StreamBuilder(
       stream: eventsBloc.eventsStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
           final Map<String, Event> events = snapshot.data;
           return StreamBuilder(
@@ -104,23 +104,21 @@ class _EventsHandlerState extends State<EventsHandler>
     animationController = AnimationController(
       duration: Duration(seconds: 1),
       vsync: this,
-    )
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((AnimationStatus status) {
-        if (status == AnimationStatus.completed) {
-          setState(() {
-            widget.eventsBloc.attendSink.add(MapEntry(eventKey, direction));
-            events.remove(eventKey);
-            if (events.isNotEmpty)
-              eventKey = events.keys.first;
-            else
-              eventKey = null;
-            animationController.reset();
-          });
-        }
-      });
+    )..addListener(() {
+      setState(() {});
+    })..addStatusListener((AnimationStatus status) {
+      if (status == AnimationStatus.completed) {
+        setState(() {
+          widget.eventsBloc.attendSink
+              .add(MapEntry(eventKey, direction));
+          events.remove(eventKey);
+          if (events.isNotEmpty)
+            eventKey = events.keys.first;
+          else eventKey = null;
+          animationController.reset();
+        });
+      }
+    });
   }
 
   @override
@@ -133,23 +131,15 @@ class _EventsHandlerState extends State<EventsHandler>
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
-    final String next =
-        events.keys.firstWhere((key) => key != eventKey, orElse: () => null);
-    Widget backgroundCard = next != null
-        ? EventCard(eventKey: next, event: events[next], users: widget.users)
-        : EmptyCard();
-    Widget foregroundCard = eventKey != null
-        ? SwipeWrapper(
-            animationController: animationController,
-            onSwipe: onSwipe,
-            direction: direction,
-            height: height,
-            width: width,
-            child: EventCard(
-                eventKey: eventKey,
-                event: events[eventKey],
-                users: widget.users))
-        : EmptyCard();
+    final String next = events.keys.firstWhere((key) =>
+    key != eventKey, orElse: () => null);
+    Widget backgroundCard = next != null ? EventCard(eventKey: next,
+        event: events[next], users: widget.users) : EmptyCard();
+    Widget foregroundCard = eventKey != null ? SwipeWrapper(
+        animationController: animationController, onSwipe: onSwipe,
+        direction: direction, height: height, width: width,
+        child: EventCard(eventKey: eventKey, event: events[eventKey],
+        users: widget.users)) : EmptyCard();
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Column(
@@ -191,14 +181,14 @@ class _EventsHandlerState extends State<EventsHandler>
   void resetEvents() {
     events = LinkedHashMap();
     List<String> sorted = List.from(widget.events.keys)
-      ..sort((String a, String b) =>
-          widget.events[b].created.compareTo(widget.events[a].created));
+      ..sort((String a, String b) => widget.events[b]
+          .created.compareTo(widget.events[a].created));
     sorted.forEach((key) => events[key] = widget.events[key]);
     if (events.isNotEmpty) {
-      if (eventKey == null || !events.keys.contains(eventKey))
+      if (eventKey == null
+          || !events.keys.contains(eventKey))
         eventKey = events.keys.first;
-    } else
-      eventKey = null;
+    } else eventKey = null;
   }
 
   void onSwipe(bool direction) {
@@ -265,12 +255,9 @@ class EventActions extends StatelessWidget {
               ),
               onPressed: () async {
                 Navigator.push(context, FadeRoute<bool>(EventAdminPage()))
-                    .then((result) => (result ?? false)
-                        ? SnackBarUtility.show(
-                            context,
-                            "¡Evento creado con éxito! Ahora a"
-                            " esperar a tus invitados.")
-                        : null);
+                    .then((result) => (result ?? false) ? SnackBarUtility
+                    .show(context, "¡Evento creado con éxito! Ahora a"
+                    " esperar a tus invitados.") : null);
               },
             ),
           ),
@@ -472,8 +459,8 @@ class EventCard extends StatelessWidget {
                 Align(
                   alignment: Alignment.topCenter,
                   child: Padding(
-                    padding: EdgeInsets.only(
-                        top: height > 300 ? height / 2 - 32 : height / 4 - 16),
+                    padding: EdgeInsets.only(top: height > 300
+                        ? height / 2 - 32 : height / 4 - 16),
                     child: IgnorePointer(child: userRow()),
                   ),
                 ),
@@ -491,10 +478,8 @@ class EventCard extends StatelessWidget {
 
     if (keys.isNotEmpty) {
       // Add the first attendee (excluding the organizer).
-      if (keys.length <= 2)
-        avatars.add(userAvatar(users[keys[0]], 48.0));
-      else
-        avatars.add(userAvatar(users[keys[0]], 32.0));
+      if (keys.length <= 2) avatars.add(userAvatar(users[keys[0]], 48.0));
+      else avatars.add(userAvatar(users[keys[0]], 32.0));
       // Add the second attendee (excluding the organizer).
       if (keys.length > 2) avatars.add(userAvatar(users[keys[1]], 48.0));
     }
@@ -505,8 +490,7 @@ class EventCard extends StatelessWidget {
 
     if (keys.isNotEmpty) {
       // Add the third attendee (excluding the organizer).
-      if (keys.length == 2)
-        avatars.add(userAvatar(users[keys[1]], 48.0));
+      if (keys.length == 2) avatars.add(userAvatar(users[keys[1]], 48.0));
       else if (keys.length > 2) avatars.add(userAvatar(users[keys[2]], 48.0));
       // Add the fourth attendee (excluding the organizer).
       if (keys.length > 3) avatars.add(userAvatar(users[keys[3]], 32.0));
@@ -524,8 +508,8 @@ class EventCard extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(8.0),
           child: Text(
-            '¡Se apunt${event.count > 1 ? 'aron' : 'ó'} ${event.count} y solo '
-            'queda${spaces > 1 ? 'n' : ''} '
+            '¡Se apunt${event.count > 1 ? 'aron' : 'ó'} '
+            '${event.count} y solo queda${spaces > 1 ? 'n' : ''} '
             '$spaces hueco${spaces > 1 ? 's' : ''}!',
             textAlign: TextAlign.center,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0),

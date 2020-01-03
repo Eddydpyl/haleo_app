@@ -123,4 +123,11 @@ class Localization {
         name: "locationErrorText",
         args: [],
       );
+
+  String userUpdatedText() =>
+      Intl.message(
+        "Your user profile has been updated.",
+        name: "userUpdatedText",
+        args: [],
+      );
 }

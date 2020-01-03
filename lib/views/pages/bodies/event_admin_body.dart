@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:haleo_app/utility.dart';
 import 'package:location/location.dart';
 
 import '../../../providers/application_provider.dart';
@@ -19,6 +18,7 @@ import '../../../models/event.dart';
 import '../../../localization.dart';
 import '../../custom_icons.dart';
 import '../../common_widgets.dart';
+import '../../../utility.dart';
 
 class EventAdminBody extends StatefulWidget {
   final String eventKey;
@@ -40,8 +40,7 @@ class _EventAdminBodyState extends State<EventAdminBody> {
   Widget build(BuildContext context) {
     final Localization localization = ApplicationProvider.localization(context);
     final StateBloc stateBloc = StateProvider.stateBloc(context);
-    final EventAdminBloc eventAdminBloc =
-        EventAdminProvider.eventAdminBloc(context);
+    final EventAdminBloc eventAdminBloc = EventAdminProvider.eventAdminBloc(context);
     final UploaderBloc uploaderBloc = EventAdminProvider.uploaderBloc(context);
     return StreamBuilder(
       stream: stateBloc.userKeyStream,
@@ -349,6 +348,7 @@ class EventAdminCard extends StatelessWidget {
         child: Center(child: const CircularProgressIndicator()),
       );
     }
+
     return GestureDetector(
       child: CardImage(
         image: image,
@@ -401,8 +401,7 @@ class EventAdminCard extends StatelessWidget {
           color: Colors.black87,
         ),
         decoration: InputDecoration(
-          hintText:
-              "¿Qué propones hacer? ¿Qué idioma hablas?, ¿Qué hora te viene mejor?, ...",
+          hintText: "¿Qué propones hacer? ¿Qué idioma hablas?, ¿Qué hora te viene mejor?, ...",
           hintStyle: TextStyle(
             fontSize: 15.0,
             color: Colors.grey,

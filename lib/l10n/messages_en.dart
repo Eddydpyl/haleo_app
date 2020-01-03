@@ -32,6 +32,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "locationPermissionText" : MessageLookupByLibrary.simpleMessage("We need your location to create an event."),
     "passwordSentText" : MessageLookupByLibrary.simpleMessage("A password reset link has been sent to your email."),
     "uploadErrorText" : MessageLookupByLibrary.simpleMessage("There was an unexpected issue and the file could not be uploaded."),
-    "usedEmailText" : MessageLookupByLibrary.simpleMessage("The email address is already in use.")
+    "usedEmailText" : MessageLookupByLibrary.simpleMessage("The email address is already in use."),
+    "userUpdatedText" : MessageLookupByLibrary.simpleMessage("Your user profile has been updated.")
   };
 }

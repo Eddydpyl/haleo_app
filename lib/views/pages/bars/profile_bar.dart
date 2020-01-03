@@ -1,22 +1,38 @@
 import 'package:flutter/material.dart';
 
-import '../../../providers/user_events_provider.dart';
+import '../../../providers/profile_provider.dart';
+import '../../../blocs/user_admin_bloc.dart';
+import '../../../blocs/user_bloc.dart';
 import '../../../models/user.dart';
 import '../../custom_icons.dart';
 import '../../common_widgets.dart';
 
 class ProfileBar extends StatelessWidget implements PreferredSizeWidget {
+  final TextEditingController nameController;
+  final TextEditingController descriptionController;
+  final void Function(bool) edit;
+  final bool editing;
+  final String path;
+
+  ProfileBar({
+    @required this.nameController,
+    @required this.descriptionController,
+    @required this.editing,
+    @required this.edit,
+    this.path,
+  });
+
   @override
   Widget build(BuildContext context) {
+    final UserAdminBloc userAdminBloc = ProfileProvider.userAdminBloc(context);
+    final UserBloc userBloc = ProfileProvider.userBloc(context);
     return StreamBuilder(
-      stream: UserEventsProvider.userBloc(context).userStream,
+      stream: userBloc.userStream,
       builder: (BuildContext context,
           AsyncSnapshot<MapEntry<String, User>> snapshot) {
         if (snapshot.data != null) {
-          final String userKey = snapshot.data.key;
+          final String uid = snapshot.data.key;
           final User user = snapshot.data.value;
-          bool isEditing = false;
-
           return AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0.0,
@@ -29,12 +45,19 @@ class ProfileBar extends StatelessWidget implements PreferredSizeWidget {
                 child: Container(
                   width: 32.0,
                   height: 32.0,
-                  child: isEditing
+                  child: editing
                       ? PaintGradient(
                           child: IconButton(
                             icon: Icon(Icons.save),
-                            onPressed: () =>
-                                {}, //TODO: save profile data, also we should save on exit perhaps ?
+                            onPressed: () {
+                              if (nameController.text?.isNotEmpty ?? false) {
+                                userAdminBloc.updateSink.add(MapEntry(uid, User(
+                                  name: nameController.text,
+                                  description: descriptionController.text,
+                                  image: path,
+                                ))); edit(false);
+                              }
+                            },
                           ),
                           colorA: Color(0xfffa6b40),
                           colorB: Color(0xfffd1d1d),
@@ -42,7 +65,7 @@ class ProfileBar extends StatelessWidget implements PreferredSizeWidget {
                       : PaintGradient(
                           child: IconButton(
                             icon: Icon(Icons.edit),
-                            onPressed: () => {}, // TODO: turn isEditing mode on
+                            onPressed: () => edit(true),
                           ),
                           colorA: Color(0xfffa6b40),
                           colorB: Color(0xfffd1d1d),
@@ -72,9 +95,8 @@ class ProfileBar extends StatelessWidget implements PreferredSizeWidget {
   Widget leadingWidget(BuildContext context) {
     return PaintGradient(
       child: IconButton(
-        icon: Icon(CustomIcons.left_big),
-        // TODO: this should always go back to main events screen overriding any other historic routes.
-        onPressed: () => Navigator.of(context).pop(),
+        icon: Icon(editing ? Icons.clear : CustomIcons.left_big),
+        onPressed: () => editing ? edit(false) : Navigator.of(context).pop(),
       ),
       colorA: Color(0xfffa6b40),
       colorB: Color(0xfffd1d1d),

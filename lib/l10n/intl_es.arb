@@ -64,5 +64,10 @@
   "@locationErrorText": {
     "type": "text",
     "placeholders": {}
+  },
+  "userUpdatedText": "Tu perfil ha sido actualizado.",
+  "@userUpdatedText": {
+    "type": "text",
+    "placeholders": {}
   }
 }

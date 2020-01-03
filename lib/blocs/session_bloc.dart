@@ -92,9 +92,10 @@ class SessionBloc extends BaseBloc {
           });
 
         if (aux == null) return;
-        User user = User(email: aux.email,
-            name: aux.displayName, image: aux.photoUrl);
-        _databaseManager.userRepository().create(aux.uid, user);
+        if ((await _databaseManager.userRepository().read(aux.uid)) == null) {
+          User user = User(email: aux.email, name: aux.displayName, image: aux.photoUrl);
+          _databaseManager.userRepository().create(aux.uid, user);
+        }
       }
     });
     _facebook.stream.listen((bool facebook) async {
@@ -106,9 +107,10 @@ class SessionBloc extends BaseBloc {
           });
 
         if (aux == null) return;
-        User user = User(email: aux.email,
-            name: aux.displayName, image: aux.photoUrl);
-        _databaseManager.userRepository().create(aux.uid, user);
+        if ((await _databaseManager.userRepository().read(aux.uid)) == null) {
+          User user = User(email: aux.email, name: aux.displayName, image: aux.photoUrl);
+          _databaseManager.userRepository().create(aux.uid, user);
+        }
       }
     });
   }

@@ -62,40 +62,43 @@ class PerimeterEventsBloc extends BaseBloc {
       }
     });
     _perimeter.stream.listen((Perimeter perimeter) {
-      if (perimeter != null) {
-        _eventSubscription?.cancel();
-        _eventSubscription = _databaseManager.eventRepository()
-            .collectionStream(center: GeoFirePoint(perimeter.lat, perimeter.lng),
-            radius: perimeter.radius, open: true).listen((data) {
-              Map<String, Event> purged = purge(data ?? Map());
-              Map<String, User> users = _users.value ?? Map();
-              List<Future> futures = List();
-              for (Event event in purged.values) {
-                for (String uid in event.attendees) {
-                  if (!users.keys.contains(uid)) {
-                    futures.add(_databaseManager.userRepository()
-                        .read(uid).then((User user) => users[uid] = user));
-                  }
-                }
-              }
-              Future.wait(futures).then((_) {
-                _events.add(purged);
-                _users.add(users);
-              });
-            });
-      }
+      if (perimeter != null)
+        _updateProviders(perimeter);
     });
     _preferenceSubscription = _preferenceManager
         .viewed().listen((List<String> viewed) {
       if (viewed != null) {
         this.viewed = viewed;
         if (_events.value != null)
-          _events.add(purge(_events.value));
+          _events.add(_purge(_events.value));
       }
     });
   }
 
-  Map<String, Event> purge(Map<String, Event> data) => data
+  void _updateProviders(Perimeter perimeter) {
+    _eventSubscription?.cancel();
+    _eventSubscription = _databaseManager.eventRepository()
+        .collectionStream(center: GeoFirePoint(perimeter.lat, perimeter.lng),
+        radius: perimeter.radius, open: true).listen((data) {
+      Map<String, Event> purged = _purge(data ?? Map());
+      Map<String, User> users = _users.value ?? Map();
+      List<Future> futures = List();
+      for (Event event in purged.values) {
+        for (String uid in event.attendees) {
+          if (!users.keys.contains(uid)) {
+            futures.add(_databaseManager.userRepository()
+                .read(uid).then((User user) => users[uid] = user));
+          }
+        }
+      }
+      Future.wait(futures).then((_) {
+        _events.add(purged);
+        _users.add(users);
+      });
+    });
+  }
+
+  Map<String, Event> _purge(Map<String, Event> data) => data
     ..removeWhere((String key, Event value) => viewed.contains(key));
 
   @override

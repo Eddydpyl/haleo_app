@@ -18,17 +18,22 @@ class _EventListingBodyState extends State<EventListingBody> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: UserEventsProvider.eventsBloc(context).eventsStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<Map<String, Event>> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
           final Map<String, Event> events = snapshot.data;
           List<String> sorted = List.from(events.keys)
-            ..sort((String a, String b) => events[b].lastMessage
-                ?.compareTo(events[a].lastMessage ?? "") ?? -1);
+            ..sort((String a, String b) =>
+                events[b].lastMessage?.compareTo(events[a].lastMessage ?? "") ??
+                -1);
           if (sorted.isNotEmpty) {
-            return ListView(children: sorted.map((String key) =>
-                EventTile(eventKey: key, event: events[key])).toList());
-          } else return EmptyWidget();
+            return ListView(
+                children: sorted
+                    .map((String key) =>
+                        EventTile(eventKey: key, event: events[key]))
+                    .toList());
+          } else
+            return EmptyWidget();
         } else {
           return Center(
             child: const CircularProgressIndicator(),
@@ -50,17 +55,23 @@ class EventTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String lastRead = ApplicationProvider
-        .preferences(context).lastRead(eventKey).getValue();
+    final String lastRead =
+        ApplicationProvider.preferences(context).lastRead(eventKey).getValue();
     final bool hasMessages = event.lastMessage?.isNotEmpty ?? false;
-    final bool unread = hasMessages && (lastRead.isEmpty || DateUtility
-        .parseDate(lastRead).isBefore(DateUtility.parseDate(event.lastMessage)));
-    final UserEventsBloc userEventsBloc = UserEventsProvider.eventsBloc(context);
+    final bool unread = hasMessages &&
+        (lastRead.isEmpty ||
+            DateUtility.parseDate(lastRead)
+                .isBefore(DateUtility.parseDate(event.lastMessage)));
+    final UserEventsBloc userEventsBloc =
+        UserEventsProvider.eventsBloc(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
+        SizedBox(
+          height: 4.0,
+        ),
         ListTile(
           title: Text(
             event.name,
@@ -78,6 +89,7 @@ class EventTile extends StatelessWidget {
             height: 64,
             width: 64,
           ),
+          // TODO: align trailing to the right so that it has the same padding as profile icon in bar
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -96,8 +108,8 @@ class EventTile extends StatelessWidget {
               ),
               IconButton(
                 icon: Icon(Icons.cancel, color: Colors.redAccent),
-                onPressed: () => leaveDialog(context,
-                    eventKey, event, userEventsBloc),
+                onPressed: () =>
+                    leaveDialog(context, eventKey, event, userEventsBloc),
               ),
             ],
           ),
@@ -107,10 +119,10 @@ class EventTile extends StatelessWidget {
             ));
           },
         ),
-        Divider(),
         SizedBox(
-          height: 8.0,
-        )
+          height: 4.0,
+        ),
+        Divider(),
       ],
     );
   }
@@ -121,8 +133,8 @@ class EventTile extends StatelessWidget {
     return asset;
   }
 
-  void leaveDialog(BuildContext context, String key,
-      Event event, UserEventsBloc userEventsBloc) {
+  void leaveDialog(BuildContext context, String key, Event event,
+      UserEventsBloc userEventsBloc) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -136,7 +148,7 @@ class EventTile extends StatelessWidget {
           actions: <Widget>[
             new FlatButton(
               child: new Text(
-                "NO",
+                "¡NO!",
                 style: TextStyle(
                   color: Colors.redAccent,
                   fontSize: 16.0,
@@ -148,7 +160,7 @@ class EventTile extends StatelessWidget {
             ),
             new FlatButton(
               child: new Text(
-                "SÍ, ¡SACAME DE AQUÍ!",
+                "¡SÍ!",
                 style: TextStyle(
                   color: Colors.blue,
                   fontSize: 16.0,

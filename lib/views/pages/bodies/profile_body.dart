@@ -8,12 +8,14 @@ import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share/share.dart';
 
+import '../../../providers/application_provider.dart';
 import '../../../providers/profile_provider.dart';
 import '../../../blocs/user_events_bloc.dart';
 import '../../../blocs/user_bloc.dart';
 import '../../../models/event.dart';
 import '../../../models/user.dart';
 import '../../common_widgets.dart';
+import '../../../localization.dart';
 
 class ProfileBody extends StatelessWidget {
   final TextEditingController nameController;
@@ -133,6 +135,7 @@ class _ProfileListState extends State<ProfileList> {
 
   @override
   Widget build(BuildContext context) {
+    final Localization localization = ApplicationProvider.localization(context);
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     final List<String> sorted = List.from(widget.events.keys)
@@ -212,9 +215,9 @@ class _ProfileListState extends State<ProfileList> {
       ),
       sorted.isNotEmpty ? Expanded(
         child: ListView(children: sorted.map((String key) =>
-            EventTile(users: widget.users, eventKey: key,
-            event: widget.events[key])).toList()),
-      ) : EmptyWidget(),
+            EventTile(localization: localization, users: widget.users,
+                eventKey: key, event: widget.events[key])).toList()),
+      ) : EmptyWidget(localization),
     ]);
   }
 
@@ -272,11 +275,13 @@ class _ProfileListState extends State<ProfileList> {
 }
 
 class EventTile extends StatelessWidget {
+  final Localization localization;
   final Map<String, User> users;
   final String eventKey;
   final Event event;
 
   EventTile({
+    @required this.localization,
     @required this.users,
     @required this.eventKey,
     @required this.event,
@@ -320,11 +325,8 @@ class EventTile extends StatelessWidget {
                   colorB: Color(0xff348ac7),
                 ),
                 onPressed: () {
-                  Share.share("¡Únete a este haleo! : *" +
-                      event.name +
-                      "* \n _" +
-                      event.description +
-                      "_  \n ¡Descarga ya la app en Google Play!"); // TODO: google play link
+                  Share.share(localization.shareText(event.name,
+                      event.description)); // TODO: Google Play link.
                 },
               ),
             ],
@@ -402,12 +404,16 @@ class EventTile extends StatelessWidget {
 
   String randomImage(String eventName) {
     int assetNumber = eventName.length % 6;
-    String asset = 'assets/images/event_' + assetNumber.toString() + ".png";
+    String asset = "assets/images/event_" + assetNumber.toString() + ".png";
     return asset;
   }
 }
 
 class EmptyWidget extends StatelessWidget {
+  final Localization localization;
+
+  EmptyWidget(this.localization);
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -417,11 +423,11 @@ class EmptyWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset('assets/images/event_3.png'),
+            Image.asset("assets/images/event_3.png"),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                '¡Ooops! \n Aun no te apuntaste a ningún evento. \n ¡Sigue haciendo swipe right!',
+                localization.eventEmptyJoinedText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,

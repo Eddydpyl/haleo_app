@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:haleo_app/blocs/user_events_bloc.dart';
 
 import '../../../providers/application_provider.dart';
 import '../../../providers/user_events_provider.dart';
+import '../../../blocs/user_events_bloc.dart';
 import '../../../models/event.dart';
 import '../../common_widgets.dart';
 import '../../pages/chat_page.dart';
 import '../../../utility.dart';
+import '../../../localization.dart';
 
 class EventListingBody extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class EventListingBody extends StatefulWidget {
 class _EventListingBodyState extends State<EventListingBody> {
   @override
   Widget build(BuildContext context) {
+    final Localization localization = ApplicationProvider.localization(context);
     return StreamBuilder(
       stream: UserEventsProvider.eventsBloc(context).eventsStream,
       builder: (BuildContext context,
@@ -27,8 +29,9 @@ class _EventListingBodyState extends State<EventListingBody> {
                 ?.compareTo(events[a].lastMessage ?? "") ?? -1);
           if (sorted.isNotEmpty) {
             return ListView(children: sorted.map((String key) =>
-                EventTile(eventKey: key, event: events[key])).toList());
-          } else return EmptyWidget();
+                EventTile(localization: localization, eventKey: key,
+                    event: events[key])).toList());
+          } else return EmptyWidget(localization);
         } else {
           return Center(
             child: const CircularProgressIndicator(),
@@ -40,10 +43,12 @@ class _EventListingBodyState extends State<EventListingBody> {
 }
 
 class EventTile extends StatelessWidget {
+  final Localization localization;
   final String eventKey;
   final Event event;
 
   EventTile({
+    @required this.localization,
     @required this.eventKey,
     @required this.event,
   });
@@ -116,7 +121,7 @@ class EventTile extends StatelessWidget {
 
   String randomImage(String eventName) {
     int assetNumber = eventName.length % 6;
-    String asset = 'assets/images/event_' + assetNumber.toString() + ".png";
+    String asset = "assets/images/event_" + assetNumber.toString() + ".png";
     return asset;
   }
 
@@ -127,15 +132,15 @@ class EventTile extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            "Salir de " + event.name,
-            maxLines: 2,
+            localization.eventExitText(event.name),
             overflow: TextOverflow.ellipsis,
+            maxLines: 2,
           ),
-          content: Text("¿Seguro que quieres abandonar este evento?"),
+          content: Text(localization.exitPromtText()),
           actions: <Widget>[
             FlatButton(
               child: Text(
-                "¡NO!",
+                localization.exitNoText(),
                 style: TextStyle(
                   color: Colors.redAccent,
                   fontSize: 16.0,
@@ -147,7 +152,7 @@ class EventTile extends StatelessWidget {
             ),
             FlatButton(
               child: Text(
-                "¡SÍ!",
+                localization.exitYesText(),
                 style: TextStyle(
                   color: Colors.blue,
                   fontSize: 16.0,
@@ -166,6 +171,10 @@ class EventTile extends StatelessWidget {
 }
 
 class EmptyWidget extends StatelessWidget {
+  final Localization localization;
+
+   EmptyWidget(this.localization);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -174,11 +183,11 @@ class EmptyWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Image.asset('assets/images/having_fun.png'),
+          Image.asset("assets/images/having_fun.png"),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              '¡Ooops! \n Aun no se ha llenado ningún evento. ¡Sigue haciendo swipe right!',
+              localization.eventEmptyFilledText(),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold,

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
+import '../../../providers/application_provider.dart';
 import '../../../providers/event_admin_provider.dart';
 import '../../../models/user.dart';
 import '../../common_widgets.dart';
 import '../../custom_icons.dart';
 import '../bars/default_bar.dart';
+import '../../../localization.dart';
 
 class EventAdminBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
+    final Localization localization = ApplicationProvider.localization(context);
     return StreamBuilder(
       stream: EventAdminProvider.userBloc(context).userStream,
       builder: (BuildContext context,
@@ -17,7 +20,7 @@ class EventAdminBar extends StatelessWidget implements PreferredSizeWidget {
           final String userKey = snapshot.data.key;
           final User user = snapshot.data.value;
           return DefaultBar(
-            title: titleWidget(),
+            title: titleWidget(localization),
             leading: leadingWidget(context),
             userKey: userKey,
             user: user,
@@ -28,10 +31,10 @@ class EventAdminBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget titleWidget() {
+  Widget titleWidget(Localization localization) {
     return RichText(
       text: TextSpan(
-        text: "¡Armar Hal",
+        text: "${localization.createText()} Hal",
         style: TextStyle(
           fontWeight: FontWeight.bold,
           color: Color(0xFF424242),

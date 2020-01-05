@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-01-03T19:29:37.860710",
+  "@@last_modified": "2020-01-05T15:17:33.682866",
   "invalidEmailText": "The email address is not valid.",
   "@invalidEmailText": {
     "type": "text",
@@ -67,6 +67,113 @@
   },
   "userUpdatedText": "Your user profile has been updated.",
   "@userUpdatedText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "messageHintText": "Write a message",
+  "@messageHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "slotsNumberText": "Minimum number of attendees?",
+  "@slotsNumberText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "eventTitleHintText": "Have a beer, go for a walk, visit the cathedral ...",
+  "@eventTitleHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "eventBodyHintText": "What would you like to do? What languages do you speak? At what time would you be free?",
+  "@eventBodyHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "exitPromtText": "Are you sure you want to leave?",
+  "@exitPromtText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "exitNoText": "NO",
+  "@exitNoText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "exitYesText": "YES, GET ME OUT!",
+  "@exitYesText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "eventEmptyFilledText": "Whoops! \n There are no filled events yet. Keep swiping right!",
+  "@eventEmptyFilledText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "eventEmptyJoinedText": "Whoops! \n You hace not joined any events yet. Keep swiping right!",
+  "@eventEmptyJoinedText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "eventEmptyReadText": "No more events to check out. \n Why not create your own?",
+  "@eventEmptyReadText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "haleoText": "Haleo!",
+  "@haleoText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "promoText": "Find events near you. \n You are only a click away!",
+  "@promoText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signInText": "Sign In",
+  "@signInText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shareText": "Join this haleo! : *{name}* \n _{description}_ \n Download the app in Google Play!",
+  "@shareText": {
+    "type": "text",
+    "placeholders": {
+      "name": {},
+      "description": {}
+    }
+  },
+  "eventCreatedText": "Your event has been created! Now we wait for more attendees.",
+  "@eventCreatedText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_attendeesCountText": "{count,plural, =1{A total of {count} has signed up.}other{A total of {count} have signed up.}}",
+  "@_attendeesCountText": {
+    "type": "text",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "_attendeesSpacesText": "{spaces,plural, =1{Only {spaces} space remains!}other{Only {spaces} spaces remain!}}",
+  "@_attendeesSpacesText": {
+    "type": "text",
+    "placeholders": {
+      "spaces": {}
+    }
+  },
+  "createText": "Create",
+  "@createText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "profileText": "Your Face!",
+  "@profileText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "yourText": "Your",
+  "@yourText": {
     "type": "text",
     "placeholders": {}
   }

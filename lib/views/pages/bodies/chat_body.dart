@@ -36,7 +36,7 @@ class _ChatBodyState extends State<ChatBody> {
             builder: (BuildContext context,
                 AsyncSnapshot<Map<String, Message>> snapshot) {
               if (snapshot.data != null) {
-                // Every time we receive new messages, we update
+                // Every time we receive messages, we update
                 // the date at which we last read the event's messages.
                 ApplicationProvider.preferences(context).read(widget.eventKey);
                 Map<String, Message> messages = snapshot.data;
@@ -128,8 +128,8 @@ class _MessageComposerState extends State<MessageComposer> {
             child: TextField(
               controller: controller,
               textCapitalization: TextCapitalization.sentences,
-              decoration:
-                  InputDecoration.collapsed(hintText: 'Escribir mensaje'),
+              decoration: InputDecoration.collapsed(hintText: ApplicationProvider
+                  .localization(context).messageHintText()),
             ),
           ),
           IconButton(

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:haleo_app/views/pages/bars/default_bar.dart';
 
+import '../../../providers/application_provider.dart';
 import '../../../providers/user_events_provider.dart';
 import '../../../models/user.dart';
 import '../../custom_icons.dart';
 import '../../common_widgets.dart';
+import '../../../localization.dart';
+import 'default_bar.dart';
 
 class EventListingBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
+    final Localization localization = ApplicationProvider.localization(context);
     return StreamBuilder(
       stream: UserEventsProvider.userBloc(context).userStream,
       builder: (BuildContext context,
@@ -17,7 +20,7 @@ class EventListingBar extends StatelessWidget implements PreferredSizeWidget {
           final String userKey = snapshot.data.key;
           final User user = snapshot.data.value;
           return DefaultBar(
-            title: titleWidget(),
+            title: titleWidget(localization),
             leading: leadingWidget(context),
             userKey: userKey,
             user: user,
@@ -28,10 +31,10 @@ class EventListingBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget titleWidget() {
+  Widget titleWidget(Localization localization) {
     return RichText(
       text: TextSpan(
-        text: "¡Tus Hal",
+        text: "${localization.yourText()} Hal",
         style: TextStyle(
           fontWeight: FontWeight.bold,
           color: Color(0xFF424242),

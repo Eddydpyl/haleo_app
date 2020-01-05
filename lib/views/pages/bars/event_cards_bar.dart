@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:haleo_app/views/pages/bars/default_bar.dart';
 
 import '../../../providers/perimeter_events_provider.dart';
 import '../../../models/user.dart';
 import '../../custom_icons.dart';
 import '../../common_widgets.dart';
 import '../event_listing_page.dart';
+import 'default_bar.dart';
 
 class EventCardsBar extends StatelessWidget implements PreferredSizeWidget {
   @override

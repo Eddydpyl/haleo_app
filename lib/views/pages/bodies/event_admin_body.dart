@@ -62,6 +62,7 @@ class _EventAdminBodyState extends State<EventAdminBody> {
                     children: <Widget>[
                       Expanded(
                         child: EventStack(
+                          localization: localization,
                           uploaderBloc: uploaderBloc,
                           nameController: nameController,
                           descriptionController: descriptionController,
@@ -109,6 +110,7 @@ class _EventAdminBodyState extends State<EventAdminBody> {
 }
 
 class EventStack extends StatelessWidget {
+  final Localization localization;
   final UploaderBloc uploaderBloc;
   final TextEditingController nameController;
   final TextEditingController descriptionController;
@@ -118,6 +120,7 @@ class EventStack extends StatelessWidget {
   final int slots;
 
   EventStack({
+    @required this.localization,
     @required this.uploaderBloc,
     @required this.nameController,
     @required this.descriptionController,
@@ -145,6 +148,7 @@ class EventStack extends StatelessWidget {
             rotation: height > 400 ? -2.0 : -1.0,
           ),
           EventAdminCard(
+            localization: localization,
             uploaderBloc: uploaderBloc,
             nameController: nameController,
             descriptionController: descriptionController,
@@ -214,9 +218,9 @@ class EventActions extends StatelessWidget {
                 colorB: Color(0xff45b649),
               ),
               onPressed: () async {
-                if (nameController.text.isNotEmpty &&
-                    descriptionController.text.isNotEmpty &&
-                    image != UploaderBloc.uploading) {
+                if (nameController.text.isNotEmpty
+                    && descriptionController.text.isNotEmpty
+                    && image != UploaderBloc.uploading) {
                   try {
                     // TODO: Use the actual user location.
                     // LocationData location = await Location().getLocation();
@@ -238,7 +242,7 @@ class EventActions extends StatelessWidget {
                     ));
                     Navigator.of(context).pop(true);
                   } on PlatformException catch (e) {
-                    if (e.code == 'PERMISSION_DENIED') {
+                    if (e.code == "PERMISSION_DENIED") {
                       Location().requestPermission();
                       SnackBarUtility.show(
                           context, localization.locationPermissionText());
@@ -261,6 +265,7 @@ class EventActions extends StatelessWidget {
 }
 
 class EventAdminCard extends StatelessWidget {
+  final Localization localization;
   final UploaderBloc uploaderBloc;
   final TextEditingController nameController;
   final TextEditingController descriptionController;
@@ -272,6 +277,7 @@ class EventAdminCard extends StatelessWidget {
   final int slots;
 
   EventAdminCard({
+    @required this.localization,
     @required this.uploaderBloc,
     @required this.nameController,
     @required this.descriptionController,
@@ -309,7 +315,7 @@ class EventAdminCard extends StatelessWidget {
                       imageWidget(height > 300 ? height / 2 : height / 4),
                       SizedBox(height: 16.0),
                       Text(
-                        '¿Mínimo de asistentes?',
+                        localization.slotsNumberText(),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15.0,
@@ -379,7 +385,7 @@ class EventAdminCard extends StatelessWidget {
           border: underlineInputBorder(),
           enabledBorder: underlineInputBorder(),
           focusedBorder: underlineInputBorder(Colors.redAccent),
-          hintText: "Beber cerveza, explorar la zona, visitar la catedral ... ",
+          hintText: localization.eventTitleHintText(),
           hintStyle: TextStyle(fontSize: 15.0, color: Colors.grey),
           hintMaxLines: 1,
         ),
@@ -401,7 +407,7 @@ class EventAdminCard extends StatelessWidget {
           color: Colors.black87,
         ),
         decoration: InputDecoration(
-          hintText: "¿Qué propones hacer? ¿Qué idioma hablas?, ¿Qué hora te viene mejor?, ...",
+          hintText: localization.eventBodyHintText(),
           hintStyle: TextStyle(
             fontSize: 15.0,
             color: Colors.grey,

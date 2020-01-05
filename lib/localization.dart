@@ -130,4 +130,160 @@ class Localization {
         name: "userUpdatedText",
         args: [],
       );
+
+  String messageHintText() =>
+      Intl.message(
+        "Write a message",
+        name: "messageHintText",
+        args: [],
+      );
+
+  String slotsNumberText() =>
+      Intl.message(
+        "Minimum number of attendees?",
+        name: "slotsNumberText",
+        args: [],
+      );
+
+  String eventTitleHintText() =>
+      Intl.message(
+        "Have a beer, go for a walk, visit the cathedral ...",
+        name: "eventTitleHintText",
+        args: [],
+      );
+
+  String eventBodyHintText() =>
+      Intl.message(
+        "What would you like to do? What languages do you speak? At what time would you be free?",
+        name: "eventBodyHintText",
+        args: [],
+      );
+
+  String eventExitText(String name) =>
+      Intl.message(
+        "Leave $name",
+        name: "_eventExitText",
+        args: [name],
+      );
+
+  String exitPromtText() =>
+      Intl.message(
+        "Are you sure you want to leave?",
+        name: "exitPromtText",
+        args: [],
+      );
+
+  String exitNoText() =>
+      Intl.message(
+        "NO",
+        name: "exitNoText",
+        args: [],
+      );
+
+  String exitYesText() =>
+      Intl.message(
+        "YES, GET ME OUT!",
+        name: "exitYesText",
+        args: [],
+      );
+
+  String eventEmptyFilledText() =>
+      Intl.message(
+        "Whoops! \n There are no filled events yet. Keep swiping right!",
+        name: "eventEmptyFilledText",
+        args: [],
+      );
+
+  String eventEmptyJoinedText() =>
+      Intl.message(
+        "Whoops! \n You hace not joined any events yet. Keep swiping right!",
+        name: "eventEmptyJoinedText",
+        args: [],
+      );
+
+  String eventEmptyReadText() =>
+      Intl.message(
+        "No more events to check out. \n Why not create your own?",
+        name: "eventEmptyReadText",
+        args: [],
+      );
+
+  String haleoText() =>
+      Intl.message(
+        "Haleo!",
+        name: "haleoText",
+        args: [],
+      );
+
+  String promoText() =>
+      Intl.message(
+        "Find events near you. \n You are only a click away!",
+        name: "promoText",
+        args: [],
+      );
+
+  String signInText() =>
+      Intl.message(
+        "Sign In",
+        name: "signInText",
+        args: [],
+      );
+
+  String shareText(String name, String description) =>
+      Intl.message(
+        "Join this haleo! : *${name}* \n _${description}_ \n Download the app in Google Play!",
+        name: "shareText",
+        args: [name, description],
+      );
+
+  String eventCreatedText() =>
+      Intl.message(
+        "Your event has been created! Now we wait for more attendees.",
+        name: "eventCreatedText",
+        args: [],
+      );
+
+  String attendeesText(int slots, int count) {
+    final int spaces = slots - count;
+    return "${_attendeesCountText(count)} ${_attendeesSpacesText(spaces)}";
+  }
+
+  String _attendeesCountText(int count) =>
+      Intl.plural(
+        count,
+        one: "A total of $count has signed up.",
+        other: "A total of $count have signed up.",
+        name: "_attendeesCountText",
+        args: [count],
+      );
+
+  String _attendeesSpacesText(int spaces) =>
+      Intl.plural(
+        spaces,
+        one: "Only $spaces space remains!",
+        other: "Only $spaces spaces remain!",
+        name: "_attendeesSpacesText",
+        args: [spaces],
+      );
+
+  String createText() =>
+      Intl.message(
+        "Create",
+        name: "createText",
+        args: [],
+      );
+
+  String profileText() =>
+      Intl.message(
+        "Your Face!",
+        name: "profileText",
+        args: [],
+      );
+
+  String yourText() =>
+      Intl.message(
+        "Your",
+        name: "yourText",
+        args: [],
+      );
 }

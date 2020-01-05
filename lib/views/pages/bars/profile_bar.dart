@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../../providers/application_provider.dart';
 import '../../../providers/profile_provider.dart';
 import '../../../blocs/user_admin_bloc.dart';
 import '../../../blocs/user_bloc.dart';
 import '../../../models/user.dart';
 import '../../custom_icons.dart';
 import '../../common_widgets.dart';
+import '../../../localization.dart';
 
 class ProfileBar extends StatelessWidget implements PreferredSizeWidget {
   final TextEditingController nameController;
@@ -24,6 +26,7 @@ class ProfileBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Localization localization = ApplicationProvider.localization(context);
     final UserAdminBloc userAdminBloc = ProfileProvider.userAdminBloc(context);
     final UserBloc userBloc = ProfileProvider.userBloc(context);
     return StreamBuilder(
@@ -38,7 +41,7 @@ class ProfileBar extends StatelessWidget implements PreferredSizeWidget {
             elevation: 0.0,
             leading: leadingWidget(context),
             centerTitle: true,
-            title: titleWidget(),
+            title: titleWidget(localization),
             actions: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(right: 16.0),
@@ -80,16 +83,17 @@ class ProfileBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget titleWidget() {
+  Widget titleWidget(Localization localization) {
     return RichText(
         text: TextSpan(
-      text: "¡Tu Cara!",
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        color: Color(0xFF424242),
-        fontSize: 24.0,
+        text: localization.profileText(),
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF424242),
+          fontSize: 24.0,
+        ),
       ),
-    ));
+    );
   }
 
   Widget leadingWidget(BuildContext context) {

@@ -7,6 +7,7 @@ import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:share/share.dart';
 
+import '../../../providers/application_provider.dart';
 import '../../../providers/perimeter_events_provider.dart';
 import '../../../blocs/perimeter_events_bloc.dart';
 import '../../../models/event.dart';
@@ -16,6 +17,7 @@ import '../../common_widgets.dart';
 import '../../custom_icons.dart';
 import '../event_admin_page.dart';
 import '../../../utility.dart';
+import '../../../localization.dart';
 
 class EventsCardsBody extends StatefulWidget {
   @override
@@ -42,7 +44,8 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
 
   @override
   Widget build(BuildContext context) {
-    final eventsBloc = PerimeterEventsProvider.eventsBloc(context);
+    final Localization localization = ApplicationProvider.localization(context);
+    final PerimeterEventsBloc eventsBloc = PerimeterEventsProvider.eventsBloc(context);
     return StreamBuilder(
       stream: eventsBloc.eventsStream,
       builder: (BuildContext context,
@@ -56,6 +59,7 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
               if (snapshot.data != null) {
                 final Map<String, User> users = snapshot.data;
                 return EventsHandler(
+                  localization: localization,
                   eventsBloc: eventsBloc,
                   events: events,
                   users: users,
@@ -75,11 +79,13 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
 }
 
 class EventsHandler extends StatefulWidget {
+  final Localization localization;
   final PerimeterEventsBloc eventsBloc;
   final Map<String, Event> events;
   final Map<String, User> users;
 
   EventsHandler({
+    @required this.localization,
     @required this.eventsBloc,
     @required this.events,
     @required this.users,
@@ -89,8 +95,7 @@ class EventsHandler extends StatefulWidget {
   _EventsHandlerState createState() => _EventsHandlerState();
 }
 
-class _EventsHandlerState extends State<EventsHandler>
-    with TickerProviderStateMixin {
+class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateMixin {
   AnimationController animationController;
   LinkedHashMap<String, Event> events;
   String eventKey;
@@ -133,13 +138,18 @@ class _EventsHandlerState extends State<EventsHandler>
     final double width = MediaQuery.of(context).size.width;
     final String next = events.keys.firstWhere((key) =>
     key != eventKey, orElse: () => null);
-    Widget backgroundCard = next != null ? EventCard(eventKey: next,
-        event: events[next], users: widget.users) : EmptyCard();
+    Widget backgroundCard = next != null
+        ? EventCard(localization: widget.localization,
+            eventKey: next, event: events[next],
+            users: widget.users)
+        : EmptyCard(widget.localization);
     Widget foregroundCard = eventKey != null ? SwipeWrapper(
         animationController: animationController, onSwipe: onSwipe,
         direction: direction, height: height, width: width,
-        child: EventCard(eventKey: eventKey, event: events[eventKey],
-        users: widget.users)) : EmptyCard();
+        child: EventCard(localization: widget.localization,
+            eventKey: eventKey, event: events[eventKey],
+            users: widget.users),
+    ) : EmptyCard(widget.localization);
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Column(
@@ -170,6 +180,7 @@ class _EventsHandlerState extends State<EventsHandler>
             ),
           ),
           EventActions(
+            localization: widget.localization,
             onSwipe: onSwipe,
             eventKey: eventKey,
           ),
@@ -206,10 +217,12 @@ class _EventsHandlerState extends State<EventsHandler>
 }
 
 class EventActions extends StatelessWidget {
+  final Localization localization;
   final void Function(bool) onSwipe;
   final String eventKey;
 
   EventActions({
+    @required this.localization,
     this.onSwipe,
     this.eventKey,
   });
@@ -256,8 +269,7 @@ class EventActions extends StatelessWidget {
               onPressed: () async {
                 Navigator.push(context, FadeRoute<bool>(EventAdminPage()))
                     .then((result) => (result ?? false) ? SnackBarUtility
-                    .show(context, "¡Evento creado con éxito! Ahora a"
-                    " esperar a tus invitados.") : null);
+                    .show(context, localization.eventCreatedText()) : null);
               },
             ),
           ),
@@ -340,7 +352,7 @@ class SwipeWrapper extends StatelessWidget {
     return GestureDetector(
       onHorizontalDragEnd: (DragEndDetails details) {
         double speed = details.velocity.pixelsPerSecond.dx;
-        if (speed.abs() < 500.0) return;
+        if (speed.abs() == 0.0) return;
         onSwipe(speed > 0);
       },
       child: AlignPositioned(
@@ -356,6 +368,7 @@ class SwipeWrapper extends StatelessWidget {
 }
 
 class EventCard extends StatelessWidget {
+  final Localization localization;
   final Map<String, User> users;
   final String eventKey;
   final Event event;
@@ -363,6 +376,7 @@ class EventCard extends StatelessWidget {
   final double width;
 
   EventCard({
+    @required this.localization,
     @required this.users,
     @required this.eventKey,
     @required this.event,
@@ -372,7 +386,7 @@ class EventCard extends StatelessWidget {
 
   String _randomImage(String eventName) {
     int assetNumber = eventName.length % 6;
-    String asset = 'assets/images/event_' + assetNumber.toString() + ".png";
+    String asset = "assets/images/event_" + assetNumber.toString() + ".png";
     return asset;
   }
 
@@ -445,11 +459,8 @@ class EventCard extends StatelessWidget {
                             colorB: Color(0xff348ac7),
                           ),
                           onPressed: () {
-                            Share.share("¡Únete a este haleo! : *" +
-                                event.name +
-                                "* \n _" +
-                                event.description +
-                                "_  \n ¡Descarga ya la app en Google Play!"); // TODO: google play link
+                            Share.share(localization.shareText(event.name,
+                                event.description)); // TODO: Google Play link.
                           },
                         ),
                       ),
@@ -496,8 +507,6 @@ class EventCard extends StatelessWidget {
       if (keys.length > 3) avatars.add(userAvatar(users[keys[3]], 32.0));
     }
 
-    final int spaces = event.slots - event.count;
-
     return Column(
       children: <Widget>[
         Row(
@@ -508,11 +517,9 @@ class EventCard extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(8.0),
           child: Text(
-            '¡Se apunt${event.count > 1 ? 'aron' : 'ó'} '
-            '${event.count} y solo queda${spaces > 1 ? 'n' : ''} '
-            '$spaces hueco${spaces > 1 ? 's' : ''}!',
-            textAlign: TextAlign.center,
+            localization.attendeesText(event.slots, event.count),
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0),
+            textAlign: TextAlign.center,
           ),
         ),
       ],
@@ -547,6 +554,10 @@ class EventCard extends StatelessWidget {
 }
 
 class EmptyCard extends StatelessWidget {
+  final Localization localization;
+
+  EmptyCard(this.localization);
+
   @override
   Widget build(BuildContext context) {
     return ColoredCard(
@@ -556,11 +567,11 @@ class EmptyCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Image.asset('assets/images/hangout.png'),
+          Image.asset("assets/images/hangout.png"),
           Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
-              'No te quedan más eventos por ver. \n ¡Crea el tuyo!',
+              localization.eventEmptyReadText(),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold,

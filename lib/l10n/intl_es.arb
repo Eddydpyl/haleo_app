@@ -69,5 +69,112 @@
   "@userUpdatedText": {
     "type": "text",
     "placeholders": {}
+  },
+  "messageHintText": "Escribe un mensaje",
+  "@messageHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "slotsNumberText": "¿Número mínimo de participantes?",
+  "@slotsNumberText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "eventTitleHintText": "Tomar una cerbeza, darse un paseo, visitar la catedral ...",
+  "@eventTitleHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "eventBodyHintText": "Qué te apetece hacer? Qué lenguajes hablas? Cuándo te viene mejor quedar?",
+  "@eventBodyHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "exitPromtText": "¿Seguro que quieres salirte?",
+  "@exitPromtText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "exitNoText": "NO",
+  "@exitNoText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "exitYesText": "SI",
+  "@exitYesText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "eventEmptyFilledText": "Oops! \n Aún no hay ningún evento cerrado. ¡Sigue haciendo swipe right!",
+  "@eventEmptyFilledText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "eventEmptyJoinedText": "Oops! \n Aún no te has apuntado a ningún evento. ¡Sigue haciendo swipe right!",
+  "@eventEmptyJoinedText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "eventEmptyReadText": "No hay más eventos. \n ¿Por qué no creas el tuyo propio?",
+  "@eventEmptyReadText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "haleoText": "¡Haleo!",
+  "@haleoText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "promoText": "Encuentra eventos cerca de ti. \n ¡Estás a un click de distancia!",
+  "@promoText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signInText": "Sign In",
+  "@signInText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shareText": "¡Únete a este haleo! : *{name}* \n _{description}_ \n ¡Descarga la app en Google Play!",
+  "@shareText": {
+    "type": "text",
+    "placeholders": {
+      "name": {},
+      "description": {}
+    }
+  },
+  "eventCreatedText": "¡Se ha creado tu evento! Ahora a esperar a que la gente se apunte.",
+  "@eventCreatedText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "_attendeesCountText": "{count,plural, =1{Se han apuntado {count}.}other{Se ha apuntado {count}.}}",
+  "@_attendeesCountText": {
+    "type": "text",
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "_attendeesSpacesText": "{spaces,plural, =1{¡Solo quedan {spaces} sitios!}other{¡Solo queda {spaces} sitio!}}",
+  "@_attendeesSpacesText": {
+    "type": "text",
+    "placeholders": {
+      "spaces": {}
+    }
+  },
+  "createText": "Armar",
+  "@createText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "profileText": "Tu Cara!",
+  "@profileText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "yourText": "Tu",
+  "@yourText": {
+    "type": "text",
+    "placeholders": {}
   }
 }

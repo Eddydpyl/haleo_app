@@ -81,27 +81,22 @@ class EventTile extends StatelessWidget {
             height: 64,
             width: 64,
           ),
-          // TODO: align trailing to the right so that it has the same padding as profile icon in bar
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: unread
-                    ? Container(
-                        width: 16,
-                        height: 16,
-                        decoration: BoxDecoration(
-                          color: Colors.lightGreen,
-                          shape: BoxShape.circle,
-                        ),
-                      )
-                    : Container(width: 0.0),
-              ),
-              IconButton(
-                icon: Icon(Icons.cancel, color: Colors.redAccent),
-                onPressed: () =>
-                    leaveDialog(context, eventKey, event, userEventsBloc),
+              unread ? Container(
+                width: 16,
+                height: 16,
+                decoration: BoxDecoration(
+                  color: Colors.lightGreen,
+                  shape: BoxShape.circle,
+                ),
+              ) : Container(width: 0.0),
+              FlatButton(
+                padding: EdgeInsets.only(left: 16.0),
+                child: Icon(Icons.cancel, color: Colors.redAccent),
+                onPressed: () => leaveDialog(context,
+                    eventKey, event, userEventsBloc),
               ),
             ],
           ),

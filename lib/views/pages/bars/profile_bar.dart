@@ -95,7 +95,7 @@ class ProfileBar extends StatelessWidget implements PreferredSizeWidget {
   Widget leadingWidget(BuildContext context) {
     return PaintGradient(
       child: IconButton(
-        icon: Icon(editing ? Icons.clear : CustomIcons.left_big),
+        icon: Icon(editing ? CustomIcons.cancel_1 : CustomIcons.left_big),
         onPressed: () => editing ? edit(false) : Navigator.of(context).pop(),
       ),
       colorA: Color(0xfffa6b40),

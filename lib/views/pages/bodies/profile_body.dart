@@ -226,21 +226,23 @@ class _ProfileListState extends State<ProfileList> {
             radius: radius,
             backgroundColor: Colors.white,
             child: TransitionToImage(
+              width: double.maxFinite,
+              height: double.maxFinite,
               fit: BoxFit.cover,
               borderRadius: BorderRadius.circular(radius),
-              placeholder: InitialsText(widget.user.name),
-              loadingWidget: InitialsText(widget.user.name),
+              placeholder: InitialsText(widget.user.name, radius / 2),
+              loadingWidget: InitialsText(widget.user.name, radius / 2),
               image: AdvancedNetworkImage(
                 widget.path ?? widget.user.image,
                 useDiskCache: true,
                 timeoutDuration: Duration(seconds: 5),
               ),
             ),
-            )
+          )
           : CircleAvatar(
             radius: radius,
             backgroundColor: Colors.white,
-            child: InitialsText(widget.user.name),
+            child: InitialsText(widget.user.name, radius / 2),
           ),
       onTap: () async {
         if (widget.editing) {
@@ -250,6 +252,15 @@ class _ProfileListState extends State<ProfileList> {
               .fileSink.add(file.readAsBytesSync());
         }
       },
+    );
+  }
+
+  UnderlineInputBorder underlineInputBorder([Color color = Colors.grey]) {
+    return UnderlineInputBorder(
+      borderSide: BorderSide(
+        color: color,
+        width: 2.0,
+      ),
     );
   }
 
@@ -289,7 +300,6 @@ class EventTile extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          // TODO: align trailing to the right so that it has the same padding as profile icon in bar
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -302,6 +312,7 @@ class EventTile extends StatelessWidget {
                 ),
               ),
               FlatButton(
+                padding: EdgeInsets.only(left: 16.0),
                 shape: CircleBorder(),
                 child: PaintGradient(
                   child: Icon(Icons.share),
@@ -348,7 +359,8 @@ class EventTile extends StatelessWidget {
                 ],
               ),
             ),
-          ]..addAll(event.attendees.map((String key) => userTile(users[key])))
+          ]..addAll(event.attendees.map((String key) =>
+              userTile(context, users[key])))
            ..add(SizedBox(height: 16.0)),
         ),
         SizedBox(
@@ -359,15 +371,17 @@ class EventTile extends StatelessWidget {
     );
   }
 
-  Widget userTile(User user) {
+  Widget userTile(BuildContext context, User user) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0),
       child: ListTile(
         leading: CircleAvatar(
           radius: 24.0,
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           child: (user.image?.isNotEmpty ?? false)
               ? TransitionToImage(
+                  width: double.maxFinite,
+                  height: double.maxFinite,
                   fit: BoxFit.cover,
                   borderRadius: BorderRadius.circular(24.0),
                   placeholder: InitialsText(user.name),
@@ -421,13 +435,4 @@ class EmptyWidget extends StatelessWidget {
       ),
     );
   }
-}
-
-UnderlineInputBorder underlineInputBorder([Color color = Colors.grey]) {
-  return UnderlineInputBorder(
-    borderSide: BorderSide(
-      color: color,
-      width: 2.0,
-    ),
-  );
 }

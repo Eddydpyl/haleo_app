@@ -7,8 +7,9 @@ import 'package:flutter_advanced_networkimage/transition.dart';
 
 class InitialsText extends StatelessWidget {
   final String text;
+  final double size;
 
-  InitialsText(this.text);
+  InitialsText(this.text, [this.size = 14.0]);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class InitialsText extends StatelessWidget {
       text.length >= 2
           ? text.substring(0, 2).toUpperCase()
           : text.toUpperCase(),
-      style: TextStyle(color: Colors.red),
+      style: TextStyle(color: Colors.red, fontSize: size),
     );
   }
 }

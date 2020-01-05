@@ -48,6 +48,8 @@ class DefaultBar extends StatelessWidget {
                       radius: 22.0,
                       backgroundColor: Colors.white,
                       child: TransitionToImage(
+                        width: 28.0,
+                        height: 28.0,
                         fit: BoxFit.cover,
                         borderRadius: BorderRadius.circular(22.0),
                         placeholder: InitialsText(user.name),

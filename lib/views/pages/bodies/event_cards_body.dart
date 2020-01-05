@@ -525,6 +525,8 @@ class EventCard extends StatelessWidget {
             radius: size / 2,
             backgroundColor: Colors.white,
             child: TransitionToImage(
+              width: double.maxFinite,
+              height: double.maxFinite,
               fit: BoxFit.cover,
               borderRadius: BorderRadius.circular(22.0),
               placeholder: InitialsText(user.name),

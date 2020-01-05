@@ -368,7 +368,6 @@ class EventTile extends StatelessWidget {
         SizedBox(
           height: 4.0,
         ),
-        Divider(),
       ],
     );
   }

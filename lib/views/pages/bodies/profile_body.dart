@@ -267,13 +267,16 @@ class _ProfileListState extends State<ProfileList> {
                   width: radius * 2,
                   height: radius * 2,
                   decoration: BoxDecoration(
-                    color: Colors.white24,
+                    color: Colors.white54,
                     borderRadius: BorderRadius.circular(radius),
                   ),
-                  child: Icon(
-                    Icons.photo,
-                    size: 32.0,
-                    color: Colors.redAccent,
+                  child: PaintGradient(
+                    child: Icon(
+                      Icons.photo,
+                      size: 32.0,
+                    ),
+                    colorA: Color(0xfffa6b40),
+                    colorB: Color(0xfffd1d1d),
                   ),
                 )
               : Container(height: 0.0),

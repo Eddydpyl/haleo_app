@@ -128,8 +128,7 @@ class _ProfileListState extends State<ProfileList> {
     super.didChangeDependencies();
     if (!init) {
       subscription = ProfileProvider.uploaderBloc(context)
-          .pathStream
-          .listen((String path) => widget.upload(path));
+          .pathStream.listen((String path) => widget.upload(path));
       init = true;
     }
   }
@@ -140,10 +139,8 @@ class _ProfileListState extends State<ProfileList> {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     final List<String> sorted = List.from(widget.events.keys)
-      ..sort((String a, String b) =>
-          widget.events[b].lastMessage
-              ?.compareTo(widget.events[a].lastMessage ?? "") ??
-          -1);
+      ..sort((String a, String b) => widget.events[b].lastMessage
+          ?.compareTo(widget.events[a].lastMessage ?? "") ?? -1);
     return Column(children: <Widget>[
       Padding(
         padding: EdgeInsets.only(top: 8.0),
@@ -236,32 +233,30 @@ class _ProfileListState extends State<ProfileList> {
       child: Stack(
         alignment: AlignmentDirectional.center,
         children: <Widget>[
-          Center(
-            child: ((widget.path?.isNotEmpty ?? false) ||
-                    (widget.user.image?.isNotEmpty ?? false))
-                ? CircleAvatar(
-                    radius: radius,
-                    backgroundColor: Colors.white,
-                    child: TransitionToImage(
-                      width: double.maxFinite,
-                      height: double.maxFinite,
-                      fit: BoxFit.cover,
-                      borderRadius: BorderRadius.circular(radius),
-                      placeholder: InitialsText(widget.user.name, radius / 2),
-                      loadingWidget: InitialsText(widget.user.name, radius / 2),
-                      image: AdvancedNetworkImage(
-                        widget.path ?? widget.user.image,
-                        useDiskCache: true,
-                        timeoutDuration: Duration(seconds: 5),
-                      ),
+          ((widget.path?.isNotEmpty ?? false)
+              || (widget.user.image?.isNotEmpty ?? false))
+              ? CircleAvatar(
+                  radius: radius,
+                  backgroundColor: Colors.white,
+                  child: TransitionToImage(
+                    width: double.maxFinite,
+                    height: double.maxFinite,
+                    fit: BoxFit.cover,
+                    borderRadius: BorderRadius.circular(radius),
+                    placeholder: InitialsText(widget.user.name, radius / 2),
+                    loadingWidget: InitialsText(widget.user.name, radius / 2),
+                    image: AdvancedNetworkImage(
+                      widget.path ?? widget.user.image,
+                      useDiskCache: true,
+                      timeoutDuration: Duration(seconds: 5),
                     ),
-                  )
-                : CircleAvatar(
-                    radius: radius,
-                    backgroundColor: Colors.white,
-                    child: InitialsText(widget.user.name, radius / 2),
                   ),
-          ),
+                )
+              : CircleAvatar(
+                  radius: radius,
+                  backgroundColor: Colors.white,
+                  child: InitialsText(widget.user.name, radius / 2),
+                ),
           widget.editing
               ? Container(
                   width: radius * 2,
@@ -286,10 +281,8 @@ class _ProfileListState extends State<ProfileList> {
         if (widget.editing) {
           File file = await ImagePicker.pickImage(
               source: ImageSource.gallery, maxHeight: 1500, maxWidth: 1500);
-          if (file != null)
-            ProfileProvider.uploaderBloc(context)
-                .fileSink
-                .add(file.readAsBytesSync());
+          if (file != null) ProfileProvider.uploaderBloc(context)
+              .fileSink.add(file.readAsBytesSync());
         }
       },
     );
@@ -399,8 +392,8 @@ class EventTile extends StatelessWidget {
               ),
             ),
           ]
-            ..addAll(event.attendees
-                .map((String key) => userTile(context, users[key])))
+            ..addAll(event.attendees.map((String key) =>
+                userTile(context, users[key])))
             ..add(SizedBox(height: 16.0)),
         ),
         SizedBox(

@@ -42,30 +42,35 @@ class EventBloc extends BaseBloc {
     _users = LenientSubject(ignoreRepeated: false);
     _eventKey = LenientSubject(ignoreRepeated: true);
 
-    _messages.stream.listen((Map<String, Message> messages) async {
-      if (messages != null) {
-        Map<String, User> users = _users.value ?? Map();
-        for (Message message in messages.values) {
-          if (!users.containsKey(message.user)) {
-            User user = await _databaseManager
-                .userRepository().read(message.user);
-            users[message.user] = user;
-          }
-        } _users.add(users);
-      }
-    });
     _eventKey.stream.listen((String key) {
-      if (key?.isNotEmpty ?? false) {
-        _eventSubscription?.cancel();
-        _eventSubscription = _databaseManager
-            .eventRepository().valueStream(key)
-            .listen((event) => _event.add(event));
-        _messagesSubscription?.cancel();
-        _messagesSubscription = _databaseManager
-            .messageRepository(key).collectionStream()
-            .listen((data) => _messages.add(data ?? Map()));
+      if (key?.isNotEmpty ?? false)
+        _updateProviders(key);
+    });
+  }
+
+  void _updateProviders(String key) {
+    _eventSubscription?.cancel();
+    _eventSubscription = _databaseManager.eventRepository()
+        .valueStream(key).listen((event) {
+      if (event != null) {
+        Map<String, User> users = _users.value ?? Map();
+        List<Future> futures = List();
+        for (String uid in event.value.attendees) {
+          if (!users.keys.contains(uid)) {
+            futures.add(_databaseManager.userRepository()
+                .read(uid).then((User user) => users[uid] = user));
+          }
+        }
+        Future.wait(futures).then((_) {
+          _event.add(event);
+          _users.add(users);
+        });
       }
     });
+    _messagesSubscription?.cancel();
+    _messagesSubscription = _databaseManager
+        .messageRepository(key).collectionStream()
+        .listen((data) => _messages.add(data ?? Map()));
   }
 
   @override

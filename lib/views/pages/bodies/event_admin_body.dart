@@ -377,7 +377,6 @@ class EventAdminCard extends StatelessWidget {
         controller: controller,
         keyboardType: TextInputType.text,
         style: TextStyle(
-          fontWeight: FontWeight.bold,
           fontSize: 20.0,
           color: Colors.black87,
         ),
@@ -402,7 +401,6 @@ class EventAdminCard extends StatelessWidget {
         controller: controller,
         keyboardType: TextInputType.text,
         style: TextStyle(
-          fontWeight: FontWeight.bold,
           fontSize: 15.0,
           color: Colors.black87,
         ),

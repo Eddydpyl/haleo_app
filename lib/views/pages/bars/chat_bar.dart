@@ -38,25 +38,30 @@ class ChatBar extends StatelessWidget implements PreferredSizeWidget {
                       final String userKey = snapshot.data.key;
                       final User user = snapshot.data.value;
                       return DefaultBar(
-                        title: titleWidget(context, localization,
-                            eventKey, event, users),
+                        title: titleWidget(
+                            context, localization, eventKey, event, users),
                         leading: leadingWidget(context),
                         userKey: userKey,
                         user: user,
                       );
-                    } else return Container();
+                    } else
+                      return Container();
                   },
                 );
-              } else return Container();
+              } else
+                return Container();
             },
           );
-        } else return Container();
+        } else
+          return Container();
       },
     );
   }
 
   Widget titleWidget(BuildContext context, Localization localization,
       String key, Event event, Map<String, User> users) {
+    double height = MediaQuery.of(context).size.height;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -72,7 +77,10 @@ class ChatBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         FlatButton(
           shape: CircleBorder(),
-          child: Icon(Icons.info),
+          child: Icon(
+            Icons.info,
+            color: Color(0xFF424242),
+          ),
           onPressed: () {
             showDialog(
               context: context,
@@ -81,6 +89,7 @@ class ChatBar extends StatelessWidget implements PreferredSizeWidget {
                   backgroundColor: Colors.transparent,
                   contentPadding: const EdgeInsets.only(),
                   content: EventCard(
+                    height: height * 0.75,
                     localization: localization,
                     eventKey: key,
                     event: event,

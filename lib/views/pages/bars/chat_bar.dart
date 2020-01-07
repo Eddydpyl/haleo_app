@@ -38,8 +38,8 @@ class ChatBar extends StatelessWidget implements PreferredSizeWidget {
                       final String userKey = snapshot.data.key;
                       final User user = snapshot.data.value;
                       return DefaultBar(
-                        title: titleWidget(
-                            context, localization, eventKey, event, users),
+                        title: titleWidget(context, localization,
+                            eventKey, event, users),
                         leading: leadingWidget(context),
                         userKey: userKey,
                         user: user,

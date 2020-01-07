@@ -148,14 +148,14 @@
     "type": "text",
     "placeholders": {}
   },
-  "_attendeesCountText": "{count,plural, =1{Se han apuntado {count}.}other{Se ha apuntado {count}.}}",
+  "_attendeesCountText": "{count,plural, =1{Se ha apuntado {count}.}other{Se han apuntado {count}.}}",
   "@_attendeesCountText": {
     "type": "text",
     "placeholders": {
       "count": {}
     }
   },
-  "_attendeesSpacesText": "{spaces,plural, =1{¡Solo quedan {spaces} sitios!}other{¡Solo queda {spaces} sitio!}}",
+  "_attendeesSpacesText": "{spaces,plural, =1{¡Solo queda {spaces} sitio!}other{¡Solo quedan {spaces} sitios!}}",
   "@_attendeesSpacesText": {
     "type": "text",
     "placeholders": {

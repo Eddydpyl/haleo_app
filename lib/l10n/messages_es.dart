@@ -18,9 +18,9 @@ typedef MessageIfAbsent(String message_str, List args);
 class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'es';
 
-  static m0(count) => "${Intl.plural(count, one: 'Se han apuntado ${count}.', other: 'Se ha apuntado ${count}.')}";
+  static m0(count) => "${Intl.plural(count, one: 'Se ha apuntado ${count}.', other: 'Se han apuntado ${count}.')}";
 
-  static m1(spaces) => "${Intl.plural(spaces, one: '¡Solo quedan ${spaces} sitios!', other: '¡Solo queda ${spaces} sitio!')}";
+  static m1(spaces) => "${Intl.plural(spaces, one: '¡Solo queda ${spaces} sitio!', other: '¡Solo quedan ${spaces} sitios!')}";
 
   static m2(name, description) => "¡Únete a este haleo! : *${name}* \n _${description}_ \n ¡Descarga la app en Google Play!";
 

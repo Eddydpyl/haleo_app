@@ -128,7 +128,8 @@ class _ProfileListState extends State<ProfileList> {
     super.didChangeDependencies();
     if (!init) {
       subscription = ProfileProvider.uploaderBloc(context)
-          .pathStream.listen((String path) => widget.upload(path));
+          .pathStream
+          .listen((String path) => widget.upload(path));
       init = true;
     }
   }
@@ -139,8 +140,10 @@ class _ProfileListState extends State<ProfileList> {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     final List<String> sorted = List.from(widget.events.keys)
-      ..sort((String a, String b) => widget.events[b].lastMessage
-          ?.compareTo(widget.events[a].lastMessage ?? "") ?? -1);
+      ..sort((String a, String b) =>
+          widget.events[b].lastMessage
+              ?.compareTo(widget.events[a].lastMessage ?? "") ??
+          -1);
     return Column(children: <Widget>[
       Padding(
         padding: EdgeInsets.only(top: 8.0),
@@ -150,109 +153,143 @@ class _ProfileListState extends State<ProfileList> {
         padding: EdgeInsets.symmetric(horizontal: 32.0),
         child: widget.editing
             ? TextFormField(
-              controller: widget.nameController,
-              keyboardType: TextInputType.text,
-              textCapitalization: TextCapitalization.words,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              inputFormatters: [LengthLimitingTextInputFormatter(25)],
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF424242),
-                fontSize: 20.0,
-              ),
-              decoration: InputDecoration(
-                border: underlineInputBorder(),
-                enabledBorder: underlineInputBorder(),
-                focusedBorder: underlineInputBorder(Colors.redAccent),
-              ),
-            )
-            : Padding(
-              padding: EdgeInsets.only(top: 8.0),
-              child: Text(
-                widget.user.name ?? "",
+                controller: widget.nameController,
+                keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.words,
                 textAlign: TextAlign.center,
+                maxLines: 1,
+                inputFormatters: [LengthLimitingTextInputFormatter(25)],
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF424242),
                   fontSize: 20.0,
                 ),
+                decoration: InputDecoration(
+                  border: underlineInputBorder(),
+                  enabledBorder: underlineInputBorder(),
+                  focusedBorder: underlineInputBorder(Colors.redAccent),
+                ),
+              )
+            : Padding(
+                padding: EdgeInsets.only(top: 8.0),
+                child: Text(
+                  widget.user.name ?? "",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF424242),
+                    fontSize: 20.0,
+                  ),
+                ),
               ),
-            ),
       ),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 32.0),
         child: widget.editing
             ? TextFormField(
-              controller: widget.descriptionController,
-              keyboardType: TextInputType.text,
-              textCapitalization: TextCapitalization.sentences,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              maxLength: 70,
-              inputFormatters: [LengthLimitingTextInputFormatter(70)],
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 14.0,
-              ),
-              decoration: InputDecoration(
-                border: underlineInputBorder(),
-                enabledBorder: underlineInputBorder(),
-                focusedBorder: underlineInputBorder(Colors.redAccent),
-              ),
-            )
-            : Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: Text(
-                widget.user.description ?? "",
+                controller: widget.descriptionController,
+                keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.sentences,
                 textAlign: TextAlign.center,
+                maxLines: 2,
+                maxLength: 70,
+                inputFormatters: [LengthLimitingTextInputFormatter(70)],
                 style: TextStyle(
                   color: Colors.black54,
                   fontSize: 14.0,
                 ),
+                decoration: InputDecoration(
+                  border: underlineInputBorder(),
+                  enabledBorder: underlineInputBorder(),
+                  focusedBorder: underlineInputBorder(Colors.redAccent),
+                ),
+              )
+            : Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(
+                  widget.user.description ?? "",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 14.0,
+                  ),
+                ),
               ),
-            ),
       ),
-      sorted.isNotEmpty ? Expanded(
-        child: ListView(children: sorted.map((String key) =>
-            EventTile(localization: localization, users: widget.users,
-                eventKey: key, event: widget.events[key])).toList()),
-      ) : EmptyWidget(localization),
+      sorted.isNotEmpty
+          ? Expanded(
+              child: ListView(
+                  children: sorted
+                      .map((String key) => EventTile(
+                          localization: localization,
+                          users: widget.users,
+                          eventKey: key,
+                          event: widget.events[key]))
+                      .toList()),
+            )
+          : EmptyWidget(localization),
     ]);
   }
 
   Widget profileImage(double radius) {
     return GestureDetector(
-      child: ((widget.path?.isNotEmpty ?? false)
-          || (widget.user.image?.isNotEmpty ?? false))
-          ? CircleAvatar(
-            radius: radius,
-            backgroundColor: Colors.white,
-            child: TransitionToImage(
-              width: double.maxFinite,
-              height: double.maxFinite,
-              fit: BoxFit.cover,
-              borderRadius: BorderRadius.circular(radius),
-              placeholder: InitialsText(widget.user.name, radius / 2),
-              loadingWidget: InitialsText(widget.user.name, radius / 2),
-              image: AdvancedNetworkImage(
-                widget.path ?? widget.user.image,
-                useDiskCache: true,
-                timeoutDuration: Duration(seconds: 5),
-              ),
-            ),
-          )
-          : CircleAvatar(
-            radius: radius,
-            backgroundColor: Colors.white,
-            child: InitialsText(widget.user.name, radius / 2),
+      child: Stack(
+        alignment: AlignmentDirectional.center,
+        children: <Widget>[
+          Center(
+            child: ((widget.path?.isNotEmpty ?? false) ||
+                    (widget.user.image?.isNotEmpty ?? false))
+                ? CircleAvatar(
+                    radius: radius,
+                    backgroundColor: Colors.white,
+                    child: TransitionToImage(
+                      width: double.maxFinite,
+                      height: double.maxFinite,
+                      fit: BoxFit.cover,
+                      borderRadius: BorderRadius.circular(radius),
+                      placeholder: InitialsText(widget.user.name, radius / 2),
+                      loadingWidget: InitialsText(widget.user.name, radius / 2),
+                      image: AdvancedNetworkImage(
+                        widget.path ?? widget.user.image,
+                        useDiskCache: true,
+                        timeoutDuration: Duration(seconds: 5),
+                      ),
+                    ),
+                  )
+                : CircleAvatar(
+                    radius: radius,
+                    backgroundColor: Colors.white,
+                    child: InitialsText(widget.user.name, radius / 2),
+                  ),
           ),
+          widget.editing
+              ? Container(
+                  width: radius * 2,
+                  height: radius * 2,
+                  decoration: BoxDecoration(
+                    color: Colors.white54,
+                    borderRadius: BorderRadius.circular(radius),
+                  ),
+                  child: PaintGradient(
+                    child: Icon(
+                      Icons.photo,
+                      size: 32.0,
+                    ),
+                    colorA: Color(0xfffa6b40),
+                    colorB: Color(0xfffd1d1d),
+                  ),
+                )
+              : Container(height: 0.0),
+        ],
+      ),
       onTap: () async {
         if (widget.editing) {
           File file = await ImagePicker.pickImage(
               source: ImageSource.gallery, maxHeight: 1500, maxWidth: 1500);
-          if (file != null) ProfileProvider.uploaderBloc(context)
-              .fileSink.add(file.readAsBytesSync());
+          if (file != null)
+            ProfileProvider.uploaderBloc(context)
+                .fileSink
+                .add(file.readAsBytesSync());
         }
       },
     );
@@ -361,14 +398,14 @@ class EventTile extends StatelessWidget {
                 ],
               ),
             ),
-          ]..addAll(event.attendees.map((String key) =>
-              userTile(context, users[key])))
-           ..add(SizedBox(height: 16.0)),
+          ]
+            ..addAll(event.attendees
+                .map((String key) => userTile(context, users[key])))
+            ..add(SizedBox(height: 16.0)),
         ),
         SizedBox(
           height: 4.0,
         ),
-        Divider(),
       ],
     );
   }

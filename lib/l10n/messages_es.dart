@@ -39,7 +39,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "eventEmptyFilledText" : MessageLookupByLibrary.simpleMessage("Oops! \n Aún no hay ningún evento cerrado. ¡Sigue haciendo swipe right!"),
     "eventEmptyJoinedText" : MessageLookupByLibrary.simpleMessage("Oops! \n Aún no te has apuntado a ningún evento. ¡Sigue haciendo swipe right!"),
     "eventEmptyReadText" : MessageLookupByLibrary.simpleMessage("No hay más eventos. \n ¿Por qué no creas el tuyo propio?"),
-    "eventTitleHintText" : MessageLookupByLibrary.simpleMessage("Tomar una cerbeza, darse un paseo, visitar la catedral ..."),
+    "eventTitleHintText" : MessageLookupByLibrary.simpleMessage("Tomar una cerveza, darse un paseo, visitar la catedral ..."),
     "exitNoText" : MessageLookupByLibrary.simpleMessage("NO"),
     "exitPromtText" : MessageLookupByLibrary.simpleMessage("¿Seguro que quieres salirte?"),
     "exitYesText" : MessageLookupByLibrary.simpleMessage("SI"),

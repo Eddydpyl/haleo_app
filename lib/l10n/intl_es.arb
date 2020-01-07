@@ -80,7 +80,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "eventTitleHintText": "Tomar una cerbeza, darse un paseo, visitar la catedral ...",
+  "eventTitleHintText": "Tomar una cerveza, darse un paseo, visitar la catedral ...",
   "@eventTitleHintText": {
     "type": "text",
     "placeholders": {}

@@ -93,7 +93,8 @@ class EventRepository {
       DocumentSnapshot snapshot = await transaction.get(reference);
       Event event = snapshot?.data != null ? Event.fromRaw(snapshot.data) : null;
       if (!(event?.open ?? false)) throw FailedException(Localization().eventClosedText());
-      Event update = Event(attendees: [uid], count: (event?.count ?? 0) + 1);
+      Set<String> attendees = Set.from(event?.attendees ?? [])..add(uid);
+      Event update = Event(attendees: [uid], count: attendees.length);
       transaction.update(reference, update.toJson(true, true));
     });
   }
@@ -103,8 +104,9 @@ class EventRepository {
     return _database.runTransaction((Transaction transaction) async {
       DocumentSnapshot snapshot = await transaction.get(reference);
       Event event = snapshot?.data != null ? Event.fromRaw(snapshot.data) : null;
-      Event update = Event(open: (event?.user?.length ?? 0) > 1,
-          attendees: [uid], count: (event?.count ?? 0) - 1);
+      Set<String> attendees = Set.from(event?.attendees ?? [])..remove(uid);
+      Event update = Event(open: attendees.length > 0,
+          attendees: [uid], count: attendees.length);
       transaction.update(reference, update.toJson(true, false));
     });
   }

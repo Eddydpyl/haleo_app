@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-01-05T15:17:33.682866",
+  "@@last_modified": "2020-01-07T18:32:42.312062",
   "invalidEmailText": "The email address is not valid.",
   "@invalidEmailText": {
     "type": "text",
@@ -90,6 +90,13 @@
     "type": "text",
     "placeholders": {}
   },
+  "eventExitText": "Leave {name}",
+  "@eventExitText": {
+    "type": "text",
+    "placeholders": {
+      "name": {}
+    }
+  },
   "exitPromtText": "Are you sure you want to leave?",
   "@exitPromtText": {
     "type": "text",
@@ -120,7 +127,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "haleoText": "Haleo!",
+  "haleoText": "haleo!",
   "@haleoText": {
     "type": "text",
     "placeholders": {}

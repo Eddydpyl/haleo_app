@@ -34,7 +34,7 @@ class EventAdminBar extends StatelessWidget implements PreferredSizeWidget {
   Widget titleWidget(Localization localization) {
     return RichText(
       text: TextSpan(
-        text: "${localization.createText()} Hal",
+        text: "${localization.createText()} hal",
         style: TextStyle(
           fontWeight: FontWeight.bold,
           color: Color(0xFF424242),

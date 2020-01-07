@@ -22,7 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m1(spaces) => "${Intl.plural(spaces, one: '¡Solo queda ${spaces} sitio!', other: '¡Solo quedan ${spaces} sitios!')}";
 
-  static m2(name, description) => "¡Únete a este haleo! : *${name}* \n _${description}_ \n ¡Descarga la app en Google Play!";
+  static m3(name, description) => "¡Únete a este haleo! : *${name}* \n _${description}_ \n ¡Descarga la app en Google Play!";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -43,7 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "exitNoText" : MessageLookupByLibrary.simpleMessage("NO"),
     "exitPromtText" : MessageLookupByLibrary.simpleMessage("¿Seguro que quieres salirte?"),
     "exitYesText" : MessageLookupByLibrary.simpleMessage("SI"),
-    "haleoText" : MessageLookupByLibrary.simpleMessage("¡Haleo!"),
+    "haleoText" : MessageLookupByLibrary.simpleMessage("¡haleo!"),
     "invalidEmailText" : MessageLookupByLibrary.simpleMessage("La dirección de correo electrónico no es válida."),
     "invalidPasswordText" : MessageLookupByLibrary.simpleMessage("La contraseña debe de tener por lo menos 6 caracteres."),
     "invalidSignInText" : MessageLookupByLibrary.simpleMessage("La dirección de correo electrónico o la contraseña son incorrectas."),
@@ -53,7 +53,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "passwordSentText" : MessageLookupByLibrary.simpleMessage("Se ha enviado un enlace para restablecer tu contraseña a tu correo."),
     "profileText" : MessageLookupByLibrary.simpleMessage("Tu Cara!"),
     "promoText" : MessageLookupByLibrary.simpleMessage("Encuentra eventos cerca de ti. \n ¡Estás a un click de distancia!"),
-    "shareText" : m2,
+    "shareText" : m3,
     "signInText" : MessageLookupByLibrary.simpleMessage("Sign In"),
     "slotsNumberText" : MessageLookupByLibrary.simpleMessage("¿Número mínimo de participantes?"),
     "uploadErrorText" : MessageLookupByLibrary.simpleMessage("Hubo un error inesperado y no se pudo subir el archivo."),

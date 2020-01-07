@@ -22,7 +22,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m1(spaces) => "${Intl.plural(spaces, one: 'Only ${spaces} space remains!', other: 'Only ${spaces} spaces remain!')}";
 
-  static m2(name, description) => "Join this haleo! : *${name}* \n _${description}_ \n Download the app in Google Play!";
+  static m2(name) => "Leave ${name}";
+
+  static m3(name, description) => "Join this haleo! : *${name}* \n _${description}_ \n Download the app in Google Play!";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -39,11 +41,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "eventEmptyFilledText" : MessageLookupByLibrary.simpleMessage("Whoops! \n There are no filled events yet. Keep swiping right!"),
     "eventEmptyJoinedText" : MessageLookupByLibrary.simpleMessage("Whoops! \n You hace not joined any events yet. Keep swiping right!"),
     "eventEmptyReadText" : MessageLookupByLibrary.simpleMessage("No more events to check out. \n Why not create your own?"),
+    "eventExitText" : m2,
     "eventTitleHintText" : MessageLookupByLibrary.simpleMessage("Have a beer, go for a walk, visit the cathedral ..."),
     "exitNoText" : MessageLookupByLibrary.simpleMessage("NO"),
     "exitPromtText" : MessageLookupByLibrary.simpleMessage("Are you sure you want to leave?"),
     "exitYesText" : MessageLookupByLibrary.simpleMessage("YES, GET ME OUT!"),
-    "haleoText" : MessageLookupByLibrary.simpleMessage("Haleo!"),
+    "haleoText" : MessageLookupByLibrary.simpleMessage("haleo!"),
     "invalidEmailText" : MessageLookupByLibrary.simpleMessage("The email address is not valid."),
     "invalidPasswordText" : MessageLookupByLibrary.simpleMessage("The password must be at least 6 characters long."),
     "invalidSignInText" : MessageLookupByLibrary.simpleMessage("Either the email or password are incorrect."),
@@ -53,7 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "passwordSentText" : MessageLookupByLibrary.simpleMessage("A password reset link has been sent to your email."),
     "profileText" : MessageLookupByLibrary.simpleMessage("Your Face!"),
     "promoText" : MessageLookupByLibrary.simpleMessage("Find events near you. \n You are only a click away!"),
-    "shareText" : m2,
+    "shareText" : m3,
     "signInText" : MessageLookupByLibrary.simpleMessage("Sign In"),
     "slotsNumberText" : MessageLookupByLibrary.simpleMessage("Minimum number of attendees?"),
     "uploadErrorText" : MessageLookupByLibrary.simpleMessage("There was an unexpected issue and the file could not be uploaded."),

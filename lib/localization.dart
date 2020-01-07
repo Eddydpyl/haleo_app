@@ -162,7 +162,7 @@ class Localization {
   String eventExitText(String name) =>
       Intl.message(
         "Leave $name",
-        name: "_eventExitText",
+        name: "eventExitText",
         args: [name],
       );
 
@@ -210,7 +210,7 @@ class Localization {
 
   String haleoText() =>
       Intl.message(
-        "Haleo!",
+        "haleo!",
         name: "haleoText",
         args: [],
       );

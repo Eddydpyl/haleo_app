@@ -243,7 +243,8 @@ class MessageBubble extends StatelessWidget {
       Colors.teal,
     ];
 
-    if (direction) return Colors.red;
-    return colors[(user?.email?.length ?? 0) % colors.length];
+    if (user == null) return Colors.transparent;
+    else if (direction) return Colors.red;
+    return colors[user.email.length % colors.length];
   }
 }

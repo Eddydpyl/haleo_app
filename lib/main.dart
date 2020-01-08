@@ -181,7 +181,12 @@ class _InitializerState extends State<Initializer> {
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(); // TODO
+    return Container(
+      padding: const EdgeInsets.all(80.0),
+      color: Colors.white,
+      child: Center(
+        child: Image.asset("assets/images/haleo_android.png"),
+      ),
+    );
   }
 }
-

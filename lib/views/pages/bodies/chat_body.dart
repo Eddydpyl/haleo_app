@@ -235,7 +235,6 @@ class MessageBubble extends StatelessWidget {
   // Assigns "unique" color to a given user
   static Color assignColor(User user, bool direction) {
     List<Color> colors = [
-      Colors.transparent,
       Colors.blue,
       Colors.pink,
       Colors.purple,

@@ -66,7 +66,7 @@ class App extends StatelessWidget {
             database: ApplicationProvider.database(context),
             messaging: ApplicationProvider.messaging(context),
             child: MaterialApp(
-              title: "Haleo",
+              title: "haleo",
               theme: CustomTheme.haleo,
               home: Initializer(messaging),
               locale: locale,

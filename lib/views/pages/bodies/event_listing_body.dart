@@ -80,6 +80,8 @@ class EventTile extends StatelessWidget {
     final UserEventsBloc userEventsBloc =
         UserEventsProvider.eventsBloc(context);
 
+// TODO: para que fuera más fácil de navegar entre tanto expanded tile no estaría mal que solo pudiera
+// haber una abierta al mismo tiempo, si abres otra se cierra la anterior.
 // TODO: maybe move Tile ui when hooked up to a function for open and closed events
     return event.count >= event.slots
         ? Column(
@@ -111,6 +113,7 @@ class EventTile extends StatelessWidget {
                               ),
                             )
                           : Container(width: 0.0),
+                      // TODO: el salto al chat es demasiado brusco, la transición, no se porque.
                       FlatButton(
                         padding: EdgeInsets.only(left: 16.0),
                         shape: CircleBorder(),

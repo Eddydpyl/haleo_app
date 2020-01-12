@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:share/share.dart';
 
 import '../../../providers/application_provider.dart';
 import '../../../providers/profile_provider.dart';
@@ -34,6 +33,7 @@ class ProfileBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: eliminar todo lo que ya no haga falta de aquí relaccionado con eventos
     final UserEventsBloc userEventsBloc = ProfileProvider.eventsBloc(context);
     final UserBloc userBloc = ProfileProvider.userBloc(context);
     return StreamBuilder(
@@ -128,7 +128,8 @@ class _ProfileListState extends State<ProfileList> {
     super.didChangeDependencies();
     if (!init) {
       subscription = ProfileProvider.uploaderBloc(context)
-          .pathStream.listen((String path) => widget.upload(path));
+          .pathStream
+          .listen((String path) => widget.upload(path));
       init = true;
     }
   }
@@ -136,11 +137,8 @@ class _ProfileListState extends State<ProfileList> {
   @override
   Widget build(BuildContext context) {
     final Localization localization = ApplicationProvider.localization(context);
-    final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
-    final List<String> sorted = List.from(widget.events.keys)
-      ..sort((String a, String b) => widget.events[b].lastMessage
-          ?.compareTo(widget.events[a].lastMessage ?? "") ?? -1);
+
     return Column(children: <Widget>[
       Padding(
         padding: EdgeInsets.only(top: 8.0),
@@ -213,18 +211,7 @@ class _ProfileListState extends State<ProfileList> {
                 ),
               ),
       ),
-      sorted.isNotEmpty
-          ? Expanded(
-              child: ListView(
-                  children: sorted
-                      .map((String key) => EventTile(
-                          localization: localization,
-                          users: widget.users,
-                          eventKey: key,
-                          event: widget.events[key]))
-                      .toList()),
-            )
-          : EmptyWidget(localization),
+      EmptyWidget(localization),
     ]);
   }
 
@@ -233,8 +220,8 @@ class _ProfileListState extends State<ProfileList> {
       child: Stack(
         alignment: AlignmentDirectional.center,
         children: <Widget>[
-          ((widget.path?.isNotEmpty ?? false)
-              || (widget.user.image?.isNotEmpty ?? false))
+          ((widget.path?.isNotEmpty ?? false) ||
+                  (widget.user.image?.isNotEmpty ?? false))
               ? CircleAvatar(
                   radius: radius,
                   backgroundColor: Colors.white,
@@ -281,8 +268,10 @@ class _ProfileListState extends State<ProfileList> {
         if (widget.editing) {
           File file = await ImagePicker.pickImage(
               source: ImageSource.gallery, maxHeight: 1500, maxWidth: 1500);
-          if (file != null) ProfileProvider.uploaderBloc(context)
-              .fileSink.add(file.readAsBytesSync());
+          if (file != null)
+            ProfileProvider.uploaderBloc(context)
+                .fileSink
+                .add(file.readAsBytesSync());
         }
       },
     );
@@ -304,141 +293,6 @@ class _ProfileListState extends State<ProfileList> {
   }
 }
 
-class EventTile extends StatelessWidget {
-  final Localization localization;
-  final Map<String, User> users;
-  final String eventKey;
-  final Event event;
-
-  EventTile({
-    @required this.localization,
-    @required this.users,
-    @required this.eventKey,
-    @required this.event,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        SizedBox(height: 4.0),
-        ExpansionTile(
-          backgroundColor: Colors.white,
-          leading: CardImage(
-            image: event.image,
-            asset: randomImage(event.name),
-            height: 64,
-            width: 64,
-          ),
-          title: Text(
-            event.name,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                event.count.toString() + " / " + event.slots.toString(),
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green,
-                ),
-              ),
-              FlatButton(
-                padding: EdgeInsets.only(left: 16.0),
-                shape: CircleBorder(),
-                child: PaintGradient(
-                  child: Icon(Icons.share),
-                  colorA: Color(0xff7474bf),
-                  colorB: Color(0xff348ac7),
-                ),
-                onPressed: () {
-                  Share.share(localization.shareText(event.name,
-                      event.description)); // TODO: Google Play link.
-                },
-              ),
-            ],
-          ),
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    event.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Color(0xFF424242),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      event.description,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ]
-            ..addAll(event.attendees.map((String key) =>
-                userTile(context, users[key])))
-            ..add(SizedBox(height: 16.0)),
-        ),
-        SizedBox(
-          height: 4.0,
-        ),
-      ],
-    );
-  }
-
-  Widget userTile(BuildContext context, User user) {
-    return Padding(
-      padding: EdgeInsets.only(left: 8.0),
-      child: ListTile(
-        leading: CircleAvatar(
-          radius: 24.0,
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          child: (user.image?.isNotEmpty ?? false)
-              ? TransitionToImage(
-                  width: double.maxFinite,
-                  height: double.maxFinite,
-                  fit: BoxFit.cover,
-                  borderRadius: BorderRadius.circular(24.0),
-                  placeholder: InitialsText(user.name),
-                  loadingWidget: InitialsText(user.name),
-                  image: AdvancedNetworkImage(
-                    user.image,
-                    useDiskCache: true,
-                    timeoutDuration: Duration(seconds: 5),
-                  ),
-                )
-              : InitialsText(user.name),
-        ),
-        title: Text(user.name ?? ""),
-        subtitle: Text(user.description ?? ""),
-      ),
-    );
-  }
-
-  String randomImage(String eventName) {
-    int assetNumber = eventName.length % 6;
-    String asset = "assets/images/event_" + assetNumber.toString() + ".png";
-    return asset;
-  }
-}
-
 class EmptyWidget extends StatelessWidget {
   final Localization localization;
 
@@ -453,11 +307,12 @@ class EmptyWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image.asset("assets/images/event_3.png"),
+            Image.asset("assets/images/coding.png"),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
               child: Text(
-                localization.eventEmptyJoinedText(),
+                localization.emptyProfile(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,

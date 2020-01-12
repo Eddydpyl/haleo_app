@@ -117,8 +117,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "eventEmptyJoinedText": "Whoops! \n You hace not joined any events yet. Keep swiping right!",
-  "@eventEmptyJoinedText": {
+  "emptyProfile": "Whoops! \n We are still working on some awesome features for your profile!",
+  "@emptyProfile": {
     "type": "text",
     "placeholders": {}
   },

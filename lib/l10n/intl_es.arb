@@ -110,8 +110,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "eventEmptyJoinedText": "Oops! \n Aún no te has apuntado a ningún evento. ¡Sigue haciendo swipe right!",
-  "@eventEmptyJoinedText": {
+  "emptyProfile": "¡Oops! \n ¡Aún estamos trabajando en algunas funcionalidades increibles para tu perfil!",
+  "@emptyProfile": {
     "type": "text",
     "placeholders": {}
   },

@@ -204,7 +204,7 @@ class Localization {
       );
 
   String shareText(String name, String description) => Intl.message(
-        "Join this haleo! : *${name}* \n _${description}_ \n Download the app in Google Play!",
+        "Join this haleo! : *${name}* \n _${description}_ \n Download the app in Google Play! https://play.google.com/apps/testing/io.darter.haleo",
         name: "shareText",
         args: [name, description],
       );
@@ -243,7 +243,7 @@ class Localization {
       );
 
   String profileText() => Intl.message(
-        "Your Face!",
+        "Your face!",
         name: "profileText",
         args: [],
       );

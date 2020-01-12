@@ -51,7 +51,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "locationPermissionText" : MessageLookupByLibrary.simpleMessage("Necesitamos tu ubicación para crear un evento."),
     "messageHintText" : MessageLookupByLibrary.simpleMessage("Escribe un mensaje"),
     "passwordSentText" : MessageLookupByLibrary.simpleMessage("Se ha enviado un enlace para restablecer tu contraseña a tu correo."),
-    "profileText" : MessageLookupByLibrary.simpleMessage("Tu Cara!"),
+    "profileText" : MessageLookupByLibrary.simpleMessage("Tu cara!"),
     "promoText" : MessageLookupByLibrary.simpleMessage("Encuentra eventos cerca de ti. \n ¡Estás a un click de distancia!"),
     "shareText" : m3,
     "signInText" : MessageLookupByLibrary.simpleMessage("Sign In"),

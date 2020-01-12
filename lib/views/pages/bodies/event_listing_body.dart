@@ -81,7 +81,7 @@ class EventTile extends StatelessWidget {
         UserEventsProvider.eventsBloc(context);
 
 // TODO: maybe move Tile ui when hooked up to a function for open and closed events
-    return (event.count >= event.slots)
+    return event.count >= event.slots
         ? Column(
             children: <Widget>[
               SizedBox(height: 4.0),
@@ -101,7 +101,7 @@ class EventTile extends StatelessWidget {
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      !unread
+                      unread
                           ? Container(
                               width: 16,
                               height: 16,
@@ -269,66 +269,6 @@ class EventTile extends StatelessWidget {
               ),
             ],
           );
-
-    /*    
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        SizedBox(
-          height: 4.0,
-        ),
-        ListTile(
-          title: Text(
-            event.name,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          subtitle: Text(
-            event.description,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-          ),
-          leading: CardImage(
-            image: event.image,
-            asset: randomImage(event.name),
-            height: 64,
-            width: 64,
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              unread
-                  ? Container(
-                      width: 16,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        color: Colors.lightGreen,
-                        shape: BoxShape.circle,
-                      ),
-                    )
-                  : Container(width: 0.0),
-              FlatButton(
-                padding: EdgeInsets.only(left: 16.0),
-                child: Icon(Icons.cancel, color: Colors.redAccent),
-                onPressed: () =>
-                    leaveDialog(context, eventKey, event, userEventsBloc),
-              ),
-            ],
-          ),
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (BuildContext context) => ChatPage(eventKey),
-            ));
-          },
-        ),
-        SizedBox(
-          height: 4.0,
-        ),
-        Divider(),
-      ],
-    );*/
   }
 
   Widget userTile(BuildContext context, User user) {

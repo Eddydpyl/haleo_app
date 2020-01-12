@@ -102,16 +102,7 @@ class EventTile extends StatelessWidget {
             children: <Widget>[
               SizedBox(height: 4.0),
               Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  // TODO: appropiate ==
-                  border: event.user == 'currentUser'
-                      ? Border.all(
-                          width: 2.0,
-                          color: Colors.redAccent,
-                        )
-                      : null,
-                ),
+                color: Colors.white,
                 child: ExpansionTile(
                     backgroundColor: Colors.white,
                     leading: CardImage(
@@ -250,7 +241,7 @@ class EventTile extends StatelessWidget {
                       ),
                       onPressed: () {
                         Share.share(localization.shareText(event.name,
-                            event.description)); // TODO: Google Play link.
+                            event.description)); // TODO: Google Play link final.
                       },
                     ),
                   ],
@@ -321,7 +312,18 @@ class EventTile extends StatelessWidget {
                 )
               : InitialsText(user.name),
         ),
-        title: Text(user.name ?? ""),
+        title: Row(
+          children: <Widget>[
+            Text(user.name ?? ""),
+            user.name == 'Tom Sheffield' //TODO: comprobacion con usuario del evento
+                ? PaintGradient(
+                    child: Icon(Icons.stars, size: 16.0),
+                    colorA: Color(0xfffa6b40),
+                    colorB: Color(0xfffd1d1d),
+                  )
+                : SizedBox(height: 0.0)
+          ],
+        ),
         subtitle: Text(user.description ?? ""),
       ),
     );

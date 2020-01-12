@@ -18,16 +18,16 @@ class MessageAdminBloc extends BaseBloc {
       : _databaseManager = databaseManager;
 
   /// Consumes a [Message] and uses it to create an instance in the database.
-  LenientSink<Message> get createSink => _create.sink;
+  Sink<Message> get createSink => _create.sink;
 
   /// Consumes a [MapEntry] and uses it to update the instance in the database.
-  LenientSink<MapEntry<String, Message>> get updateSink => _update.sink;
+  Sink<MapEntry<String, Message>> get updateSink => _update.sink;
 
   /// Consumes a [String] and uses it to delete the instance in the database.
-  LenientSink<String> get deleteSink => _delete.sink;
+  Sink<String> get deleteSink => _delete.sink;
 
   /// The event where the messages belong to(REQUIRED).
-  LenientSink<String> get eventKeySink => _eventKey.sink;
+  Sink<String> get eventKeySink => _eventKey.sink;
 
   @override
   void initialize() {

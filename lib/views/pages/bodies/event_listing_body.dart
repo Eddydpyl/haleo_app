@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
-import 'package:haleo_app/models/user.dart';
-import 'package:haleo_app/views/custom_icons.dart';
 import 'package:share/share.dart';
 
 import '../../../providers/application_provider.dart';
 import '../../../providers/user_events_provider.dart';
 import '../../../blocs/user_events_bloc.dart';
 import '../../../models/event.dart';
+import '../../../models/user.dart';
 import '../../common_widgets.dart';
+import '../../custom_icons.dart';
 import '../../pages/chat_page.dart';
 import '../../../utility.dart';
 import '../../../localization.dart';
@@ -25,25 +25,38 @@ class _EventListingBodyState extends State<EventListingBody> {
     final Localization localization = ApplicationProvider.localization(context);
     return StreamBuilder(
       stream: UserEventsProvider.eventsBloc(context).eventsStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
           final Map<String, Event> events = snapshot.data;
           final List<String> sorted = List.from(events.keys)
             ..sort((String a, String b) =>
-                events[b].lastMessage?.compareTo(events[a].lastMessage ?? "") ??
+            events[b].lastMessage?.compareTo(events[a].lastMessage ?? "") ??
                 -1);
-          if (sorted.isNotEmpty) {
-            return ListView(
-                children: sorted
-                    .map((String key) => EventTile(
-                          localization: localization,
-                          eventKey: key,
-                          event: events[key],
-                        ))
-                    .toList());
-          } else
-            return EmptyWidget(localization);
+          return StreamBuilder(
+            stream: UserEventsProvider.eventsBloc(context).usersStream,
+            builder: (BuildContext context,
+                AsyncSnapshot<Map<String, User>> snapshot) {
+              if (snapshot.data != null) {
+                final Map<String, User> users = snapshot.data;
+                if (sorted.isNotEmpty) {
+                  return ListView(
+                    children: sorted.map((String key) => EventTile(
+                      localization: localization,
+                      users: users,
+                      eventKey: key,
+                      event: events[key],
+                    )).toList(),
+                  );
+                } else
+                  return EmptyWidget(localization);
+              } else {
+                return Center(
+                  child: const CircularProgressIndicator(),
+                );
+              }
+            },
+          );
         } else {
           return Center(
             child: const CircularProgressIndicator(),
@@ -56,14 +69,13 @@ class _EventListingBodyState extends State<EventListingBody> {
 
 class EventTile extends StatelessWidget {
   final Localization localization;
-  // TODO: we need to show the users here too
-  //final Map<String, User> users;
+  final Map<String, User> users;
   final String eventKey;
   final Event event;
 
   EventTile({
     @required this.localization,
-    //@required this.users,
+    @required this.users,
     @required this.eventKey,
     @required this.event,
   });
@@ -162,11 +174,9 @@ class EventTile extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ]
-                  // TODO: add users
-                  /*..addAll(event.attendees
-                .map((String key) => userTile(context, users[key])))
-            ..add(SizedBox(height: 16.0)),*/
+                  ]..addAll(event.attendees.map((String key) =>
+                      userTile(context, users[key])))
+                    ..add(SizedBox(height: 16.0)),
                   ),
               //TODO: this would go inside the expansion tile
               Align(
@@ -261,11 +271,9 @@ class EventTile extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ]
-                  //TODO:
-                  /*..addAll(event.attendees
-                      .map((String key) => userTile(context, users[key])))
-                  ..add(SizedBox(height: 16.0)),*/
+                  ]..addAll(event.attendees.map((String key) =>
+                      userTile(context, users[key])))
+                    ..add(SizedBox(height: 16.0)),
                   ),
               SizedBox(
                 height: 4.0,

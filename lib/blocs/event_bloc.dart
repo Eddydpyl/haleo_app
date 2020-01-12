@@ -32,7 +32,7 @@ class EventBloc extends BaseBloc {
   Observable<Map<String, User>> get usersStream => _users.stream;
 
   /// Consumes the key of the event (REQUIRED).
-  LenientSink<String> get eventKeySink => _eventKey.sink;
+  Sink<String> get eventKeySink => _eventKey.sink;
 
   @override
   void initialize() {

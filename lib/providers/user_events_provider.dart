@@ -34,7 +34,6 @@ class UserEventsProvider extends StatelessWidget {
       initialize: (Map<String, BaseBloc> blocs, Set<StreamSubscription> subscriptions) {
         UserEventsBloc eventsBloc = blocs["eventsBloc"];
         UserBloc userBloc = blocs["userBloc"];
-        eventsBloc.openSink.add(false);
         subscriptions.add(stateBloc.userKeyStream.listen((key) {
           eventsBloc.userKeySink.add(key);
           userBloc.userKeySink.add(key);

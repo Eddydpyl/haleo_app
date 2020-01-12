@@ -18,13 +18,13 @@ class EventAdminBloc extends BaseBloc {
       : _databaseManager = databaseManager, _preferenceManager = preferenceManager;
 
   /// Consumes a [Event] and uses it to create an instance in the database.
-  LenientSink<Event> get createSink => _create.sink;
+  Sink<Event> get createSink => _create.sink;
 
   /// Consumes a [MapEntry] and uses it to update the instance in the database.
-  LenientSink<MapEntry<String, Event>> get updateSink => _update.sink;
+  Sink<MapEntry<String, Event>> get updateSink => _update.sink;
 
   /// Consumes a [String] and uses it to delete the instance in the database.
-  LenientSink<String> get deleteSink => _delete.sink;
+  Sink<String> get deleteSink => _delete.sink;
 
   @override
   void initialize() {

@@ -9,9 +9,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../providers/application_provider.dart';
 import '../../../providers/profile_provider.dart';
-import '../../../blocs/user_events_bloc.dart';
 import '../../../blocs/user_bloc.dart';
-import '../../../models/event.dart';
 import '../../../models/user.dart';
 import '../../common_widgets.dart';
 import '../../../localization.dart';
@@ -33,8 +31,6 @@ class ProfileBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: eliminar todo lo que ya no haga falta de aquí relaccionado con eventos
-    final UserEventsBloc userEventsBloc = ProfileProvider.eventsBloc(context);
     final UserBloc userBloc = ProfileProvider.userBloc(context);
     return StreamBuilder(
       stream: userBloc.userStream,
@@ -47,41 +43,13 @@ class ProfileBody extends StatelessWidget {
             nameController.text = user.name ?? "";
           if (descriptionController.text?.isEmpty ?? true)
             descriptionController.text = user.description ?? "";
-          return StreamBuilder(
-            stream: userEventsBloc.eventsStream,
-            builder: (BuildContext context,
-                AsyncSnapshot<Map<String, Event>> snapshot) {
-              if (snapshot.data != null) {
-                final Map<String, Event> events = snapshot.data;
-                return StreamBuilder(
-                  stream: userEventsBloc.usersStream,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<Map<String, User>> snapshot) {
-                    if (snapshot.data != null) {
-                      final Map<String, User> users = snapshot.data;
-                      return ProfileList(
-                        nameController: nameController,
-                        descriptionController: descriptionController,
-                        editing: editing,
-                        upload: upload,
-                        path: path,
-                        events: events,
-                        users: users,
-                        user: user,
-                      );
-                    } else {
-                      return Center(
-                        child: const CircularProgressIndicator(),
-                      );
-                    }
-                  },
-                );
-              } else {
-                return Center(
-                  child: const CircularProgressIndicator(),
-                );
-              }
-            },
+          return ProfileList(
+            nameController: nameController,
+            descriptionController: descriptionController,
+            editing: editing,
+            upload: upload,
+            path: path,
+            user: user,
           );
         } else {
           return Center(
@@ -99,9 +67,6 @@ class ProfileList extends StatefulWidget {
   final void Function(String) upload;
   final bool editing;
   final String path;
-
-  final Map<String, Event> events;
-  final Map<String, User> users;
   final User user;
 
   ProfileList({
@@ -110,8 +75,6 @@ class ProfileList extends StatefulWidget {
     @required this.upload,
     @required this.editing,
     @required this.path,
-    @required this.events,
-    @required this.users,
     @required this.user,
   });
 
@@ -128,8 +91,7 @@ class _ProfileListState extends State<ProfileList> {
     super.didChangeDependencies();
     if (!init) {
       subscription = ProfileProvider.uploaderBloc(context)
-          .pathStream
-          .listen((String path) => widget.upload(path));
+          .pathStream.listen((String path) => widget.upload(path));
       init = true;
     }
   }
@@ -266,12 +228,13 @@ class _ProfileListState extends State<ProfileList> {
       ),
       onTap: () async {
         if (widget.editing) {
-          File file = await ImagePicker.pickImage(
-              source: ImageSource.gallery, maxHeight: 1500, maxWidth: 1500);
-          if (file != null)
+          File file = await ImagePicker
+              .pickImage(source: ImageSource.gallery,
+              maxHeight: 1500, maxWidth: 1500);
+          if (file != null) {
             ProfileProvider.uploaderBloc(context)
-                .fileSink
-                .add(file.readAsBytesSync());
+                .fileSink.add(file.readAsBytesSync());
+          }
         }
       },
     );
@@ -309,8 +272,8 @@ class EmptyWidget extends StatelessWidget {
           children: <Widget>[
             Image.asset("assets/images/coding.png"),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+              padding: const EdgeInsets
+                  .symmetric(vertical: 16.0, horizontal: 32.0),
               child: Text(
                 localization.emptyProfile(),
                 textAlign: TextAlign.center,

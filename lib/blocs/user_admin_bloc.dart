@@ -18,13 +18,13 @@ class UserAdminBloc extends BaseBloc {
       : _databaseManager = databaseManager, _localization = localization;
 
   /// Consumes a [MapEntry] and uses it to create an instance in the database.
-  LenientSink<MapEntry<String, User>> get createSink => _create.sink;
+  Sink<MapEntry<String, User>> get createSink => _create.sink;
 
   /// Consumes a [MapEntry] and uses it to update the instance in the database.
-  LenientSink<MapEntry<String, User>> get updateSink => _update.sink;
+  Sink<MapEntry<String, User>> get updateSink => _update.sink;
 
   /// Consumes a [String] and uses it to delete the instance in the database.
-  LenientSink<String> get deleteSink => _delete.sink;
+  Sink<String> get deleteSink => _delete.sink;
 
   @override
   void initialize() {

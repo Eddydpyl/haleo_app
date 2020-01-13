@@ -130,7 +130,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "signInText": "Sign In",
+  "signInText": "Iniciar Sesión",
   "@signInText": {
     "type": "text",
     "placeholders": {}

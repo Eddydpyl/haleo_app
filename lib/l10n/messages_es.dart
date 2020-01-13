@@ -22,7 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m1(spaces) => "${Intl.plural(spaces, one: '¡Solo queda ${spaces} sitio!', other: '¡Solo quedan ${spaces} sitios!')}";
 
-  static m3(name, description) => "¡Únete a este haleo! : *${name}* \n _${description}_ \n ¡Descarga la app en Google Play!";
+  static m3(name, description) => "¡Únete a este haleo! : *${name}* \n _${description}_ \n ¡Descarga la app en Google Play! https://play.google.com/apps/testing/io.darter.haleo";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -31,13 +31,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "accountNotFoundText" : MessageLookupByLibrary.simpleMessage("No existe una cuenta con el correo electrónico proporcionado."),
     "createText" : MessageLookupByLibrary.simpleMessage("Armar"),
     "disabledUserText" : MessageLookupByLibrary.simpleMessage("Tu usuario ha sido deshabilitado por un administrador."),
+    "emptyProfile" : MessageLookupByLibrary.simpleMessage("¡Oops! \n ¡Aún estamos trabajando en algunas funcionalidades increibles para tu perfil!"),
     "errorSignInText" : MessageLookupByLibrary.simpleMessage("Hubo un problema y no se pudo iniciar sesión."),
     "errorSignUpText" : MessageLookupByLibrary.simpleMessage("Hubo un problema y no se pudo registrar."),
     "eventBodyHintText" : MessageLookupByLibrary.simpleMessage("Qué te apetece hacer? Qué lenguajes hablas? Cuándo te viene mejor quedar?"),
     "eventClosedText" : MessageLookupByLibrary.simpleMessage("¡Este evento ha sido cerrado!"),
     "eventCreatedText" : MessageLookupByLibrary.simpleMessage("¡Se ha creado tu evento! Ahora a esperar a que la gente se apunte."),
     "eventEmptyFilledText" : MessageLookupByLibrary.simpleMessage("Oops! \n Aún no hay ningún evento cerrado. ¡Sigue haciendo swipe right!"),
-    "emptyProfile" : MessageLookupByLibrary.simpleMessage("¡Oops! \n ¡Aún estamos trabajando en algunas funcionalidades increibles para tu perfil!"),
     "eventEmptyReadText" : MessageLookupByLibrary.simpleMessage("No hay más eventos. \n ¿Por qué no creas el tuyo propio?"),
     "eventTitleHintText" : MessageLookupByLibrary.simpleMessage("Tomar una cerveza, darse un paseo, visitar la catedral ..."),
     "exitNoText" : MessageLookupByLibrary.simpleMessage("NO"),
@@ -54,7 +54,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "profileText" : MessageLookupByLibrary.simpleMessage("Tu cara!"),
     "promoText" : MessageLookupByLibrary.simpleMessage("Encuentra eventos cerca de ti. \n ¡Estás a un click de distancia!"),
     "shareText" : m3,
-    "signInText" : MessageLookupByLibrary.simpleMessage("Sign In"),
+    "signInText" : MessageLookupByLibrary.simpleMessage("Iniciar Sesión"),
     "slotsNumberText" : MessageLookupByLibrary.simpleMessage("¿Número mínimo de participantes?"),
     "uploadErrorText" : MessageLookupByLibrary.simpleMessage("Hubo un error inesperado y no se pudo subir el archivo."),
     "usedEmailText" : MessageLookupByLibrary.simpleMessage("La dirección de correo electrónico ya está en uso."),

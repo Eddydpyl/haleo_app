@@ -24,7 +24,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m2(name) => "Leave ${name}";
 
-  static m3(name, description) => "Join this haleo! : *${name}* \n _${description}_ \n Download the app in Google Play!";
+  static m3(name, description) => "Join this haleo! : *${name}* \n _${description}_ \n Download the app in Google Play! https://play.google.com/apps/testing/io.darter.haleo";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -33,13 +33,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "accountNotFoundText" : MessageLookupByLibrary.simpleMessage("An account with the provided email does not exist."),
     "createText" : MessageLookupByLibrary.simpleMessage("Create"),
     "disabledUserText" : MessageLookupByLibrary.simpleMessage("Your user has been disabled by an administrator."),
+    "emptyProfile" : MessageLookupByLibrary.simpleMessage("Whoops! \n We are still working on some awesome features for your profile!"),
     "errorSignInText" : MessageLookupByLibrary.simpleMessage("There was an issue and you could not sign in."),
     "errorSignUpText" : MessageLookupByLibrary.simpleMessage("There was an issue and you could not sign up."),
     "eventBodyHintText" : MessageLookupByLibrary.simpleMessage("What would you like to do? What languages do you speak? At what time would you be free?"),
     "eventClosedText" : MessageLookupByLibrary.simpleMessage("The event has been closed!"),
     "eventCreatedText" : MessageLookupByLibrary.simpleMessage("Your event has been created! Now we wait for more attendees."),
     "eventEmptyFilledText" : MessageLookupByLibrary.simpleMessage("Whoops! \n There are no filled events yet. Keep swiping right!"),
-    "emptyProfile" : MessageLookupByLibrary.simpleMessage("Whoops! \n We are still working on some awesome features for your profile!"),
     "eventEmptyReadText" : MessageLookupByLibrary.simpleMessage("No more events to check out. \n Why not create your own?"),
     "eventExitText" : m2,
     "eventTitleHintText" : MessageLookupByLibrary.simpleMessage("Have a beer, go for a walk, visit the cathedral ..."),

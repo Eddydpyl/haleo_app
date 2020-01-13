@@ -4,9 +4,7 @@ import 'package:flutter_advanced_networkimage/transition.dart';
 import 'package:share/share.dart';
 
 import '../../../providers/application_provider.dart';
-import '../../../providers/state_provider.dart';
 import '../../../providers/user_events_provider.dart';
-import '../../../blocs/state_bloc.dart';
 import '../../../blocs/user_events_bloc.dart';
 import '../../../models/event.dart';
 import '../../../models/user.dart';
@@ -25,50 +23,36 @@ class _EventListingBodyState extends State<EventListingBody> {
   @override
   Widget build(BuildContext context) {
     final Localization localization = ApplicationProvider.localization(context);
-    final StateBloc stateBloc = StateProvider.stateBloc(context);
     final UserEventsBloc eventsBloc = UserEventsProvider.eventsBloc(context);
     return StreamBuilder(
-      stream: stateBloc.userKeyStream,
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+      stream: eventsBloc.eventsStream,
+      builder:
+          (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
-          final String uid = snapshot.data;
+          final Map<String, Event> events = snapshot.data;
+          final List<String> sorted = List.from(events.keys)
+            ..sort((String a, String b) =>
+                events[b].lastMessage?.compareTo(events[a].lastMessage ?? "") ??
+                -1);
           return StreamBuilder(
-            stream: eventsBloc.eventsStream,
+            stream: eventsBloc.usersStream,
             builder: (BuildContext context,
-                AsyncSnapshot<Map<String, Event>> snapshot) {
+                AsyncSnapshot<Map<String, User>> snapshot) {
               if (snapshot.data != null) {
-                final Map<String, Event> events = snapshot.data;
-                final List<String> sorted = List.from(events.keys)
-                  ..sort((String a, String b) =>
-                  events[b].lastMessage?.compareTo(events[a].lastMessage ?? "") ??
-                      -1);
-                return StreamBuilder(
-                  stream: eventsBloc.usersStream,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<Map<String, User>> snapshot) {
-                    if (snapshot.data != null) {
-                      final Map<String, User> users = snapshot.data;
-                      if (sorted.isNotEmpty) {
-                        return ListView(
-                          children: sorted
-                              .map((String key) => EventTile(
-                            localization: localization,
-                            users: users,
-                            eventKey: key,
-                            event: events[key],
-                            uid: uid,
-                          ))
-                              .toList(),
-                        );
-                      } else
-                        return EmptyWidget(localization);
-                    } else {
-                      return Center(
-                        child: const CircularProgressIndicator(),
-                      );
-                    }
-                  },
-                );
+                final Map<String, User> users = snapshot.data;
+                if (sorted.isNotEmpty) {
+                  return ListView(
+                    children: sorted
+                        .map((String key) => EventTile(
+                              localization: localization,
+                              users: users,
+                              eventKey: key,
+                              event: events[key],
+                            ))
+                        .toList(),
+                  );
+                } else
+                  return EmptyWidget(localization);
               } else {
                 return Center(
                   child: const CircularProgressIndicator(),
@@ -91,14 +75,12 @@ class EventTile extends StatelessWidget {
   final Map<String, User> users;
   final String eventKey;
   final Event event;
-  final String uid;
 
   EventTile({
     @required this.localization,
     @required this.users,
     @required this.eventKey,
     @required this.event,
-    @required this.uid,
   });
 
   @override
@@ -198,8 +180,8 @@ class EventTile extends StatelessWidget {
                         ),
                       ),
                     ]
-                      ..addAll(event.attendees
-                          .map((String key) => userTile(context, key, users[key])))
+                      ..addAll(event.attendees.map((String key) =>
+                          userTile(context, users[key], event.user == key)))
                       ..add(
                         Align(
                           alignment: Alignment.bottomRight,
@@ -259,8 +241,10 @@ class EventTile extends StatelessWidget {
                         colorB: Color(0xff348ac7),
                       ),
                       onPressed: () {
-                        Share.share(localization.shareText(event.name,
-                            event.description)); // TODO: Google Play link final.
+                        Share.share(localization.shareText(
+                            event.name,
+                            event
+                                .description)); // TODO: Google Play link final.
                       },
                     ),
                   ],
@@ -297,8 +281,8 @@ class EventTile extends StatelessWidget {
                     ),
                   ),
                 ]
-                  ..addAll(event.attendees
-                      .map((String key) => userTile(context, key, users[key])))
+                  ..addAll(event.attendees.map((String key) =>
+                      userTile(context, users[key], event.user == key)))
                   ..add(SizedBox(height: 16.0)),
               ),
               SizedBox(
@@ -308,7 +292,7 @@ class EventTile extends StatelessWidget {
           );
   }
 
-  Widget userTile(BuildContext context, String userKey, User user) {
+  Widget userTile(BuildContext context, User user, bool star) {
     return Padding(
       padding: EdgeInsets.only(left: 8.0),
       child: ListTile(
@@ -334,7 +318,7 @@ class EventTile extends StatelessWidget {
         title: Row(
           children: <Widget>[
             Text(user.name ?? ""),
-            userKey == uid
+            star
                 ? PaintGradient(
                     child: Icon(Icons.stars, size: 16.0),
                     colorA: Color(0xfffa6b40),

@@ -87,7 +87,9 @@ class SessionBloc extends BaseBloc {
       if (google ?? false) {
         FirebaseUser aux = await _authManager
           .signInWithGoogle().catchError((exception) {
-            forwardException(FailedException(_localization.errorSignInText()));
+            if (exception.code == "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL")
+              forwardException(FailedException(_localization.existingAccountText()));
+            else forwardException(FailedException(_localization.errorSignInText()));
             return null;
           });
 
@@ -102,7 +104,9 @@ class SessionBloc extends BaseBloc {
       if (facebook ?? false) {
         FirebaseUser aux = await _authManager
           .signInWithFacebook().catchError((exception) {
-            forwardException(FailedException(_localization.errorSignInText()));
+            if (exception.code == "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL")
+              forwardException(FailedException(_localization.existingAccountText()));
+            else forwardException(FailedException(_localization.errorSignInText()));
             return null;
           });
 

@@ -253,15 +253,10 @@ class Localization {
         name: "yourText",
         args: [],
       );
-<<<<<<< HEAD
-}
-=======
 
-  String existingAccountText() =>
-      Intl.message(
+  String existingAccountText() => Intl.message(
         "There's already an account using this email. Try loggin in using another provider.",
         name: "existingAccountText",
         args: [],
       );
 }
->>>>>>> master

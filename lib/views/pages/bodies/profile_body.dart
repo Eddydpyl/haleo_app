@@ -91,7 +91,8 @@ class _ProfileListState extends State<ProfileList> {
     super.didChangeDependencies();
     if (!init) {
       subscription = ProfileProvider.uploaderBloc(context)
-          .pathStream.listen((String path) => widget.upload(path));
+          .pathStream
+          .listen((String path) => widget.upload(path));
       init = true;
     }
   }
@@ -100,81 +101,84 @@ class _ProfileListState extends State<ProfileList> {
   Widget build(BuildContext context) {
     final Localization localization = ApplicationProvider.localization(context);
     final double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
 
-    return Column(children: <Widget>[
-      Padding(
-        padding: EdgeInsets.only(top: 8.0),
-        child: Center(child: profileImage(width / 6)),
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 32.0),
-        child: widget.editing
-            ? TextFormField(
-                controller: widget.nameController,
-                keyboardType: TextInputType.text,
-                textCapitalization: TextCapitalization.words,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                inputFormatters: [LengthLimitingTextInputFormatter(25)],
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF424242),
-                  fontSize: 20.0,
-                ),
-                decoration: InputDecoration(
-                  border: underlineInputBorder(),
-                  enabledBorder: underlineInputBorder(),
-                  focusedBorder: underlineInputBorder(Colors.redAccent),
-                ),
-              )
-            : Padding(
-                padding: EdgeInsets.only(top: 8.0),
-                child: Text(
-                  widget.user.name ?? "",
+    return SingleChildScrollView(
+      child: Column(children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(top: 8.0),
+          child: Center(child: profileImage(width / 6)),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 32.0),
+          child: widget.editing
+              ? TextFormField(
+                  controller: widget.nameController,
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.words,
                   textAlign: TextAlign.center,
+                  maxLines: 1,
+                  inputFormatters: [LengthLimitingTextInputFormatter(25)],
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF424242),
                     fontSize: 20.0,
                   ),
+                  decoration: InputDecoration(
+                    border: underlineInputBorder(),
+                    enabledBorder: underlineInputBorder(),
+                    focusedBorder: underlineInputBorder(Colors.redAccent),
+                  ),
+                )
+              : Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    widget.user.name ?? "",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF424242),
+                      fontSize: 20.0,
+                    ),
+                  ),
                 ),
-              ),
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 32.0),
-        child: widget.editing
-            ? TextFormField(
-                controller: widget.descriptionController,
-                keyboardType: TextInputType.text,
-                textCapitalization: TextCapitalization.sentences,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                maxLength: 70,
-                inputFormatters: [LengthLimitingTextInputFormatter(70)],
-                style: TextStyle(
-                  color: Colors.black54,
-                  fontSize: 14.0,
-                ),
-                decoration: InputDecoration(
-                  border: underlineInputBorder(),
-                  enabledBorder: underlineInputBorder(),
-                  focusedBorder: underlineInputBorder(Colors.redAccent),
-                ),
-              )
-            : Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: Text(
-                  widget.user.description ?? "",
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 32.0),
+          child: widget.editing
+              ? TextFormField(
+                  controller: widget.descriptionController,
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.sentences,
                   textAlign: TextAlign.center,
+                  maxLines: 2,
+                  maxLength: 70,
+                  inputFormatters: [LengthLimitingTextInputFormatter(70)],
                   style: TextStyle(
                     color: Colors.black54,
                     fontSize: 14.0,
                   ),
+                  decoration: InputDecoration(
+                    border: underlineInputBorder(),
+                    enabledBorder: underlineInputBorder(),
+                    focusedBorder: underlineInputBorder(Colors.redAccent),
+                  ),
+                )
+              : Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    widget.user.description ?? "",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 14.0,
+                    ),
+                  ),
                 ),
-              ),
-      ),
-      EmptyWidget(localization),
-    ]);
+        ),
+        EmptyWidget(localization),
+      ]),
+    );
   }
 
   Widget profileImage(double radius) {
@@ -228,12 +232,12 @@ class _ProfileListState extends State<ProfileList> {
       ),
       onTap: () async {
         if (widget.editing) {
-          File file = await ImagePicker
-              .pickImage(source: ImageSource.gallery,
-              maxHeight: 1500, maxWidth: 1500);
+          File file = await ImagePicker.pickImage(
+              source: ImageSource.gallery, maxHeight: 1500, maxWidth: 1500);
           if (file != null) {
             ProfileProvider.uploaderBloc(context)
-                .fileSink.add(file.readAsBytesSync());
+                .fileSink
+                .add(file.readAsBytesSync());
           }
         }
       },
@@ -263,29 +267,27 @@ class EmptyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Image.asset("assets/images/coding.png"),
-            Padding(
-              padding: const EdgeInsets
-                  .symmetric(vertical: 16.0, horizontal: 32.0),
-              child: Text(
-                localization.emptyProfile(),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
-                  color: Colors.black54,
-                ),
+    return Container(
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Image.asset("assets/images/coding.png"),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+            child: Text(
+              localization.emptyProfile(),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0,
+                color: Colors.black54,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

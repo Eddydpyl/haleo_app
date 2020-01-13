@@ -91,7 +91,8 @@ class _ProfileListState extends State<ProfileList> {
     super.didChangeDependencies();
     if (!init) {
       subscription = ProfileProvider.uploaderBloc(context)
-          .pathStream.listen((String path) => widget.upload(path));
+          .pathStream
+          .listen((String path) => widget.upload(path));
       init = true;
     }
   }
@@ -230,12 +231,12 @@ class _ProfileListState extends State<ProfileList> {
       ),
       onTap: () async {
         if (widget.editing) {
-          File file = await ImagePicker
-              .pickImage(source: ImageSource.gallery,
-              maxHeight: 1500, maxWidth: 1500);
+          File file = await ImagePicker.pickImage(
+              source: ImageSource.gallery, maxHeight: 1500, maxWidth: 1500);
           if (file != null) {
             ProfileProvider.uploaderBloc(context)
-                .fileSink.add(file.readAsBytesSync());
+                .fileSink
+                .add(file.readAsBytesSync());
           }
         }
       },

@@ -176,5 +176,10 @@
   "@yourText": {
     "type": "text",
     "placeholders": {}
+  },
+  "existingAccountText": "Ya existe una cuenta usando este correo electrónico. Prueba a iniciar sesión con otro proveedor.",
+  "@existingAccountText": {
+    "type": "text",
+    "placeholders": {}
   }
 }

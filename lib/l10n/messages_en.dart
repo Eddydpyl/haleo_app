@@ -43,6 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "eventEmptyReadText" : MessageLookupByLibrary.simpleMessage("No more events to check out. \n Why not create your own?"),
     "eventExitText" : m2,
     "eventTitleHintText" : MessageLookupByLibrary.simpleMessage("Have a beer, go for a walk, visit the cathedral ..."),
+    "existingAccountText" : MessageLookupByLibrary.simpleMessage("There\'s already an account using this email. Try loggin in using another provider."),
     "exitNoText" : MessageLookupByLibrary.simpleMessage("NO"),
     "exitPromtText" : MessageLookupByLibrary.simpleMessage("Are you sure you want to leave?"),
     "exitYesText" : MessageLookupByLibrary.simpleMessage("YES, GET ME OUT!"),

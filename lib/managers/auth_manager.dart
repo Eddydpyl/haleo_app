@@ -1,8 +1,11 @@
 import 'dart:async';
 
+import 'package:darter_base/darter_base.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+
+import '../localization.dart';
 
 class AuthManager {
   final FirebaseAuth _auth;
@@ -28,8 +31,15 @@ class AuthManager {
     );
 
     if (credential == null) return null;
-    final AuthResult authResult = await _auth.signInWithCredential(credential);
-    return authResult?.user;
+
+    try {
+      final AuthResult authResult = await _auth.signInWithCredential(credential);
+      return authResult?.user;
+    } catch (exception) {
+      if (exception.code == "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL")
+        throw FailedException(Localization().existingAccountText());
+      else throw exception;
+    }
   }
 
   Future<FirebaseUser> signInWithFacebook() async {
@@ -40,8 +50,15 @@ class AuthManager {
         .getCredential(accessToken: result.accessToken.token);
 
     if (credential == null) return null;
-    final AuthResult authResult = await _auth.signInWithCredential(credential);
-    return authResult?.user;
+
+    try {
+      final AuthResult authResult = await _auth.signInWithCredential(credential);
+      return authResult?.user;
+    } catch (exception) {
+      if (exception.code == "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL")
+        throw FailedException(Localization().existingAccountText());
+      else throw exception;
+    }
   }
 
   Future<dynamic> signOut() async {

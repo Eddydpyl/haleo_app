@@ -87,7 +87,8 @@ class SessionBloc extends BaseBloc {
       if (google ?? false) {
         FirebaseUser aux = await _authManager
           .signInWithGoogle().catchError((exception) {
-            forwardException(FailedException(_localization.errorSignInText()));
+            if (exception is BaseException) forwardException(exception);
+            else forwardException(FailedException(_localization.errorSignInText()));
             return null;
           });
 
@@ -102,7 +103,8 @@ class SessionBloc extends BaseBloc {
       if (facebook ?? false) {
         FirebaseUser aux = await _authManager
           .signInWithFacebook().catchError((exception) {
-            forwardException(FailedException(_localization.errorSignInText()));
+            if (exception is BaseException) forwardException(exception);
+            else forwardException(FailedException(_localization.errorSignInText()));
             return null;
           });
 

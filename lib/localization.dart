@@ -168,7 +168,7 @@ class Localization {
       );
 
   String eventEmptyFilledText() => Intl.message(
-        "Whoops! \n There are no filled events yet. Keep swiping right!",
+        "Whoops! \n You haven't joined any events yet. Keep swiping right!",
         name: "eventEmptyFilledText",
         args: [],
       );

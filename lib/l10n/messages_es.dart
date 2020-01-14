@@ -37,7 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "eventBodyHintText" : MessageLookupByLibrary.simpleMessage("Qué te apetece hacer? Qué lenguajes hablas? Cuándo te viene mejor quedar?"),
     "eventClosedText" : MessageLookupByLibrary.simpleMessage("¡Este evento ha sido cerrado!"),
     "eventCreatedText" : MessageLookupByLibrary.simpleMessage("¡Se ha creado tu evento! Ahora a esperar a que la gente se apunte."),
-    "eventEmptyFilledText" : MessageLookupByLibrary.simpleMessage("Oops! \n Aún no hay ningún evento cerrado. ¡Sigue haciendo swipe right!"),
+    "eventEmptyFilledText" : MessageLookupByLibrary.simpleMessage("¡Oops! \n Aún no te has unido a ningún evento. ¡Sigue haciendo swipe right!"),
     "eventEmptyReadText" : MessageLookupByLibrary.simpleMessage("No hay más eventos. \n ¿Por qué no creas el tuyo propio?"),
     "eventTitleHintText" : MessageLookupByLibrary.simpleMessage("Tomar una cerveza, darse un paseo, visitar la catedral ..."),
     "existingAccountText" : MessageLookupByLibrary.simpleMessage("Ya existe una cuenta usando este correo electrónico. Prueba a iniciar sesión con otro proveedor."),

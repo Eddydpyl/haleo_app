@@ -112,7 +112,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "eventEmptyFilledText": "Whoops! \n There are no filled events yet. Keep swiping right!",
+  "eventEmptyFilledText": "Whoops! \n You haven't joined any events yet. Keep swiping right!",
   "@eventEmptyFilledText": {
     "type": "text",
     "placeholders": {}

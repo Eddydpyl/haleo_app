@@ -105,7 +105,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "eventEmptyFilledText": "Oops! \n Aún no hay ningún evento cerrado. ¡Sigue haciendo swipe right!",
+  "eventEmptyFilledText": "¡Oops! \n Aún no te has unido a ningún evento. ¡Sigue haciendo swipe right!",
   "@eventEmptyFilledText": {
     "type": "text",
     "placeholders": {}

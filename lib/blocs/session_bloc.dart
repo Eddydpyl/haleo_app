@@ -133,6 +133,8 @@ class SessionBloc extends BaseBloc {
         forwardException(FailedException(_localization.invalidSignInText()));
       else if (exception.code == "ERROR_USER_DISABLED")
         forwardException(FailedException(_localization.disabledUserText()));
+      else if (exception.code == "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL")
+        forwardException(FailedException(_localization.existingAccountText()));
       else forwardException(FailedException(_localization.errorSignInText()));
     });
   }

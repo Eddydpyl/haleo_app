@@ -26,14 +26,13 @@ class _EventListingBodyState extends State<EventListingBody> {
     final UserEventsBloc eventsBloc = UserEventsProvider.eventsBloc(context);
     return StreamBuilder(
       stream: eventsBloc.eventsStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
           final Map<String, Event> events = snapshot.data;
           final List<String> sorted = List.from(events.keys)
-            ..sort((String a, String b) =>
-                events[b].lastMessage?.compareTo(events[a].lastMessage ?? "") ??
-                -1);
+            ..sort((String a, String b) => events[b].lastMessage
+                ?.compareTo(events[a].lastMessage ?? "") ?? -1);
           return StreamBuilder(
             stream: eventsBloc.usersStream,
             builder: (BuildContext context,
@@ -42,14 +41,9 @@ class _EventListingBodyState extends State<EventListingBody> {
                 final Map<String, User> users = snapshot.data;
                 if (sorted.isNotEmpty) {
                   return ListView(
-                    children: sorted
-                        .map((String key) => EventTile(
-                              localization: localization,
-                              users: users,
-                              eventKey: key,
-                              event: events[key],
-                            ))
-                        .toList(),
+                    children: sorted.map((String key) =>
+                        EventTile(localization: localization, users: users,
+                            eventKey: key, event: events[key])).toList(),
                   );
                 } else
                   return EmptyWidget(localization);
@@ -85,15 +79,12 @@ class EventTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String lastRead =
-        ApplicationProvider.preferences(context).lastRead(eventKey).getValue();
+    final String lastRead = ApplicationProvider
+        .preferences(context).lastRead(eventKey).getValue();
     final bool hasMessages = event.lastMessage?.isNotEmpty ?? false;
-    final bool unread = hasMessages &&
-        (lastRead.isEmpty ||
-            DateUtility.parseDate(lastRead)
-                .isBefore(DateUtility.parseDate(event.lastMessage)));
-    final UserEventsBloc userEventsBloc =
-        UserEventsProvider.eventsBloc(context);
+    final bool unread = hasMessages && (lastRead.isEmpty || DateUtility
+        .parseDate(lastRead).isBefore(DateUtility.parseDate(event.lastMessage)));
+    final UserEventsBloc userEventsBloc = UserEventsProvider.eventsBloc(context);
 
 // TODO: para que fuera más fácil de navegar entre tanto expanded tile no estaría mal que solo pudiera
 // haber una abierta al mismo tiempo, si abres otra se cierra la anterior.
@@ -130,7 +121,6 @@ class EventTile extends StatelessWidget {
                                 ),
                               )
                             : Container(width: 0.0),
-                        // TODO: el salto al chat es demasiado brusco, la transición, no se porque.
                         FlatButton(
                           padding: EdgeInsets.only(left: 16.0),
                           shape: CircleBorder(),
@@ -141,8 +131,7 @@ class EventTile extends StatelessWidget {
                           ),
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  ChatPage(eventKey),
+                              builder: (BuildContext context) => ChatPage(eventKey),
                             ));
                           },
                         ),
@@ -150,8 +139,7 @@ class EventTile extends StatelessWidget {
                     ),
                     children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 32.0, vertical: 16.0),
+                        padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
                         child: Column(
                           children: <Widget>[
                             Text(
@@ -193,8 +181,8 @@ class EventTile extends StatelessWidget {
                               colorB: Color(0xfffd1d1d),
                             ),
                             onPressed: () {
-                              leaveDialog(
-                                  context, eventKey, event, userEventsBloc);
+                              leaveDialog(context, eventKey,
+                                  event, userEventsBloc);
                             },
                           ),
                         ),
@@ -241,18 +229,15 @@ class EventTile extends StatelessWidget {
                         colorB: Color(0xff348ac7),
                       ),
                       onPressed: () {
-                        Share.share(localization.shareText(
-                            event.name,
-                            event
-                                .description)); // TODO: Google Play link final.
+                        Share.share(localization.shareText(event.name,
+                            event.description)); // TODO: Google Play link final.
                       },
                     ),
                   ],
                 ),
                 children: <Widget>[
                   Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
+                    padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
                     child: Column(
                       children: <Widget>[
                         Text(
@@ -338,8 +323,8 @@ class EventTile extends StatelessWidget {
     return asset;
   }
 
-  void leaveDialog(BuildContext context, String key, Event event,
-      UserEventsBloc userEventsBloc) {
+  void leaveDialog(BuildContext context, String key,
+      Event event, UserEventsBloc userEventsBloc) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

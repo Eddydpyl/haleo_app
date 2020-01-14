@@ -244,15 +244,15 @@ class EventActions extends StatelessWidget {
                   } on PlatformException catch (e) {
                     if (e.code == "PERMISSION_DENIED") {
                       Location().requestPermission();
-                      SnackBarUtility.show(
-                          context, localization.locationPermissionText());
+                      SnackBarUtility.show(context,
+                          localization.locationPermissionText());
                     } else {
-                      SnackBarUtility.show(
-                          context, localization.locationErrorText());
+                      SnackBarUtility.show(context,
+                          localization.locationErrorText());
                     }
                   } catch (e) {
-                    SnackBarUtility.show(
-                        context, localization.locationErrorText());
+                    SnackBarUtility.show(context,
+                        localization.locationErrorText());
                   }
                 }
               },

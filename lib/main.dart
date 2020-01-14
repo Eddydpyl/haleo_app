@@ -32,8 +32,7 @@ import 'models/base.dart';
 
 void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  final StreamingSharedPreferences preferences =
-      await StreamingSharedPreferences.instance;
+  final StreamingSharedPreferences preferences = await StreamingSharedPreferences.instance;
   final FirebaseAuth auth = FirebaseAuth.fromApp(FirebaseApp.instance);
   Locale locale = ui.window.locale ?? Locale(Language.EN);
   Intl.systemLocale = locale.languageCode;
@@ -118,8 +117,8 @@ class _InitializerState extends State<Initializer> {
     // https://pub.dev/packages/firebase_messaging#ios-integration
     widget.messaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        final Map<String, dynamic> data =
-            Map.from(Platform.isIOS ? message : message["data"]);
+        final Map<String, dynamic> data = Map
+            .from(Platform.isIOS ? message : message["data"]);
         if (data != null && data["type"] != null) {
           // Play the appropriate sound.
           FlutterRingtonePlayer.playNotification();
@@ -129,17 +128,17 @@ class _InitializerState extends State<Initializer> {
         }
       },
       onLaunch: (Map<String, dynamic> message) async {
-        final Map<String, dynamic> data =
-            Map.from(Platform.isIOS ? message : message["data"]);
+        final Map<String, dynamic> data = Map
+            .from(Platform.isIOS ? message : message["data"]);
         if (data != null && data["type"] != null) {
           // Identify the notification type.
           final int type = int.parse(data["type"]);
           final int action = int.parse(data["action"]);
           final String key = data["key"];
           if (type == Archetype.EVENT) {
-            if (action == Action.OPEN ||
-                action == Action.ATTEND ||
-                action == Action.SEND_MESSAGE) {
+            if (action == Action.OPEN
+                || action == Action.ATTEND
+                || action == Action.SEND_MESSAGE) {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) => ChatPage(key),
               ));
@@ -156,9 +155,9 @@ class _InitializerState extends State<Initializer> {
           final int action = int.parse(data["action"]);
           final String key = data["key"];
           if (type == Archetype.EVENT) {
-            if (action == Action.OPEN ||
-                action == Action.ATTEND ||
-                action == Action.SEND_MESSAGE) {
+            if (action == Action.OPEN
+                || action == Action.ATTEND
+                || action == Action.SEND_MESSAGE) {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) => ChatPage(key),
               ));
@@ -178,10 +177,8 @@ class _InitializerState extends State<Initializer> {
         if (snapshot.data != null) {
           if (snapshot.data.isNotEmpty)
             return EventCardsPage();
-          else
-            return SplashScreen();
-        } else
-          return SessionPage();
+          else return SplashScreen();
+        } else return SessionPage();
       },
     );
   }

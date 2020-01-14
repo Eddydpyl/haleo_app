@@ -46,8 +46,8 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
         PerimeterEventsProvider.eventsBloc(context);
     return StreamBuilder(
       stream: eventsBloc.eventsStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
           final Map<String, Event> events = snapshot.data;
           return StreamBuilder(
@@ -93,8 +93,7 @@ class EventsHandler extends StatefulWidget {
   _EventsHandlerState createState() => _EventsHandlerState();
 }
 
-class _EventsHandlerState extends State<EventsHandler>
-    with TickerProviderStateMixin {
+class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateMixin {
   AnimationController animationController;
   LinkedHashMap<String, Event> events;
   String eventKey;
@@ -119,8 +118,7 @@ class _EventsHandlerState extends State<EventsHandler>
             events.remove(eventKey);
             if (events.isNotEmpty)
               eventKey = events.keys.first;
-            else
-              eventKey = null;
+            else eventKey = null;
             animationController.reset();
           });
         }
@@ -137,14 +135,15 @@ class _EventsHandlerState extends State<EventsHandler>
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
-    final String next =
-        events.keys.firstWhere((key) => key != eventKey, orElse: () => null);
+    final String next = events.keys.firstWhere((key) =>
+        key != eventKey, orElse: () => null);
     Widget backgroundCard = next != null
         ? EventCard(
             localization: widget.localization,
             eventKey: next,
             event: events[next],
-            users: widget.users)
+            users: widget.users,
+          )
         : EmptyCard(widget.localization);
     Widget foregroundCard = eventKey != null
         ? SwipeWrapper(
@@ -202,14 +201,13 @@ class _EventsHandlerState extends State<EventsHandler>
   void resetEvents() {
     events = LinkedHashMap();
     List<String> sorted = List.from(widget.events.keys)
-      ..sort((String a, String b) =>
-          widget.events[b].created.compareTo(widget.events[a].created));
+      ..sort((String a, String b) => widget.events[b]
+          .created.compareTo(widget.events[a].created));
     sorted.forEach((key) => events[key] = widget.events[key]);
     if (events.isNotEmpty) {
       if (eventKey == null || !events.keys.contains(eventKey))
         eventKey = events.keys.first;
-    } else
-      eventKey = null;
+    } else eventKey = null;
   }
 
   void onSwipe(bool direction) {
@@ -250,7 +248,8 @@ class EventActions extends StatelessWidget {
             height: 64.0,
             width: 80.0,
             child: FloatingActionButton(
-              heroTag: null, // Fixes issue.
+              heroTag: null,
+              // Fixes issue.
               shape: TearBorder(),
               backgroundColor: Colors.white,
               child: Padding(
@@ -277,11 +276,9 @@ class EventActions extends StatelessWidget {
                 colorB: Color(0xff348ac7),
               ),
               onPressed: () async {
-                Navigator.push(context, FadeRoute<bool>(EventAdminPage())).then(
-                    (result) => (result ?? false)
-                        ? SnackBarUtility.show(
-                            context, localization.eventCreatedText())
-                        : null);
+                Navigator.push(context, FadeRoute<bool>(EventAdminPage()))
+                    .then((result) => (result ?? false) ? SnackBarUtility
+                    .show(context, localization.eventCreatedText()) : null);
               },
             ),
           ),
@@ -290,7 +287,8 @@ class EventActions extends StatelessWidget {
             width: 80.0,
             child: MirrorWidget(
               child: FloatingActionButton(
-                heroTag: null, // Fixes issue.
+                heroTag: null,
+                // Fixes issue.
                 shape: TearBorder(),
                 backgroundColor: Colors.white,
                 child: Padding(

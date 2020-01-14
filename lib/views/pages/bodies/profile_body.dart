@@ -274,7 +274,7 @@ class EmptyWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Flexible(
-              child: Image.asset("assets/images/coding.png"),
+              child: Image.asset("assets/images/gamify.png"),
             ),
             Padding(
               padding: const EdgeInsets

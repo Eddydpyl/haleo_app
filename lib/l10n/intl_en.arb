@@ -117,7 +117,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "emptyProfile":  "Whoops! \n We are still working on some awesome features for your profile!",
+  "emptyProfile":  "Whoops! \n We are working on some awesome features for your profile! \n Points, titles and analytics are coming soon!",
   "@emptyProfile": {
     "type": "text",
     "placeholders": {}

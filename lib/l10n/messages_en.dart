@@ -33,7 +33,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "accountNotFoundText" : MessageLookupByLibrary.simpleMessage("An account with the provided email does not exist."),
     "createText" : MessageLookupByLibrary.simpleMessage("Create"),
     "disabledUserText" : MessageLookupByLibrary.simpleMessage("Your user has been disabled by an administrator."),
-    "emptyProfile" : MessageLookupByLibrary.simpleMessage("Whoops! \n We are still working on some awesome features for your profile!"),
+    "emptyProfile" : MessageLookupByLibrary.simpleMessage("Whoops! \n We are working on some awesome features for your profile! \n Points, titles and analytics are coming soon!"),
     "errorSignInText" : MessageLookupByLibrary.simpleMessage("There was an issue and you could not sign in."),
     "errorSignUpText" : MessageLookupByLibrary.simpleMessage("There was an issue and you could not sign up."),
     "eventBodyHintText" : MessageLookupByLibrary.simpleMessage("What would you like to do? What languages do you speak? At what time would you be free?"),

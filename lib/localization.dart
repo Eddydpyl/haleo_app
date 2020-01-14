@@ -174,7 +174,7 @@ class Localization {
       );
 
   String emptyProfile() => Intl.message(
-        "Whoops! \n We are still working on some awesome features for your profile!",
+        "Whoops! \n We are working on some awesome features for your profile! \n Points, titles and analytics are coming soon!",
         name: "emptyProfile",
         args: [],
       );

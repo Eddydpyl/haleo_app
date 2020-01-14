@@ -110,7 +110,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "emptyProfile": "¡Oops! \n ¡Aún estamos trabajando en algunas funcionalidades increibles para tu perfil!",
+  "emptyProfile": "¡Oops! \n ¡Estamos trabajando en algunas funcionalidades increibles para tu perfil! \n ¡Puntos, títulos y analíticas llegarán pronto!",
   "@emptyProfile": {
     "type": "text",
     "placeholders": {}

@@ -395,7 +395,7 @@ class EventCard extends StatelessWidget {
   }
 
   String randomImage(String eventName) {
-    int assetNumber = eventName.length % 6;
+    int assetNumber = eventName.length % 7;
     String asset = "assets/images/event_" + assetNumber.toString() + ".png";
     return asset;
   }

@@ -8,7 +8,6 @@ import '../localization.dart';
 import '../managers/database_manager.dart';
 import '../managers/storage_manager.dart';
 import '../blocs/state_bloc.dart';
-import '../blocs/user_events_bloc.dart';
 import '../blocs/user_bloc.dart';
 import '../blocs/user_admin_bloc.dart';
 import '../blocs/uploader_bloc.dart';
@@ -35,26 +34,19 @@ class ProfileProvider extends StatelessWidget {
       inherited: ProfileInherited(
         child: child,
         blocs: {
-          "eventsBloc": UserEventsBloc(database),
           "userBloc": UserBloc(database),
           "userAdminBloc": UserAdminBloc(database, localization),
           "uploaderBloc": UploaderBloc(storage, localization),
         },
       ),
       initialize: (Map<String, BaseBloc> blocs, Set<StreamSubscription> subscriptions) {
-        UserEventsBloc eventsBloc = blocs["eventsBloc"];
         UserBloc userBloc = blocs["userBloc"];
-        eventsBloc.openSink.add(true);
         subscriptions.add(stateBloc.userKeyStream.listen((key) {
-          eventsBloc.userKeySink.add(key);
           userBloc.userKeySink.add(key);
         }));
       },
     );
   }
-
-  static UserEventsBloc eventsBloc(BuildContext context) =>
-      MultiBaseProvider.bloc<ProfileInherited>(context, "eventsBloc");
 
   static UserBloc userBloc(BuildContext context) =>
       MultiBaseProvider.bloc<ProfileInherited>(context, "userBloc");

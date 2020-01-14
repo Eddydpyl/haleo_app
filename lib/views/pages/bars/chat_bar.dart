@@ -108,7 +108,7 @@ class ChatBar extends StatelessWidget implements PreferredSizeWidget {
   Widget leadingWidget(BuildContext context) {
     return PaintGradient(
       child: IconButton(
-        icon: Icon(CustomIcons.left_big),
+        icon: Icon(CustomIcons.left),
         onPressed: () => Navigator.of(context).pop(),
       ),
       colorA: Color(0xfffa6b40),

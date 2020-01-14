@@ -105,13 +105,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "eventEmptyFilledText": "Oops! \n Aún no hay ningún evento cerrado. ¡Sigue haciendo swipe right!",
+  "eventEmptyFilledText": "¡Oops! \n Aún no te has unido a ningún evento. ¡Sigue haciendo swipe right!",
   "@eventEmptyFilledText": {
     "type": "text",
     "placeholders": {}
   },
-  "eventEmptyJoinedText": "Oops! \n Aún no te has apuntado a ningún evento. ¡Sigue haciendo swipe right!",
-  "@eventEmptyJoinedText": {
+  "emptyProfile": "¡Oops! \n ¡Estamos trabajando en algunas funcionalidades increibles para tu perfil! \n ¡Puntos, títulos y analíticas llegarán pronto!",
+  "@emptyProfile": {
     "type": "text",
     "placeholders": {}
   },
@@ -130,12 +130,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "signInText": "Sign In",
+  "signInText": "Iniciar Sesión",
   "@signInText": {
     "type": "text",
     "placeholders": {}
   },
-  "shareText": "¡Únete a este haleo! : *{name}* \n _{description}_ \n ¡Descarga la app en Google Play!",
+  "shareText": "¡Únete a este haleo! : *{name}* \n _{description}_ \n ¡Descarga la app en Google Play! https://play.google.com/apps/testing/io.darter.haleo",
   "@shareText": {
     "type": "text",
     "placeholders": {
@@ -167,7 +167,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "profileText": "Tu Cara!",
+  "profileText": "Tu cara!",
   "@profileText": {
     "type": "text",
     "placeholders": {}

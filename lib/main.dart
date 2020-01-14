@@ -1,6 +1,8 @@
 import 'dart:ui' as ui;
 import 'dart:io';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -30,7 +32,8 @@ import 'models/base.dart';
 
 void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  final StreamingSharedPreferences preferences = await StreamingSharedPreferences.instance;
+  final StreamingSharedPreferences preferences =
+      await StreamingSharedPreferences.instance;
   final FirebaseAuth auth = FirebaseAuth.fromApp(FirebaseApp.instance);
   Locale locale = ui.window.locale ?? Locale(Language.EN);
   Intl.systemLocale = locale.languageCode;
@@ -41,6 +44,7 @@ void main() async {
 
 class App extends StatelessWidget {
   final FirebaseMessaging messaging = FirebaseMessaging();
+  final FirebaseAnalytics analytics = FirebaseAnalytics();
 
   final Locale locale;
   final FirebaseAuth auth;
@@ -79,6 +83,9 @@ class App extends StatelessWidget {
               supportedLocales: [
                 const Locale("en"),
                 const Locale("es"),
+              ],
+              navigatorObservers: [
+                FirebaseAnalyticsObserver(analytics: analytics)
               ],
             ),
           );
@@ -130,9 +137,9 @@ class _InitializerState extends State<Initializer> {
           final int action = int.parse(data["action"]);
           final String key = data["key"];
           if (type == Archetype.EVENT) {
-            if (action == Action.OPEN
-                || action == Action.ATTEND
-                || action == Action.SEND_MESSAGE) {
+            if (action == Action.OPEN ||
+                action == Action.ATTEND ||
+                action == Action.SEND_MESSAGE) {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) => ChatPage(key),
               ));
@@ -149,9 +156,9 @@ class _InitializerState extends State<Initializer> {
           final int action = int.parse(data["action"]);
           final String key = data["key"];
           if (type == Archetype.EVENT) {
-            if (action == Action.OPEN
-                || action == Action.ATTEND
-                || action == Action.SEND_MESSAGE) {
+            if (action == Action.OPEN ||
+                action == Action.ATTEND ||
+                action == Action.SEND_MESSAGE) {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) => ChatPage(key),
               ));
@@ -171,8 +178,10 @@ class _InitializerState extends State<Initializer> {
         if (snapshot.data != null) {
           if (snapshot.data.isNotEmpty)
             return EventCardsPage();
-          else return SplashScreen();
-        } else return SessionPage();
+          else
+            return SplashScreen();
+        } else
+          return SessionPage();
       },
     );
   }

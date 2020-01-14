@@ -24,10 +24,10 @@ class UploaderBloc extends BaseBloc {
   Observable<String> get pathStream => _path.stream;
 
   /// Consumes a file as a [List] of bytes and uploads it.
-  LenientSink<dynamic> get fileSink => _file.sink;
+  Sink<dynamic> get fileSink => _file.sink;
 
   /// Consumes the path of a file and deletes it.
-  LenientSink<String> get deleteSink => _delete.sink;
+  Sink<String> get deleteSink => _delete.sink;
 
   @override
   void initialize() {

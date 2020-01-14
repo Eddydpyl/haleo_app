@@ -42,11 +42,12 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
   @override
   Widget build(BuildContext context) {
     final Localization localization = ApplicationProvider.localization(context);
-    final PerimeterEventsBloc eventsBloc = PerimeterEventsProvider.eventsBloc(context);
+    final PerimeterEventsBloc eventsBloc =
+        PerimeterEventsProvider.eventsBloc(context);
     return StreamBuilder(
       stream: eventsBloc.eventsStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<Map<String, Event>> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<Map<String, Event>> snapshot) {
         if (snapshot.data != null) {
           final Map<String, Event> events = snapshot.data;
           return StreamBuilder(
@@ -92,7 +93,8 @@ class EventsHandler extends StatefulWidget {
   _EventsHandlerState createState() => _EventsHandlerState();
 }
 
-class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateMixin {
+class _EventsHandlerState extends State<EventsHandler>
+    with TickerProviderStateMixin {
   AnimationController animationController;
   LinkedHashMap<String, Event> events;
   String eventKey;
@@ -106,21 +108,23 @@ class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateM
     animationController = AnimationController(
       duration: Duration(seconds: 1),
       vsync: this,
-    )..addListener(() {
-      setState(() {});
-    })..addStatusListener((AnimationStatus status) {
-      if (status == AnimationStatus.completed) {
-        setState(() {
-          widget.eventsBloc.attendSink
-              .add(MapEntry(eventKey, direction));
-          events.remove(eventKey);
-          if (events.isNotEmpty)
-            eventKey = events.keys.first;
-          else eventKey = null;
-          animationController.reset();
-        });
-      }
-    });
+    )
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((AnimationStatus status) {
+        if (status == AnimationStatus.completed) {
+          setState(() {
+            widget.eventsBloc.attendSink.add(MapEntry(eventKey, direction));
+            events.remove(eventKey);
+            if (events.isNotEmpty)
+              eventKey = events.keys.first;
+            else
+              eventKey = null;
+            animationController.reset();
+          });
+        }
+      });
   }
 
   @override
@@ -133,20 +137,29 @@ class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateM
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
-    final String next = events.keys.firstWhere((key) =>
-    key != eventKey, orElse: () => null);
+    final String next =
+        events.keys.firstWhere((key) => key != eventKey, orElse: () => null);
     Widget backgroundCard = next != null
-        ? EventCard(localization: widget.localization,
-            eventKey: next, event: events[next],
+        ? EventCard(
+            localization: widget.localization,
+            eventKey: next,
+            event: events[next],
             users: widget.users)
         : EmptyCard(widget.localization);
-    Widget foregroundCard = eventKey != null ? SwipeWrapper(
-        animationController: animationController, onSwipe: onSwipe,
-        direction: direction, height: height, width: width,
-        child: EventCard(localization: widget.localization,
-            eventKey: eventKey, event: events[eventKey],
-            users: widget.users),
-    ) : EmptyCard(widget.localization);
+    Widget foregroundCard = eventKey != null
+        ? SwipeWrapper(
+            animationController: animationController,
+            onSwipe: onSwipe,
+            direction: direction,
+            height: height,
+            width: width,
+            child: EventCard(
+                localization: widget.localization,
+                eventKey: eventKey,
+                event: events[eventKey],
+                users: widget.users),
+          )
+        : EmptyCard(widget.localization);
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Column(
@@ -189,14 +202,14 @@ class _EventsHandlerState extends State<EventsHandler> with TickerProviderStateM
   void resetEvents() {
     events = LinkedHashMap();
     List<String> sorted = List.from(widget.events.keys)
-      ..sort((String a, String b) => widget.events[b]
-          .created.compareTo(widget.events[a].created));
+      ..sort((String a, String b) =>
+          widget.events[b].created.compareTo(widget.events[a].created));
     sorted.forEach((key) => events[key] = widget.events[key]);
     if (events.isNotEmpty) {
-      if (eventKey == null
-          || !events.keys.contains(eventKey))
+      if (eventKey == null || !events.keys.contains(eventKey))
         eventKey = events.keys.first;
-    } else eventKey = null;
+    } else
+      eventKey = null;
   }
 
   void onSwipe(bool direction) {
@@ -244,7 +257,7 @@ class EventActions extends StatelessWidget {
                 // Displace the icon within the button.
                 padding: const EdgeInsets.only(right: 12.0),
                 child: PaintGradient(
-                  child: Icon(CustomIcons.cancel_1),
+                  child: Icon(CustomIcons.cancel),
                   colorA: Color(0xfffa6b40),
                   colorB: Color(0xfffd1d1d),
                 ),
@@ -259,14 +272,16 @@ class EventActions extends StatelessWidget {
               heroTag: null, // Fixes issue.
               backgroundColor: Colors.white,
               child: PaintGradient(
-                child: Icon(CustomIcons.plus_1),
+                child: Icon(CustomIcons.plus),
                 colorA: Color(0xff7474bf),
                 colorB: Color(0xff348ac7),
               ),
               onPressed: () async {
-                Navigator.push(context, FadeRoute<bool>(EventAdminPage()))
-                    .then((result) => (result ?? false) ? SnackBarUtility
-                    .show(context, localization.eventCreatedText()) : null);
+                Navigator.push(context, FadeRoute<bool>(EventAdminPage())).then(
+                    (result) => (result ?? false)
+                        ? SnackBarUtility.show(
+                            context, localization.eventCreatedText())
+                        : null);
               },
             ),
           ),
@@ -282,7 +297,7 @@ class EventActions extends StatelessWidget {
                   // Displace the icon within the button.
                   padding: const EdgeInsets.only(right: 12.0),
                   child: PaintGradient(
-                    child: MirrorWidget(child: Icon(CustomIcons.ok_1)),
+                    child: MirrorWidget(child: Icon(CustomIcons.ok)),
                     colorA: Color(0xff7dd624),
                     colorB: Color(0xff45b649),
                   ),

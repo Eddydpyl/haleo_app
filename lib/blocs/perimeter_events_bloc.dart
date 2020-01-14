@@ -35,13 +35,13 @@ class PerimeterEventsBloc extends BaseBloc {
   Observable<Map<String, User>> get usersStream => _users.stream;
 
   /// Indicates if the user is interested in an event.
-  LenientSink<MapEntry<String, bool>> get attendSink => _attend.sink;
+  Sink<MapEntry<String, bool>> get attendSink => _attend.sink;
 
   /// Consumes the [Perimeter] where the events will be searched for (REQUIRED).
-  LenientSink<Perimeter> get perimeterSink => _perimeter.sink;
+  Sink<Perimeter> get perimeterSink => _perimeter.sink;
 
   /// Consumes the key of the logged in user (REQUIRED).
-  LenientSink<String> get userKeySink => _userKey.sink;
+  Sink<String> get userKeySink => _userKey.sink;
 
   @override
   void initialize() {

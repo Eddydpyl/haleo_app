@@ -33,22 +33,22 @@ class SessionBloc extends BaseBloc {
   Observable<int> get modeStream => _mode.stream;
 
   /// Consumes a [int] used for indicating whether we sign up, sign in or reset.
-  LenientSink<int> get modeSink => _mode.sink;
+  Sink<int> get modeSink => _mode.sink;
 
   /// Consumes a [String] used to sign up.
-  LenientSink<String> get nameSink => _name.sink;
+  Sink<String> get nameSink => _name.sink;
 
   /// Consumes a [String] used to sign up, sign in or reset.
-  LenientSink<String> get emailSink => _email.sink;
+  Sink<String> get emailSink => _email.sink;
 
   /// Consumes a [String] used to sign up or sign in.
-  LenientSink<String> get passwordSink => _password.sink;
+  Sink<String> get passwordSink => _password.sink;
 
   /// Consumes a placeholder to trigger a Google sign in.
-  LenientSink<bool> get googleSink => _google.sink;
+  Sink<bool> get googleSink => _google.sink;
 
   /// Consumes a placeholder to trigger a Facebook sign in.
-  LenientSink<bool> get facebookSink => _facebook.sink;
+  Sink<bool> get facebookSink => _facebook.sink;
 
   @override
   void initialize() {

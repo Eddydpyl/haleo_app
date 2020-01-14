@@ -68,7 +68,7 @@ class EventCardsBar extends StatelessWidget implements PreferredSizeWidget {
   Widget leadingWidget(BuildContext context) {
     return PaintGradient(
       child: IconButton(
-        icon: Icon(CustomIcons.chat),
+        icon: Icon(CustomIcons.users),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (BuildContext context) => EventListingPage(),

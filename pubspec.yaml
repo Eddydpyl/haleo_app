@@ -29,6 +29,7 @@ dependencies:
   cupertino_icons: 0.1.2
   font_awesome_flutter: 8.5.0
   firebase_core: 0.4.2+1
+  firebase_analytics: ^4.0.0
   firebase_auth: 0.15.1
   cloud_firestore: 0.12.11
   firebase_storage: 3.0.8
@@ -38,7 +39,7 @@ dependencies:
   geoflutterfire: 2.0.3+5
   google_sign_in: 4.0.14
   image_picker: 0.6.2+1
-  darter_base: ^0.0.3
+  darter_base: ^0.0.4
   vibration: 1.2.2
   location: 2.3.5
   share: 0.6.3+4

@@ -21,7 +21,7 @@ class UserBloc extends BaseBloc {
   Observable<MapEntry<String, User>> get userStream => _user.stream;
 
   /// Consumes the key of the user (REQUIRED).
-  LenientSink<String> get userKeySink => _userKey.sink;
+  Sink<String> get userKeySink => _userKey.sink;
 
   @override
   void initialize() {

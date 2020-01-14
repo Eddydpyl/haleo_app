@@ -199,7 +199,7 @@ class EventActions extends StatelessWidget {
               heroTag: null, // Fixes issue.
               backgroundColor: Colors.white,
               child: PaintGradient(
-                child: Icon(CustomIcons.cancel_1),
+                child: Icon(CustomIcons.cancel),
                 colorA: Color(0xfffa6b40),
                 colorB: Color(0xfffd1d1d),
               ),
@@ -213,7 +213,7 @@ class EventActions extends StatelessWidget {
               heroTag: null, // Fixes issue.
               backgroundColor: Colors.white,
               child: PaintGradient(
-                child: Icon(CustomIcons.ok_1),
+                child: Icon(CustomIcons.ok),
                 colorA: Color(0xff7dd624),
                 colorB: Color(0xff45b649),
               ),

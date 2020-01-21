@@ -31,28 +31,7 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
     super.didChangeDependencies();
     if (!init) {
       init = true;
-      final Localization localization = ApplicationProvider.localization(context);
-      final eventsBloc = PerimeterEventsProvider.eventsBloc(context);
-      Location().getLocation()
-          .timeout(Duration(seconds: 3))
-          .then((LocationData location) {
-        eventsBloc.perimeterSink.add(Perimeter(
-          lat: location.latitude,
-          lng: location.longitude,
-          radius: search_radius,
-        ));
-      }).catchError((e) {
-        eventsBloc.perimeterSink.add(Perimeter(lat: -1.0,
-          lng: -1.0, radius: double.maxFinite,));
-        if (e.code == "PERMISSION_DENIED") {
-          Location().requestPermission();
-          SnackBarUtility.show(context,
-              localization.locationPermissionText());
-        } else {
-          SnackBarUtility.show(context,
-              localization.locationErrorText());
-        }
-      });
+      initLocation(context);
     }
   }
 
@@ -89,6 +68,32 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
         }
       },
     );
+  }
+
+  void initLocation(BuildContext context) {
+    final Localization localization = ApplicationProvider.localization(context);
+    final eventsBloc = PerimeterEventsProvider.eventsBloc(context);
+    Location().getLocation()
+        .timeout(Duration(seconds: 3))
+        .then((LocationData location) {
+      eventsBloc.perimeterSink.add(Perimeter(
+        lat: location.latitude,
+        lng: location.longitude,
+        radius: search_radius,
+      ));
+    }).catchError((e) {
+      eventsBloc.perimeterSink.add(Perimeter(lat: -1.0,
+        lng: -1.0, radius: double.maxFinite,));
+      if (e.code == "PERMISSION_DENIED") {
+        Location().requestPermission().then((result) =>
+            result ? initLocation(context) : null);
+        SnackBarUtility.show(context,
+            localization.locationPermissionText());
+      } else {
+        SnackBarUtility.show(context,
+            localization.locationErrorText());
+      }
+    });
   }
 }
 

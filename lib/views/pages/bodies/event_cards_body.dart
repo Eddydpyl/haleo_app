@@ -3,7 +3,9 @@ import 'dart:collection';
 import 'package:angles/angles.dart';
 import 'package:flutter/material.dart';
 import 'package:align_positioned/align_positioned.dart';
+import 'package:location/location.dart';
 
+import '../../../constants.dart';
 import '../../../providers/application_provider.dart';
 import '../../../providers/perimeter_events_provider.dart';
 import '../../../blocs/perimeter_events_bloc.dart';
@@ -29,21 +31,35 @@ class _EventsCardsBodyState extends State<EventsCardsBody> {
     super.didChangeDependencies();
     if (!init) {
       init = true;
+      final Localization localization = ApplicationProvider.localization(context);
       final eventsBloc = PerimeterEventsProvider.eventsBloc(context);
-      // TODO: Use the actual user location & radius.
-      eventsBloc.perimeterSink.add(Perimeter(
-        lat: 40.4378698,
-        lng: -3.8196212,
-        radius: double.maxFinite,
-      ));
+      Location().getLocation()
+          .timeout(Duration(seconds: 3))
+          .then((LocationData location) {
+        eventsBloc.perimeterSink.add(Perimeter(
+          lat: location.latitude,
+          lng: location.longitude,
+          radius: search_radius,
+        ));
+      }).catchError((e) {
+        eventsBloc.perimeterSink.add(Perimeter(lat: -1.0,
+          lng: -1.0, radius: double.maxFinite,));
+        if (e.code == "PERMISSION_DENIED") {
+          Location().requestPermission();
+          SnackBarUtility.show(context,
+              localization.locationPermissionText());
+        } else {
+          SnackBarUtility.show(context,
+              localization.locationErrorText());
+        }
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final Localization localization = ApplicationProvider.localization(context);
-    final PerimeterEventsBloc eventsBloc =
-        PerimeterEventsProvider.eventsBloc(context);
+    final PerimeterEventsBloc eventsBloc = PerimeterEventsProvider.eventsBloc(context);
     return StreamBuilder(
       stream: eventsBloc.eventsStream,
       builder: (BuildContext context,

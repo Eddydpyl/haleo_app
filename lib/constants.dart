@@ -1,0 +1,1 @@
+const double search_radius = 20.0;

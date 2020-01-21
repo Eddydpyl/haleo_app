@@ -222,9 +222,9 @@ class EventActions extends StatelessWidget {
                     && descriptionController.text.isNotEmpty
                     && image != UploaderBloc.uploading) {
                   try {
-                    // TODO: Use the actual user location.
-                    // LocationData location = await Location().getLocation();
-                    GeoFirePoint point = GeoFirePoint(40.4378698, -3.8196212);
+                    LocationData location = await Location()
+                        .getLocation().timeout(Duration(seconds: 3));
+                    GeoFirePoint point = GeoFirePoint(location.latitude, location.longitude);
                     Locale locale = ui.window.locale ?? Locale(Language.EN);
                     String date = DateUtility.currentDate();
                     eventAdminBloc.createSink.add(Event(

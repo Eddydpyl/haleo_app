@@ -181,6 +181,12 @@ class EventTile extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
+                      Text(localization.attendeesCountText(event.count),
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          )),
                       FlatButton(
                         shape: CircleBorder(),
                         child: PaintGradient(
@@ -189,8 +195,8 @@ class EventTile extends StatelessWidget {
                           colorB: Color(0xff348ac7),
                         ),
                         onPressed: () {
-                          Share.share(localization.shareText(event.name,
-                              event.description));
+                          Share.share(localization.shareText(
+                              event.name, event.description));
                         },
                       ),
                       FlatButton(

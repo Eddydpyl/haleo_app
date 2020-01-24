@@ -235,7 +235,7 @@ class EventActions extends StatelessWidget {
                       point: point.data,
                       open: true,
                       count: 1,
-                      slots: slots ?? 2,
+                      slots: 1000, // TODO: Hardcoded 1000 to make an always open event
                       attendees: [userKey],
                       created: date,
                       lang: locale.languageCode,

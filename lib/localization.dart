@@ -217,14 +217,14 @@ class Localization {
 
   String attendeesText(int slots, int count) {
     final int spaces = slots - count;
-    return "${_attendeesCountText(count)} ${_attendeesSpacesText(spaces)}";
+    return "${attendeesCountText(count)} ${_attendeesSpacesText(spaces)}";
   }
 
-  String _attendeesCountText(int count) => Intl.plural(
+  String attendeesCountText(int count) => Intl.plural(
         count,
-        one: "A total of $count has signed up.",
-        other: "A total of $count have signed up.",
-        name: "_attendeesCountText",
+        one: "$count has signed up!",
+        other: "$count have signed up!",
+        name: "attendeesCountText",
         args: [count],
       );
 
@@ -259,4 +259,6 @@ class Localization {
         name: "existingAccountText",
         args: [],
       );
+
+  String countText(int count) {}
 }

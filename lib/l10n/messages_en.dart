@@ -18,7 +18,7 @@ typedef MessageIfAbsent(String message_str, List args);
 class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'en';
 
-  static m0(count) => "${Intl.plural(count, one: 'A total of ${count} has signed up.', other: 'A total of ${count} have signed up.')}";
+  static m0(count) => "${Intl.plural(count, one: '${count} has signed up!', other: '${count} have signed up!')}";
 
   static m1(spaces) => "${Intl.plural(spaces, one: 'Only ${spaces} space remains!', other: 'Only ${spaces} spaces remain!')}";
 
@@ -28,7 +28,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "_attendeesCountText" : m0,
+    "attendeesCountText" : m0,
     "_attendeesSpacesText" : m1,
     "accountNotFoundText" : MessageLookupByLibrary.simpleMessage("An account with the provided email does not exist."),
     "createText" : MessageLookupByLibrary.simpleMessage("Create"),

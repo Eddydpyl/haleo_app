@@ -155,8 +155,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "_attendeesCountText": "{count,plural, =1{A total of {count} has signed up.}other{A total of {count} have signed up.}}",
-  "@_attendeesCountText": {
+  "attendeesCountText": "{count,plural, =1{{count} has signed up!}other{{count} have signed up!}}",
+  "@attendeesCountText": {
     "type": "text",
     "placeholders": {
       "count": {}

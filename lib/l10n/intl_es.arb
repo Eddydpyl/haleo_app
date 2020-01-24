@@ -148,8 +148,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "_attendeesCountText": "{count,plural, =1{Se ha apuntado {count}.}other{Se han apuntado {count}.}}",
-  "@_attendeesCountText": {
+  "attendeesCountText": "{count,plural, =1{¡Estás solo tu!}other{¡Ya sois {count}!}}",
+  "@attendeesCountText": {
     "type": "text",
     "placeholders": {
       "count": {}

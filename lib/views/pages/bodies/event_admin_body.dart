@@ -314,24 +314,6 @@ class EventAdminCard extends StatelessWidget {
                     children: <Widget>[
                       imageWidget(height > 300 ? height / 2 : height / 4),
                       SizedBox(height: 16.0),
-                      Text(
-                        localization.slotsNumberText(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.0,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      Slider(
-                        value: (slots ?? 2) / 1.0,
-                        inactiveColor: Colors.grey,
-                        activeColor: Colors.redAccent,
-                        onChanged: (double value) => updateSlots(value.floor()),
-                        divisions: 8,
-                        label: "$slots",
-                        min: 2.0,
-                        max: 10.0,
-                      ),
                       titleWidget(nameController),
                       descriptionWidget(descriptionController),
                     ],

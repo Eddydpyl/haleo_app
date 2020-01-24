@@ -142,7 +142,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "shareText": "Join this haleo! : *{name}* \n _{description}_ \n Download the app in Google Play! https://play.google.com/apps/testing/io.darter.haleo",
+  "shareText": "Join this haleo! : *{name}* \n _{description}_ \n Download the app in Google Play! https://play.google.com/store/apps/details?id=io.darter.haleo",
   "@shareText": {
     "type": "text",
     "placeholders": {

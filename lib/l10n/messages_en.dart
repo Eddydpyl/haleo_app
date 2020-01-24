@@ -24,7 +24,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m2(name) => "Leave ${name}";
 
-  static m3(name, description) => "Join this haleo! : *${name}* \n _${description}_ \n Download the app in Google Play! https://play.google.com/apps/testing/io.darter.haleo";
+  static m3(name, description) => "Join this haleo! : *${name}* \n _${description}_ \n Download the app in Google Play! https://play.google.com/store/apps/details?id=io.darter.haleo";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {

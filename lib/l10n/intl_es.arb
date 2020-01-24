@@ -135,7 +135,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "shareText": "¡Únete a este haleo! : *{name}* \n _{description}_ \n ¡Descarga la app en Google Play! https://play.google.com/apps/testing/io.darter.haleo",
+  "shareText": "¡Únete a este haleo! : *{name}* \n _{description}_ \n ¡Descarga la app en Google Play! https://play.google.com/store/apps/details?id=io.darter.haleo",
   "@shareText": {
     "type": "text",
     "placeholders": {

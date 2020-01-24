@@ -22,7 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m1(spaces) => "${Intl.plural(spaces, one: '¡Solo queda ${spaces} sitio!', other: '¡Solo quedan ${spaces} sitios!')}";
 
-  static m3(name, description) => "¡Únete a este haleo! : *${name}* \n _${description}_ \n ¡Descarga la app en Google Play! https://play.google.com/apps/testing/io.darter.haleo";
+  static m3(name, description) => "¡Únete a este haleo! : *${name}* \n _${description}_ \n ¡Descarga la app en Google Play! https://play.google.com/store/apps/details?id=io.darter.haleo";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {

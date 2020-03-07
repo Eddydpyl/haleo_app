@@ -1,6 +1,6 @@
 # haleo [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![Status: abandoned](https://img.shields.io/badge/status-abandoned-red.svg)
 
-Red social experimental al estilo Tinder para organizar eventos sobre la marcha. Una aplicación de código abierto escrita en Flutter.
+Red social experimental al estilo Tinder para organizar eventos. Una aplicación de código abierto escrita en Flutter.
 <br><br>
 
 <p align="center">

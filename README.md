@@ -1,4 +1,4 @@
-# haleo [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![Status: abandoned](https://img.shields.io/badge/status-abandoned-red.svg)
+# haleo! [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![Status: abandoned](https://img.shields.io/badge/status-abandoned-red.svg)
 
 Red social experimental al estilo Tinder para organizar eventos. Una aplicación de código abierto escrita en Flutter.<br>
 El backend de la aplicación se ha escrito utilizando Firebase: https://github.com/Eddydpyl/haleo_functions
